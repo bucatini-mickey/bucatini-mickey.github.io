@@ -7,7 +7,44 @@
 <meta name="description" content="Every public Letterboxd list by bucatini_mickey, nested and searchable.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Mulish:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap">
-<link rel="stylesheet" href="../assets/theme.css">
+<style>
+/* Bucatini Mickey — shared theme. Night-forest sumi ground, autumn + psychedelic accents, washi light mode. */
+:root{
+  --bg:#14120e; --bg2:#1c1913; --ink:#efe6d4; --dim:#a69c88; --line:#2f2a21;
+  --kaki:#e8743b; --kuchiba:#d6a14a; --koke:#86a35a; --ai:#5b77bd; --fuji:#a07ccb; --beni:#d0473c;
+  --acc:var(--kaki);
+  --f-disp:'Cormorant Garamond',Garamond,Georgia,serif;
+  --f-body:'Mulish',system-ui,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){:root{
+  --bg:#ece6da; --bg2:#f5f0e6; --ink:#1d1a15; --dim:#6b6253; --line:#d6ccbb;
+  --kaki:#c4561f; --kuchiba:#a2761b; --koke:#557a2c; --ai:#33508f; --fuji:#6f4a95; --beni:#a8302a;
+  color-scheme:light}}
+*{box-sizing:border-box}
+html{scroll-padding-top:20px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 var(--f-body);letter-spacing:.01em}
+a{color:inherit}
+button,input,summary{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.wrap{max-width:900px;margin:0 auto;padding-inline:20px}
+.sky{position:relative;height:clamp(220px,42vh,420px);overflow:hidden}
+.sky.short{height:clamp(150px,26vh,240px)}
+.sky canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.sky::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--bg))}
+.mast{position:relative;margin-top:-90px;z-index:1;display:flex;flex-direction:column;gap:12px;padding-bottom:28px}
+.crumb{font:500 .78rem var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-decoration:none}
+.crumb:hover{color:var(--acc)}
+.title{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap}
+h1{font:500 clamp(2.8rem,9.5vw,5.2rem)/1 var(--f-disp);margin:0;letter-spacing:.01em;text-wrap:balance}
+.lede{margin:0;max-width:58ch;color:var(--dim)}
+.lede a{color:var(--ink);text-decoration-color:var(--acc);text-underline-offset:3px}
+.dab{display:inline-block;width:.62em;height:.62em;border-radius:52% 46% 55% 44%/48% 55% 45% 52%;background:var(--acc);transform:rotate(-12deg);flex:none}
+footer{border-top:1px solid var(--line);padding-block:24px 48px;color:var(--dim);font-size:.85rem;display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
+footer a{text-decoration:none}footer a:hover{color:var(--acc)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
 <style>
 /* Layout: sections in the old bio's order; each section holds folding groups, each group holds folding list rows, each row opens to its films */
 .search input{width:100%;max-width:520px;background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:10px 18px}
@@ -149,6 +186,41 @@ function search(){
 render();
 const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1],true);
 </script>
-<script src="../assets/swirl.js"></script>
+<script>
+/* Impressionist brushstroke field: short strokes follow a swirling flow (a few vortices, Starry Night style), coloured from the theme's autumn tokens. Drawn once; redrawn on resize or theme change. */
+(function(){
+  function rng(seed){let s=seed>>>0||1;return()=>((s=Math.imul(s^s>>>15,1|s)+0x6D2B79F5|0,((s^s>>>14)>>>0)/4294967296))}
+  function draw(cv){
+    const seed=+cv.dataset.seed||7, dens=+cv.dataset.density||1;
+    const r=rng(seed), dpr=Math.min(2,window.devicePixelRatio||1);
+    const W=cv.clientWidth,H=cv.clientHeight; cv.width=W*dpr; cv.height=H*dpr;
+    const c=cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,W,H);
+    const cs=getComputedStyle(document.documentElement);
+    const pal=['--kaki','--kuchiba','--koke','--ai','--fuji','--beni'].map(v=>cs.getPropertyValue(v).trim());
+    const vort=Array.from({length:4},()=>({x:r()*W,y:r()*H*.8,s:(r()<.5?-1:1)*(.6+r()*.8),rad:80+r()*160}));
+    const field=(x,y)=>{let a=Math.sin(x*.006+Math.sin(y*.009)*1.6)+Math.cos(y*.005-x*.002)*1.1;
+      let vx=Math.cos(a),vy=Math.sin(a)*.6;
+      for(const v of vort){const dx=x-v.x,dy=y-v.y,d=Math.hypot(dx,dy)+1,w=Math.exp(-d/v.rad)*2.2*v.s;vx+=-dy/d*w;vy+=dx/d*w}
+      const m=Math.hypot(vx,vy)||1;return [vx/m,vy/m]};
+    const n=Math.floor(W*H/260*dens);
+    c.lineCap='round';
+    for(let i=0;i<n;i++){
+      let x=r()*W,y=r()*H;
+      const t=Math.min(.999,Math.max(0,x/W*.75+y/H*.25+(r()-.5)*.35));
+      c.strokeStyle=pal[Math.floor(t*pal.length)];
+      c.globalAlpha=.22+r()*.5; c.lineWidth=1.2+r()*3.4;
+      c.beginPath();c.moveTo(x,y);
+      const len=5+Math.floor(r()*9);
+      for(let k=0;k<len;k++){const [dx,dy]=field(x,y);x+=dx*3.2;y+=dy*3.2;c.lineTo(x,y)}
+      c.stroke();
+    }
+    c.globalAlpha=1;
+  }
+  function all(){document.querySelectorAll('canvas.swirl').forEach(draw)}
+  let t;window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(all,200)});
+  matchMedia('(prefers-color-scheme: light)').addEventListener?.('change',all);
+  document.fonts?.ready.then(all); all();
+})();
+</script>
 </body>
 </html>
