@@ -1,0 +1,36 @@
+/* Bucatini Mickey — shared theme. Night-forest sumi ground, autumn + psychedelic accents, washi light mode. */
+:root{
+  --bg:#14120e; --bg2:#1c1913; --ink:#efe6d4; --dim:#a69c88; --line:#2f2a21;
+  --kaki:#e8743b; --kuchiba:#d6a14a; --koke:#86a35a; --ai:#5b77bd; --fuji:#a07ccb; --beni:#d0473c;
+  --acc:var(--kaki);
+  --f-disp:'Cormorant Garamond',Garamond,Georgia,serif;
+  --f-body:'Mulish',system-ui,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){:root{
+  --bg:#ece6da; --bg2:#f5f0e6; --ink:#1d1a15; --dim:#6b6253; --line:#d6ccbb;
+  --kaki:#c4561f; --kuchiba:#a2761b; --koke:#557a2c; --ai:#33508f; --fuji:#6f4a95; --beni:#a8302a;
+  color-scheme:light}}
+*{box-sizing:border-box}
+html{scroll-padding-top:20px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 var(--f-body);letter-spacing:.01em}
+a{color:inherit}
+button,input,summary{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.wrap{max-width:900px;margin:0 auto;padding-inline:20px}
+.sky{position:relative;height:clamp(220px,42vh,420px);overflow:hidden}
+.sky.short{height:clamp(150px,26vh,240px)}
+.sky canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.sky::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--bg))}
+.mast{position:relative;margin-top:-90px;z-index:1;display:flex;flex-direction:column;gap:12px;padding-bottom:28px}
+.crumb{font:500 .78rem var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-decoration:none}
+.crumb:hover{color:var(--acc)}
+.title{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap}
+h1{font:500 clamp(2.8rem,9.5vw,5.2rem)/1 var(--f-disp);margin:0;letter-spacing:.01em;text-wrap:balance}
+.lede{margin:0;max-width:58ch;color:var(--dim)}
+.lede a{color:var(--ink);text-decoration-color:var(--acc);text-underline-offset:3px}
+.dab{display:inline-block;width:.62em;height:.62em;border-radius:52% 46% 55% 44%/48% 55% 45% 52%;background:var(--acc);transform:rotate(-12deg);flex:none}
+footer{border-top:1px solid var(--line);padding-block:24px 48px;color:var(--dim);font-size:.85rem;display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
+footer a{text-decoration:none}footer a:hover{color:var(--acc)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}

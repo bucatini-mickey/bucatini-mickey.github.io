@@ -4,84 +4,55 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Bucatini Mickey</title>
-<meta name="description" content="Hobby projects by Mickey: film, game dev and whatever comes next.">
+<meta name="description" content="Hobby projects by Mickey: film, game dev and whatever grows next.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Public+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Mulish:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/theme.css">
 <style>
-/* Layout: one header, then a drawer per hobby. Each drawer is a wide index card with a coloured tab; shared tokens with /films/ */
-:root{
-  --paper:#eceee9; --card:#fbfcfa; --ink:#1b201e; --dim:#5f6762; --line:#d3d8d2;
-  --film:#c3392c; --game:#2f6f5e; --tab-ink:#fff;
-  --f-disp:'Bricolage Grotesque',Georgia,serif;
-  --f-body:'Public Sans',system-ui,sans-serif;
-  --f-mono:'IBM Plex Mono',ui-monospace,monospace;
-  color-scheme:light;
-}
-@media (prefers-color-scheme:dark){:root{
-  --paper:#141716; --card:#1d2220; --ink:#e7ebe8; --dim:#9aa39e; --line:#2f3633;
-  --film:#ff6a5a; --game:#5fcfae; --tab-ink:#141716; color-scheme:dark}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--f-body)}
-a{color:inherit}
-:focus-visible{outline:3px solid var(--film);outline-offset:3px}
-.wrap{max-width:980px;margin:0 auto;padding-inline:16px}
-header{padding-block:56px 36px;display:flex;flex-direction:column;gap:14px}
-.eyebrow{font:500 .78rem var(--f-mono);text-transform:uppercase;letter-spacing:.1em;color:var(--dim)}
-h1{font:800 clamp(2.8rem,10vw,5.6rem)/.9 var(--f-disp);margin:0;letter-spacing:-.03em;text-wrap:balance}
-h1 span{color:var(--film)}
-.lede{margin:0;max-width:56ch;color:var(--dim);font-size:1.08rem}
-main{display:flex;flex-direction:column;gap:34px;padding-block:20px 64px}
-.drawer{--c:var(--film);position:relative;background:var(--card);border:1px solid var(--line);border-radius:4px 16px 16px 16px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px;padding:28px 24px 24px;text-decoration:none}
-.drawer::before{content:attr(data-tab);position:absolute;left:-1px;top:-26px;height:26px;padding:3px 14px 0;background:var(--c);color:var(--tab-ink);font:500 .75rem var(--f-mono);text-transform:uppercase;letter-spacing:.1em;border-radius:8px 8px 0 0}
-a.drawer:hover{border-color:var(--c)}
-a.drawer:hover h2 b{text-decoration:underline;text-decoration-thickness:3px;text-decoration-color:var(--c)}
-.drawer.game{--c:var(--game)}
-@media (max-width:700px){.drawer{grid-template-columns:1fr}}
-.drawer h2{font:800 clamp(1.9rem,5vw,2.8rem)/1 var(--f-disp);margin:0 0 10px;letter-spacing:-.02em}
-.drawer h2 b{font-weight:800}
-.drawer p{margin:0 0 14px;color:var(--dim);max-width:52ch}
-.go{font:700 .95rem var(--f-body);color:var(--c)}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-content:start;margin:0}
-.stats div{border-top:2px solid var(--c);padding-top:8px;min-width:0}
-.stats dt{font:500 .72rem var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--dim)}
-.stats dd{margin:0;font:800 1.9rem/1.1 var(--f-disp);font-variant-numeric:tabular-nums}
-.soon{font:500 .8rem var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--c);border:1px dashed var(--c);border-radius:99px;padding:3px 10px;align-self:start;justify-self:start}
-ul.links{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:.95rem}
-ul.links a{text-decoration:none;font-weight:600}
-ul.links a:hover{text-decoration:underline}
-footer{border-top:1px solid var(--line);padding-block:20px 40px;color:var(--dim);font-size:.85rem;display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
+.rooms{display:flex;flex-direction:column;padding-block:8px 64px}
+.room{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:start;padding:30px 0;border-top:1px solid var(--line);text-decoration:none}
+.room:last-child{border-bottom:1px solid var(--line)}
+.room.game{--acc:var(--koke)}
+.room .dab{margin-top:.75rem;font-size:1.3rem}
+.room h2{font:500 clamp(1.7rem,5vw,2.4rem)/1.1 var(--f-disp);margin:0 0 8px}
+.room p{margin:0;color:var(--dim);max-width:52ch}
+.room .go{display:inline-block;margin-top:12px;font-size:.9rem;color:var(--acc)}
+a.room:hover h2{color:var(--acc)}
+a.room:hover .go{text-decoration:underline;text-underline-offset:4px}
+.stats{display:flex;flex-direction:column;gap:10px;margin:0;text-align:right}
+.stats dt{font:500 .68rem var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.stats dd{margin:0;font:500 1.6rem/1 var(--f-disp);font-variant-numeric:tabular-nums}
+.soon{font:500 .72rem var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);border:1px solid var(--acc);border-radius:99px;padding:3px 10px;white-space:nowrap}
+@media (max-width:620px){.room{grid-template-columns:auto minmax(0,1fr)}.stats{grid-column:2;flex-direction:row;gap:20px;text-align:left}.soon{grid-column:2;justify-self:start}}
 </style>
 </head>
 <body>
-<header class="wrap">
-  <span class="eyebrow">Hobby portfolio</span>
-  <h1>Bucatini <span>Mickey</span></h1>
-  <p class="lede">Things I make and keep track of outside work and the PhD. Each drawer is one hobby; open one to dig in.</p>
+<div class="sky"><canvas class="swirl" data-seed="31" aria-hidden="true"></canvas></div>
+<header class="wrap mast">
+  <span class="crumb">Hobby portfolio</span>
+  <div class="title"><h1>Bucatini Mickey</h1></div>
+  <p class="lede">Things I make and keep track of outside work and the PhD. Each room is one hobby.</p>
 </header>
-<main class="wrap">
-  <a class="drawer" data-tab="Film" href="films/">
+<main class="wrap rooms">
+  <a class="room" href="films/">
+    <span class="dab" aria-hidden="true"></span>
     <div>
-      <h2><b>Film Index</b></h2>
-      <p>Every public Letterboxd list I keep, filed into drawers: favourites, moods, story archetypes, director rankings, my disc collection and recommendations for friends. Search any film to see which lists it's on.</p>
-      <span class="go">Open the Film Index →</span>
+      <h2>Film Index</h2>
+      <p>Every public Letterboxd list I keep, nested the way I think about them: favourites, moods, story archetypes, rankings, my disc collection and picks for friends. Search any film to find which lists it lives on.</p>
+      <span class="go">Enter →</span>
     </div>
-    <dl class="stats">
-      <div><dt>Films logged</dt><dd>815</dd></div>
-      <div><dt>Public lists</dt><dd>149</dd></div>
-      <div><dt>Discs owned</dt><dd>146</dd></div>
-    </dl>
+    <dl class="stats"><div><dt>Films logged</dt><dd>815</dd></div><div><dt>Lists</dt><dd>149</dd></div><div><dt>Discs</dt><dd>146</dd></div></dl>
   </a>
-  <section class="drawer game" data-tab="Game dev">
+  <section class="room game">
+    <span class="dab" aria-hidden="true"></span>
     <div>
       <h2>Game Dev</h2>
-      <p>Prototypes, experiments and dev notes. This drawer is being filled in.</p>
+      <p>Prototypes, experiments and dev notes. Still growing.</p>
     </div>
     <span class="soon">Coming soon</span>
   </section>
 </main>
-<footer class="wrap">
-  <span>Bucatini Mickey</span>
-  <ul class="links" style="flex-direction:row;gap:16px"><li><a href="https://letterboxd.com/bucatini_mickey/">Letterboxd ↗</a></li><li><a href="https://github.com/bucatini-mickey">GitHub ↗</a></li></ul>
-</footer>
+<footer class="wrap"><span>Bucatini Mickey</span><span><a href="https://letterboxd.com/bucatini_mickey/">Letterboxd ↗</a> · <a href="https://github.com/bucatini-mickey">GitHub ↗</a></span></footer>
+<script src="assets/swirl.js"></script>
 </body>
 </html>
