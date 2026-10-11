@@ -55,6 +55,11 @@ footer a{text-decoration:none}footer a:hover{color:var(--acc)}
 .top nav .later{color:var(--dim);opacity:.55;cursor:default;padding-block:4px;border-bottom:1px solid transparent}
 .mode{background:none;border:0;padding:4px 0;cursor:pointer;color:var(--dim);font:inherit;letter-spacing:inherit;text-transform:inherit;border-bottom:1px solid transparent}
 .mode:hover{color:var(--ink)}
+.side{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;opacity:.6;
+  -webkit-mask-image:linear-gradient(to right,#000 0,rgba(0,0,0,.35) calc(50% - 470px),transparent calc(50% - 440px),transparent calc(50% + 440px),rgba(0,0,0,.35) calc(50% + 470px),#000 100%);
+  mask-image:linear-gradient(to right,#000 0,rgba(0,0,0,.35) calc(50% - 470px),transparent calc(50% - 440px),transparent calc(50% + 440px),rgba(0,0,0,.35) calc(50% + 470px),#000 100%)}
+@media (max-width:1060px){.side{display:none}}
+body{position:relative;isolation:isolate}
 </style>
 <style>
 /* Layout: sections in the old bio's order; each section holds folding groups, each group holds folding list rows, each row opens to its films */
@@ -92,12 +97,23 @@ summary:hover .nm{color:var(--acc)}
 .lst>summary{align-items:center}
 .th{width:26px;height:39px;object-fit:cover;border-radius:2px;flex:none;background:var(--bg2);opacity:.85;filter:saturate(.85)}
 summary:hover .th{opacity:1;filter:none}
-.bd{display:block;position:relative;aspect-ratio:16/7;max-height:260px;width:100%;max-width:100%;overflow:hidden;border-radius:3px;background:var(--bg2)}
+.stage{position:relative}
+.bd{display:block;position:relative;aspect-ratio:16/9;width:100%;max-width:100%;overflow:hidden;border-radius:3px;background:var(--bg2)}
 .bd img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.9)}
-.bd::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,var(--bg))}
-.posters{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px}
+.bd::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 35%,color-mix(in srgb,var(--bg) 55%,transparent) 62%,var(--bg) 92%)}
+.stage .bd+.posters{position:relative;z-index:1;margin-top:calc(-1 * min(24%,190px));padding-inline:14px}
+.stage .bd+.d{position:relative;z-index:1}
+.posters{list-style:none;margin:0;padding:0;counter-reset:rk;display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px}
 .posters img{width:100%;height:auto;aspect-ratio:2/3;object-fit:cover;display:block;border-radius:2px;background:var(--bg2);transition:transform .2s,opacity .2s;opacity:.92}
 .posters a:hover img{transform:translateY(-3px);opacity:1}
+.posters li{position:relative}
+.posters img{box-shadow:0 6px 18px -8px rgba(0,0,0,.45)}
+.ranked .posters li{counter-increment:rk}
+.ranked .posters li::after{content:counter(rk);display:block;text-align:center;margin-top:4px;font:500 1.15rem/1 var(--f-disp);color:var(--ink);font-variant-numeric:tabular-nums}
+.ranked .posters li:nth-child(-n+3)::after{color:var(--acc)}
+.films.num{display:block;columns:2 220px;column-gap:24px;padding-left:0;list-style:none}
+.films.num li{white-space:normal;break-inside:avoid;padding:2px 0;display:flex;gap:10px;align-items:baseline}
+.films.num b{font:500 1.05rem var(--f-disp);color:var(--acc);min-width:1.6em;text-align:right;font-variant-numeric:tabular-nums}
 @media (max-width:620px){.posters{grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}}
 span.th{background:none}
 .body .d{margin:0;color:var(--dim)}
@@ -124,6 +140,7 @@ span.th{background:none}
 </style>
 </head>
 <body>
+<canvas class="swirl side" data-seed="57" data-density=".55" aria-hidden="true"></canvas>
 <div class="top"><div class="wrap"><a class="home" href="../">Bucatini Mickey</a><nav aria-label="Site"><a href="../films/" aria-current="page">Film</a><span class="later" title="Coming soon">Game Dev</span><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Dark</button></nav></div></div>
 <div class="sky short"><canvas class="swirl" data-seed="113" aria-hidden="true"></canvas></div>
 <header class="wrap mast">
@@ -183,14 +200,15 @@ function row(l,hits){
   const im=l.img||{},ps=im.p||[],searching=hits&&hits.length;
   const textFrom=searching?0:ps.length;
   const show=searching?hits:l.f.slice(textFrom,textFrom+18);
-  const fl=show.map(f=>`<li>${searching?`<mark>${film(f)}</mark>`:film(f)}</li>`).join('');
+  const fl=show.map((f,i)=>`<li>${!searching&&l.g.some(g=>g==='rank'||g.startsWith('rank:'))?`<b>${textFrom+i+1}</b>`:''}<span>${searching?`<mark>${film(f)}</mark>`:film(f)}</span></li>`).join('');
   const shown=searching?hits.length:textFrom+show.length;
   const rest=searching?'':(l.c>shown?`<span class="more">and ${l.c-shown} more on Letterboxd</span>`:'');
   const thumb=ps[0]?`<img class="th" src="${esc(ps[0][1])}" alt="" loading="lazy" width="26" height="39">`:'<span class="th"></span>';
   const bd=im.b?`<a class="bd" href="${esc(l.u)}" aria-hidden="true" tabindex="-1"><img src="${esc(im.bm)}" srcset="${esc(im.bm)} 960w, ${esc(im.b)} 1200w" sizes="(max-width:900px) 100vw, 860px" alt="" loading="lazy"></a>`:'';
+  const ranked=l.g.some(g=>g==='rank'||g.startsWith('rank:'));
   const strip=ps.length&&!searching?`<ul class="posters">${ps.map(([s,u],i)=>`<li><a href="https://letterboxd.com/film/${esc(s)}/" title="${esc(l.f[i]||'')}"><img src="${esc(u)}" alt="${esc(l.f[i]||s)}" loading="lazy" width="230" height="345"></a></li>`).join('')}</ul>`:'';
   return `<details class="lst"${hits?' open':''}><summary><span class="tw"></span>${thumb}<span class="nm">${esc(l.n)}</span><span class="ct">${l.c}</span><a class="out" href="${esc(l.u)}" onclick="event.stopPropagation()">open ↗</a></summary>
-   <div class="body">${searching?'':bd}${l.d?`<p class="d">${esc(l.d)}</p>`:''}${strip}${fl?`<ul class="films">${fl}</ul>`:''}${rest}
+   <div class="body${ranked?' ranked':''}">${searching?(l.d?`<p class="d">${esc(l.d)}</p>`:''):`<div class="stage">${bd}${strip}</div>${l.d?`<p class="d">${esc(l.d)}</p>`:''}`}${fl?`<ul class="films${ranked&&!searching?' num':''}">${fl}</ul>`:''}${rest}
    ${l.g.length?`<div class="tags">${l.g.map(g=>`<button class="tag" data-tag="${esc(g)}">${esc(g)}</button>`).join('')}</div>`:''}</div></details>`;
 }
 const rows=(xs,h)=>xs.map(l=>row(l,h&&h.get(l))).join('');
