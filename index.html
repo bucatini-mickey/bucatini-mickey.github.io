@@ -28,12 +28,12 @@ body{margin:0;background:var(--bg);color:var(--ink);font:300 16px/1.8 var(--f-bo
 a{color:inherit}
 button,input,summary{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--acc);outline-offset:3px}
-.wrap{max-width:900px;margin:0 auto;padding-inline:20px}
+.wrap{max-width:none;margin:0;padding-inline:clamp(20px,5vw,48px)}
 .sky{position:relative;height:clamp(220px,42vh,420px);overflow:hidden}
 .sky.short{height:clamp(150px,26vh,240px)}
 .sky canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .sky::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--bg))}
-.mast{position:relative;margin-top:-80px;z-index:1;display:flex;flex-direction:column;gap:14px;padding-bottom:36px}
+.mast{position:relative;display:flex;flex-direction:column;gap:14px;padding-block:56px 36px}
 .crumb{font:500 .78rem var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-decoration:none}
 .crumb:hover{color:var(--acc)}
 .title{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap}
@@ -55,11 +55,14 @@ footer a{text-decoration:none}footer a:hover{color:var(--acc)}
 .top nav .later{color:var(--dim);opacity:.55;cursor:default;padding-block:4px;border-bottom:1px solid transparent}
 .mode{background:none;border:0;padding:4px 0;cursor:pointer;color:var(--dim);font:inherit;letter-spacing:inherit;text-transform:inherit;border-bottom:1px solid transparent}
 .mode:hover{color:var(--ink)}
-.side{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;opacity:.6;
-  -webkit-mask-image:linear-gradient(to right,#000 0,rgba(0,0,0,.35) calc(50% - 470px),transparent calc(50% - 440px),transparent calc(50% + 440px),rgba(0,0,0,.35) calc(50% + 470px),#000 100%);
-  mask-image:linear-gradient(to right,#000 0,rgba(0,0,0,.35) calc(50% - 470px),transparent calc(50% - 440px),transparent calc(50% + 440px),rgba(0,0,0,.35) calc(50% + 470px),#000 100%)}
-@media (max-width:1060px){.side{display:none}}
-body{position:relative;isolation:isolate}
+
+/* one painted background for the whole site; content sits on a paper column down the middle */
+.backdrop{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;display:block}
+.page{position:relative;max-width:980px;margin:48px auto;background:var(--bg);border-radius:4px;box-shadow:0 30px 80px -40px rgba(0,0,0,.45),0 0 0 1px var(--line)}
+.page>.top{border-radius:4px 4px 0 0}
+.page>footer{border-radius:0 0 4px 4px}
+@media (max-width:1040px){.page{margin:28px 24px}}
+@media (max-width:620px){.page{margin:14px 10px}}
 </style>
 <style>
 .rooms{display:flex;flex-direction:column;padding-block:8px 64px}
@@ -80,9 +83,9 @@ a.room:hover .go{text-decoration:underline;text-underline-offset:4px}
 </style>
 </head>
 <body>
-<canvas class="swirl side" data-seed="57" data-density=".55" aria-hidden="true"></canvas>
+<canvas class="swirl backdrop" data-seed="57" data-density=".8" aria-hidden="true"></canvas>
+<div class="page">
 <div class="top"><div class="wrap"><a class="home" href="./">Bucatini Mickey</a><nav aria-label="Site"><a href="./films/">Film</a><span class="later" title="Coming soon">Game Dev</span><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Dark</button></nav></div></div>
-<div class="sky"><canvas class="swirl" data-seed="31" aria-hidden="true"></canvas></div>
 <header class="wrap mast">
     <div class="title"><h1>Bucatini Mickey</h1></div>
   <p class="lede">Things I make and keep track of outside work and the PhD. One room for each hobby.</p>
@@ -107,6 +110,7 @@ a.room:hover .go{text-decoration:underline;text-underline-offset:4px}
   </section>
 </main>
 <footer class="wrap"><span>Bucatini Mickey</span><span><a href="https://letterboxd.com/bucatini_mickey/">Letterboxd ↗</a> · <a href="https://github.com/bucatini-mickey">GitHub ↗</a></span></footer>
+</div>
 <script>
 /* Impressionist brushstroke field: short strokes follow a swirling flow (a few vortices, Starry Night style), coloured from the theme's autumn tokens. Drawn once; redrawn on resize or theme change. */
 (function(){
