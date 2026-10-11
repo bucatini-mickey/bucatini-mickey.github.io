@@ -8,20 +8,20 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Mulish:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
-/* Bucatini Mickey — shared theme. Washi paper by default, autumn + psychedelic accents, night-forest dark mode on request. */
+/* Bucatini Mickey — shared theme. Night-forest dark by default, autumn + psychedelic accents, washi paper light mode on request. */
 :root{
-  --bg:#ece6da; --bg2:#f5f0e6; --ink:#1d1a15; --dim:#6b6253; --line:#d6ccbb;
-  --kaki:#c4561f; --kuchiba:#a2761b; --koke:#557a2c; --ai:#33508f; --fuji:#6f4a95; --beni:#a8302a;
-  --acc:#a95a32; --hair:color-mix(in srgb,var(--line) 70%,transparent);
+  --bg:#14120e; --bg2:#1c1913; --ink:#efe6d4; --dim:#a69c88; --line:#2f2a21;
+  --kaki:#e8743b; --kuchiba:#d6a14a; --koke:#86a35a; --ai:#5b77bd; --fuji:#a07ccb; --beni:#d0473c;
+  --acc:#d3895c; --hair:color-mix(in srgb,var(--line) 70%,transparent);
   --f-disp:'Cormorant Garamond',Garamond,Georgia,serif;
   --f-body:'Mulish',system-ui,sans-serif;
   --f-mono:'IBM Plex Mono',ui-monospace,monospace;
-  color-scheme:light;
+  color-scheme:dark;
 }
-:root[data-theme="dark"]{
-  --bg:#14120e; --bg2:#1c1913; --ink:#efe6d4; --dim:#a69c88; --line:#2f2a21;
-  --kaki:#e8743b; --kuchiba:#d6a14a; --koke:#86a35a; --ai:#5b77bd; --fuji:#a07ccb; --beni:#d0473c;
-  --acc:#d3895c; color-scheme:dark}
+:root[data-theme="light"]{
+  --bg:#ece6da; --bg2:#f5f0e6; --ink:#1d1a15; --dim:#6b6253; --line:#d6ccbb;
+  --kaki:#c4561f; --kuchiba:#a2761b; --koke:#557a2c; --ai:#33508f; --fuji:#6f4a95; --beni:#a8302a;
+  --acc:#a95a32; color-scheme:light}
 *{box-sizing:border-box}
 html{scroll-padding-top:20px}
 body{margin:0;background:var(--bg);color:var(--ink);font:300 16px/1.8 var(--f-body);letter-spacing:.015em}
@@ -63,6 +63,10 @@ footer a{text-decoration:none}footer a:hover{color:var(--acc)}
 .page>footer{border-radius:0 0 4px 4px}
 @media (max-width:1040px){.page{margin:28px 24px}}
 @media (max-width:620px){.page{margin:14px 10px}}
+.brand{display:flex;align-items:center;gap:12px}
+.js{display:inline-grid;place-items:center;width:30px;height:30px;border:1px solid var(--ink);font:600 .78rem/1 var(--f-body);letter-spacing:.06em;color:var(--ink);text-decoration:none;flex:none}
+a.js:hover{background:var(--ink);color:var(--bg)}
+span.js{cursor:default;opacity:.85}
 </style>
 <style>
 .rooms{display:flex;flex-direction:column;padding-block:8px 64px}
@@ -85,7 +89,7 @@ a.room:hover .go{text-decoration:underline;text-underline-offset:4px}
 <body>
 <canvas class="swirl backdrop" data-seed="57" data-density=".8" aria-hidden="true"></canvas>
 <div class="page">
-<div class="top"><div class="wrap"><a class="home" href="./">Bucatini Mickey</a><nav aria-label="Site"><a href="./films/">Film</a><span class="later" title="Coming soon">Game Dev</span><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Dark</button></nav></div></div>
+<div class="top"><div class="wrap"><span class="brand"><span class="js" title="Jason Summers: professional site coming soon" aria-label="JS, professional site coming soon">JS</span><a class="home" href="./">Bucatini Mickey</a></span><nav aria-label="Site"><a href="./films/">Film</a><span class="later" title="Coming soon">Game Dev</span><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav></div></div>
 <header class="wrap mast">
     <div class="title"><h1>Bucatini Mickey</h1></div>
   <p class="lede">Things I make and keep track of outside work and the PhD. One room for each hobby.</p>
@@ -143,10 +147,10 @@ a.room:hover .go{text-decoration:underline;text-underline-offset:4px}
   }
   function all(){document.querySelectorAll('canvas.swirl').forEach(draw)}
   let t;window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(all,200)});
-  /* light by default; dark only when the visitor picks it (remembered in this browser) */
+  /* dark by default; light only when the visitor picks it (remembered in this browser) */
   const root=document.documentElement,btn=document.getElementById('mode');
-  const set=m=>{if(m==='dark')root.dataset.theme='dark';else delete root.dataset.theme;if(btn)btn.textContent=m==='dark'?'Light':'Dark';};
-  let m='light';try{m=localStorage.getItem('bm-theme')||'light'}catch(e){}
+  const set=m=>{if(m==='light')root.dataset.theme='light';else delete root.dataset.theme;if(btn)btn.textContent=m==='light'?'Dark':'Light';};
+  let m='dark';try{m=localStorage.getItem('bm-theme')||'dark'}catch(e){}
   set(m);
   if(btn)btn.onclick=()=>{m=m==='dark'?'light':'dark';try{localStorage.setItem('bm-theme',m)}catch(e){}set(m);all()};
   document.fonts?.ready.then(all); all();
