@@ -23,3 +23,17 @@
   .sites .here{margin-bottom:0}
   .pages{flex-wrap:wrap;gap:4px 18px;padding:8px 0;border-bottom:1px solid var(--line)}
 }
+
+/* The floating page, used by every bucatini-mickey room: the room's theme fills the window as a fixed
+   .backdrop and the page sits on it as a panel. The panel's width, top offset and bar are the same in every
+   room, so the navigation never moves when you change rooms. Rooms only colour it (--bg, --line). */
+.backdrop{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;display:block}
+.page{position:relative;z-index:1;max-width:980px;margin:48px auto;background:var(--bg);border-radius:4px;box-shadow:0 30px 80px -40px rgba(0,0,0,.45),0 0 0 1px var(--line)}
+.page>.bar{border-radius:4px 4px 0 0}
+.page>.bar .bar-in{max-width:none}
+.page>footer:last-child{border-radius:0 0 4px 4px}
+@media (max-width:1040px){.page{margin:28px 24px}}
+@media (max-width:620px){.page{margin:14px 10px}}
+/* In the floating page the bar keeps one typeface in every room, so the tabs and links never shift by a pixel;
+   only the colours follow the room. */
+.page>.bar{--f-disp:'Cormorant Garamond',Garamond,Georgia,serif;--f-body:'Mulish',system-ui,sans-serif;--here-size:1.1rem}

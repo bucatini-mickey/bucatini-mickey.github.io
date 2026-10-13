@@ -7,124 +7,161 @@
 <meta name="description" content="Paintings and other art by Mickey.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Mulish:wght@300;400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italianno&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=EB+Garamond:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Mulish:wght@500;600&display=swap">
 <style>
-/* After Monet's Water Lilies: watercolour glazed onto cold-press paper. The pond is laid out as in the
-   Orangerie panels: horizontal washes of water, willow reflections hanging from the top edge, and rows of
-   lily pads that shrink towards the far bank. Dark mode is the same pond at dusk. */
+/* Leonardo's notebooks. Around the page: parchment written over in red chalk, his notes in mirror writing,
+   with the construction drawings he kept returning to (the circle and square, a spiral, water turning on itself).
+   On the page: a skeletal solid as he drew them for Pacioli, turning slowly. Dark mode is the same by candlelight. */
 :root{
-  --bg:#f4efe3; --ink:#2c2a36; --dim:#6f6a78; --line:#ddd5c4; --acc:#5c6fa8;
-  --f-disp:'Cormorant Garamond',Garamond,Georgia,serif; --f-body:'Mulish',system-ui,sans-serif;
-  --here-size:1.1rem;
+  --bg:#f3e8cf; --ink:#3b2a1a; --dim:#7a6248; --line:#dcc9a3; --acc:#b4532a;
+  --parch:#e6d3a8; --parch-hi:#efe0bd; --parch-lo:#c9ae7c; --sanguine:#b4532a; --sepia:#5a3c22;
+  --f-disp:'Cormorant Garamond',Garamond,Georgia,serif; --f-body:'EB Garamond',Georgia,serif;
+  --here-size:1.12rem;
   color-scheme:light;
 }
 :root[data-theme="dark"]{
-  --bg:#12151d; --ink:#ebe6f2; --dim:#a29eb2; --line:#2a2e3a; --acc:#a9b6e6;
+  --bg:#2e2318; --ink:#ecdcbc; --dim:#b39c7c; --line:#4a3a29; --acc:#e08a5a;
+  --parch:#3a2b1c; --parch-hi:#4a3825; --parch-lo:#241a10; --sanguine:#d9814f; --sepia:#e2c79d;
   color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:300 17px/1.75 var(--f-body)}
+body{margin:0;background:var(--parch);color:var(--ink);font:400 19px/1.65 var(--f-body)}
 a{color:inherit;text-underline-offset:4px}
 :focus-visible{outline:2px solid var(--acc);outline-offset:3px}
 
-.pond{position:relative;height:clamp(320px,62vh,640px)}
-.pond canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.pond::after{content:"";position:absolute;left:0;right:0;bottom:0;height:30%;background:linear-gradient(transparent,var(--bg))}
-.pond h1{position:absolute;left:0;right:0;bottom:8%;z-index:1;margin:0 auto;max-width:1040px;padding-inline:clamp(16px,5vw,48px);
-  font:400 clamp(3rem,10vw,6.5rem)/1 var(--f-disp);letter-spacing:.01em}
-
-.wrap{max-width:1040px;margin:0 auto;padding-inline:clamp(16px,5vw,48px)}
-.lede{margin:8px 0 0;max-width:56ch;color:var(--dim)}
-.soon{margin:56px 0 0;font:italic 400 1.35rem var(--f-disp);color:var(--dim)}
-.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:clamp(18px,3vw,36px);margin:56px 0 0;padding:0;list-style:none}
-.gallery figure{margin:0}
-.gallery .frame{aspect-ratio:4/5;background:color-mix(in srgb,var(--ink) 5%,var(--bg));border:1px dashed var(--line);display:grid;place-items:center;color:var(--dim);font:italic 400 1.1rem var(--f-disp)}
-.gallery figcaption{margin-top:10px;font-size:.92rem}
-.gallery figcaption b{font:500 1.15rem var(--f-disp);display:block}
-.gallery figcaption span{color:var(--dim)}
-footer{margin-top:96px;border-top:1px solid var(--line);padding-block:20px 48px;color:var(--dim);font-size:.85rem}
+.folio{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:clamp(16px,4vw,48px);align-items:center;padding:clamp(40px,8vh,80px) clamp(16px,5vw,48px) 24px}
+@media (max-width:720px){.folio{grid-template-columns:minmax(0,1fr)}}
+.folio h1{margin:0;font:400 clamp(3.2rem,9vw,6rem)/1 var(--f-disp);color:var(--sanguine);letter-spacing:.01em}
+.folio .lede{margin:16px 0 0;color:var(--dim);font-style:italic;max-width:34ch}
+.folio .note{margin:22px 0 0;font:400 1.9rem/1.1 'Italianno',cursive;color:var(--sanguine);transform:scaleX(-1);text-align:right;opacity:.85}
+.solid{display:flex;flex-direction:column;align-items:center;gap:6px}
+.solid canvas{width:min(100%,380px);aspect-ratio:1;display:block}
+.solid .cap{font:400 .8rem/1 var(--f-disp);letter-spacing:.3em;text-transform:uppercase;color:var(--sepia)}
+.wrap{padding-inline:clamp(16px,5vw,48px)}
+.soon{margin:40px 0 0;font:italic 400 1.35rem var(--f-disp);color:var(--dim)}
+footer{margin-top:80px;border-top:1px solid var(--line);padding-block:20px 24px;color:var(--dim);font-size:.9rem}
 footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 footer a{text-decoration:none}
 </style>
 <link rel="stylesheet" href="../assets/bar.css">
 </head>
 <body>
+<canvas class="backdrop" id="notebook" aria-hidden="true"></canvas>
+<div class="page">
 <header class="bar"><div class="bar-in">
   <nav class="sites" aria-label="Sites"><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a><a class="here" href="../" aria-current="true">Bucatini Mickey</a></nav>
   <nav class="pages" aria-label="Pages"><a href="../films/">Film</a><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="../writing/">Writing</a><a href="./" aria-current="page">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Dark</button></nav>
 </div></header>
 
-<div class="pond"><canvas id="pond" data-seed="1926" aria-hidden="true"></canvas><h1>Art</h1></div>
+<section class="folio">
+  <div>
+    <h1>Art</h1>
+    <p class="lede">Paintings, mostly watercolour and acrylic.</p>
+    <p class="note" aria-hidden="true">la pittura è una poesia che si vede</p>
+  </div>
+  <div class="solid"><canvas id="solid" role="img" aria-label="A hollow rhombicuboctahedron, after Leonardo's drawings for Pacioli, turning slowly"></canvas><span class="cap">Vigintisex basium vacuum</span></div>
+</section>
 
 <main class="wrap">
-  <p class="lede">Paintings, mostly watercolour and acrylic.</p>
   <p class="soon">The first paintings are on their way.</p>
 </main>
 
 <footer><div class="wrap"><span>Bucatini Mickey · Art</span><span><a href="../">Portfolio</a></span></div></footer>
+</div>
 
 <script>
-/* Watercolour by glazing: each wash is a polygon deformed by recursive midpoint displacement, then painted
-   as many slightly different, nearly transparent layers so edges pool and soften like pigment in water. */
 (function(){
-  const cv=document.getElementById('pond'), root=document.documentElement;
+  const root=document.documentElement, still=matchMedia('(prefers-reduced-motion: reduce)').matches;
   function rng(seed){let s=seed>>>0||1;return()=>((s=Math.imul(s^s>>>15,1|s)+0x6D2B79F5|0,((s^s>>>14)>>>0)/4294967296))}
-  function draw(){
-    const r=rng(+cv.dataset.seed), dpr=Math.min(2,devicePixelRatio||1), W=cv.clientWidth, H=cv.clientHeight;
-    if(!W||!H) return;
-    cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
-    const c=cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,W,H);
-    const dusk=root.dataset.theme==='dark', k=dusk?1:.62;
-    c.globalCompositeOperation=dusk?'screen':'multiply';
-    const gauss=()=>{let u=0,v=0;while(!u)u=r();while(!v)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
-    function deform(pts,depth,amt){
-      for(let d=0;d<depth;d++){
-        const out=[];
-        for(let i=0;i<pts.length;i++){
-          const [x1,y1,v1]=pts[i],[x2,y2]=pts[(i+1)%pts.length], len=Math.hypot(x2-x1,y2-y1);
-          out.push(pts[i]);
-          out.push([(x1+x2)/2+gauss()*len*amt*v1,(y1+y2)/2+gauss()*len*amt*v1,v1*(.7+r()*.6)]);
-        }
-        pts=out;
-      }
-      return pts;
-    }
-    function wash(cx,cy,rx,ry,col,layers,alpha){
-      const n=12, base=deform(Array.from({length:n},(_,i)=>{const a=i/n*Math.PI*2;return[cx+Math.cos(a)*rx,cy+Math.sin(a)*ry,.4+r()*.8]}),3,.28);
-      c.fillStyle=col; c.globalAlpha=alpha*k;
-      for(let l=0;l<layers;l++){
-        const p=deform(base,2,.18);
-        c.beginPath(); c.moveTo(p[0][0],p[0][1]); for(const q of p) c.lineTo(q[0],q[1]); c.closePath(); c.fill();
-      }
-    }
-    const P=dusk
-      ? {water:['#24305a','#3a3f78','#2a5560','#4b3f6e'],willow:['#2f5a4a','#3d3a66'],pad:['#2f6a48','#3f7a50','#2a5a3e'],bloom:['#c98aa0','#e8d6c8','#d9b85a']}
-      : {water:['#a9b8e0','#bcb0dc','#a6cddc','#cdc1e4'],willow:['#a3c4a2','#ada3d2'],pad:['#9cc196','#b0cc98','#93bba4'],bloom:['#f0b6c6','#fff6ea','#f2dc92']};
-    // water: wide horizontal washes, laid in bands
-    for(let b=0;b<7;b++){
-      const y=H*(b/6), col=P.water[b%P.water.length];
-      for(let k=0;k<3;k++) wash(W*(k/2.2+r()*.2),y+gauss()*H*.04,W*(.35+r()*.2),H*(.07+r()*.05),col,28,.045);
-    }
-    // willow reflections hang from the top edge in vertical streaks
-    for(let i=0;i<9;i++){const x=W*(.05+i/8.5+gauss()*.02);wash(x,H*.12,W*(.012+r()*.02),H*(.22+r()*.18),P.willow[i%2],24,.05)}
-    // lily pads in rows, smaller and flatter towards the far bank
-    for(let row=0;row<6;row++){
-      const t=row/5, y=H*(.3+t*.6), s=W*(.018+t*.045), count=Math.round(5+r()*4);
-      for(let i=0;i<count;i++){
-        const x=W*((i+.5+gauss()*.18)/count), rx=s*(.8+r()*.5);
-        wash(x,y+gauss()*H*.02,rx,rx*(.28+t*.12),P.pad[(row+i)%3],22,.045);
-        if(r()<.35) wash(x+rx*.15*gauss(),y-rx*.12,rx*.22,rx*.12,P.bloom[Math.floor(r()*3)],14,.09);
-      }
-    }
-    c.globalAlpha=1; c.globalCompositeOperation='source-over';
-  }
-  let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(draw,200)});
+  const col=v=>getComputedStyle(root).getPropertyValue(v).trim();
 
-  /* site-wide light/dark switch; this page is a daylight page, so it reads the same remembered choice */
+  /* ---- the notebook around the page ---- */
+  const NOTES=['il sole non si move','chi poco pensa molto erra','l’acqua è il vetturale della natura',
+    'ogni nostra cognizione principia da’ sentimenti','la pittura è una poesia che si vede e non si sente','del moto e peso dell’acqua'];
+  const nb=document.getElementById('notebook');
+  function notebook(){
+    const r=rng(1490), dpr=Math.min(2,devicePixelRatio||1), W=innerWidth, H=innerHeight;
+    nb.width=Math.round(W*dpr); nb.height=Math.round(H*dpr);
+    const c=nb.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
+    // the sheet: even parchment, slightly darker and warmer towards the edges
+    c.fillStyle=col('--parch'); c.fillRect(0,0,W,H);
+    const g=c.createRadialGradient(W/2,H/2,Math.min(W,H)*.3,W/2,H/2,Math.max(W,H)*.75);
+    g.addColorStop(0,col('--parch-hi')); g.addColorStop(1,col('--parch-lo')); c.globalAlpha=.7; c.fillStyle=g; c.fillRect(0,0,W,H); c.globalAlpha=1;
+    const red=col('--sanguine'), ink=col('--sepia');
+    // construction drawings in red chalk
+    c.strokeStyle=red; c.lineWidth=1.1; c.globalAlpha=.5;
+    const vx=W*.1, vy=H*.62, R=Math.min(W,H)*.26;       // circle and square, as in the Vitruvian study
+    c.beginPath(); c.arc(vx,vy,R,0,Math.PI*2); c.stroke();
+    const sq=R*1.65; c.strokeRect(vx-sq/2,vy+R-sq,sq,sq);
+    c.beginPath(); c.moveTo(vx,vy-R); c.lineTo(vx,vy+R); c.moveTo(vx-R,vy); c.lineTo(vx+R,vy); c.stroke();
+    // a golden spiral in quarter circles, with its rectangles
+    let x=W*.84, y=H*.16, s=Math.min(W,H)*.2, phi=1.618;
+    c.globalAlpha=.45; c.beginPath();
+    for(let i=0;i<9;i++){
+      const k=i%4;
+      c.strokeRect(x,y,s,s);
+      const [ax,ay,a0]=[[x+s,y+s,Math.PI],[x,y+s,1.5*Math.PI],[x,y,0],[x+s,y,.5*Math.PI]][k];
+      c.moveTo(ax+s*Math.cos(a0),ay+s*Math.sin(a0)); c.arc(ax,ay,s,a0,a0+Math.PI/2);
+      const ns=s/phi;
+      if(k===0){x=x+s;y=y+s-ns}else if(k===1){x=x+s-ns;y=y+s}else if(k===2){x=x-ns;y=y+s-ns}else{y=y-ns;x=x}
+      s=ns; if(s<2) break;
+    }
+    c.stroke();
+    // water turning on itself: a few spiralling eddies in a stream, as in his studies of flow
+    c.globalAlpha=.4; c.lineWidth=.9;
+    for(let e=0;e<4;e++){
+      const ex=W*(.78+e*.05), ey=H*(.72+(e%2)*.08), er=30+e*8;
+      c.beginPath();
+      for(let t=0;t<=1;t+=.01){const a=t*Math.PI*6, rr=er*(1-t); const px=ex+Math.cos(a)*rr, py=ey+Math.sin(a)*rr*.8; t?c.lineTo(px,py):c.moveTo(px,py)}
+      c.stroke();
+    }
+    // his notes, in mirror writing, in red chalk and in ink
+    c.globalAlpha=1; c.textBaseline='alphabetic';
+    for(let i=0;i<34;i++){
+      const tx=r()*W, ty=40+r()*(H-40), size=20+r()*14, txt=NOTES[Math.floor(r()*NOTES.length)];
+      c.save(); c.translate(tx,ty); c.scale(-1,1); c.rotate((r()-.5)*.06);
+      c.font=`${size}px Italianno, cursive`; c.fillStyle=r()<.7?red:ink; c.globalAlpha=.32+r()*.3;
+      c.fillText(txt,0,0); c.restore();
+    }
+    c.globalAlpha=1;
+  }
+
+  /* ---- the solid: a rhombicuboctahedron (every permutation of +-1, +-1, +-(1+sqrt2)) drawn hollow,
+     each edge a squared bar of wood as in Leonardo's plates, turning slowly ---- */
+  const sc=document.getElementById('solid');
+  const q=1+Math.SQRT2, V=[];
+  for(const a of [1,-1]) for(const b of [1,-1]) for(const cc of [q,-q]){V.push([a,b,cc],[a,cc,b],[cc,a,b])}
+  const E=[]; for(let i=0;i<V.length;i++) for(let j=i+1;j<V.length;j++){const d=Math.hypot(V[i][0]-V[j][0],V[i][1]-V[j][1],V[i][2]-V[j][2]); if(Math.abs(d-2)<1e-6) E.push([i,j])}
+  let ang=.6;
+  function solid(){
+    const S=sc.clientWidth; if(!S) return;
+    const dpr=Math.min(2,devicePixelRatio||1); if(sc.width!==Math.round(S*dpr)){sc.width=sc.height=Math.round(S*dpr)}
+    const c=sc.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,S,S);
+    const ca=Math.cos(ang), sa=Math.sin(ang), tilt=.42, ct=Math.cos(tilt), st=Math.sin(tilt), k=S*.17;
+    const P=V.map(([x,y,z])=>{const X=x*ca+z*sa, Z=-x*sa+z*ca, Y=y*ct-Z*st, Z2=y*st+Z*ct, p=6/(6+Z2*.35); return [S/2+X*k*p,S/2-Y*k*p,Z2]});
+    const ink=col('--sepia'), red=col('--sanguine');
+    const order=E.map(e=>[e,(P[e[0]][2]+P[e[1]][2])/2]).sort((a,b)=>a[1]-b[1]);
+    for(const [[i,j],z] of order){
+      const [x1,y1]=P[i],[x2,y2]=P[j], dx=x2-x1, dy=y2-y1, L=Math.hypot(dx,dy), nx=-dy/L, ny=dx/L, w=S*.012, front=z>0;
+      c.globalAlpha=front?1:.45;
+      c.fillStyle=front?col('--bg'):'transparent';
+      c.beginPath(); c.moveTo(x1+nx*w,y1+ny*w); c.lineTo(x2+nx*w,y2+ny*w); c.lineTo(x2-nx*w,y2-ny*w); c.lineTo(x1-nx*w,y1-ny*w); c.closePath();
+      if(front) c.fill();
+      c.strokeStyle=front?ink:red; c.lineWidth=front?1.1:.8; c.stroke();
+    }
+    c.globalAlpha=1;
+  }
+  function spin(){ang+=.0025; solid(); requestAnimationFrame(spin)}
+
+  /* site-wide light/dark switch; this page is a daylight page */
   const btn=document.getElementById('mode');
-  const set=m=>{if(m==='dark')root.dataset.theme='dark';else delete root.dataset.theme;btn.textContent=m==='dark'?'Light':'Dark';draw()};
+  const set=m=>{if(m==='dark')root.dataset.theme='dark';else delete root.dataset.theme;btn.textContent=m==='dark'?'Light':'Dark';notebook();solid()};
   let m='dark';try{m=localStorage.getItem('bm-theme')||'dark'}catch(e){}
   btn.onclick=()=>{m=m==='dark'?'light':'dark';try{localStorage.setItem('bm-theme',m)}catch(e){}set(m)};
+  let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{notebook();solid()},200)});
   set(m);
+  document.fonts?.load('30px Italianno').then(notebook);
+  if(still) solid(); else spin();
 })();
 </script>
 </body>

@@ -8,87 +8,178 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Mulish:wght@500;600&display=swap">
 <style>
-/* After Bela Tarr and Frantisek Vlacil: black and white only, the wide frame, chapter cards, and time.
-   Nothing here has a colour; the title takes as long to arrive as a Tarr shot takes to start moving. */
+/* Gothic, in black and white. Outside the page: a winter field after Marketa Lazarova, snow falling, two wolf
+   trails crossing to a monastery on the horizon. On the page: the monastery's cloister, pointed arches open to the
+   snow, a rib vault overhead, light pooling on the flagstones, and a door lit at the far end. */
 :root{
-  --bg:#0b0b0b; --ink:#e8e8e6; --dim:#8d8d8a; --line:#2c2c2b; --acc:#e8e8e6;
-  --sky-a:#2a2a2a; --sky-b:#6b6b69; --earth:#141414;
+  --bg:#0c0c0c; --ink:#e8e8e6; --dim:#8d8d8a; --line:#2c2c2b; --acc:#e8e8e6;
   --f-disp:'IM Fell English SC',Georgia,serif; --f-body:'EB Garamond',Georgia,serif;
   --here-size:1.05rem;
   color-scheme:dark;
 }
-:root[data-theme="light"]{
-  --bg:#f2f2f0; --ink:#121212; --dim:#5e5e5c; --line:#cfcfcc; --acc:#121212;
-  --sky-a:#bdbdbb; --sky-b:#efefed; --earth:#4a4a49;
-  color-scheme:light}
+:root[data-theme="light"]{--bg:#f2f2f0;--ink:#121212;--dim:#5e5e5c;--line:#cfcfcc;--acc:#121212;color-scheme:light}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 19px/1.65 var(--f-body);filter:grayscale(1)}
+body{margin:0;background:#1a1a1a;color:var(--ink);font:400 19px/1.65 var(--f-body)}
 a{color:inherit;text-underline-offset:4px;text-decoration-thickness:1px}
 :focus-visible{outline:1px solid var(--ink);outline-offset:3px}
 
-/* the opening shot: a 2.39:1 frame, a low grey sky, one horizon, and the title held in the middle of it */
-.shot{position:relative;max-width:1400px;margin:clamp(24px,5vh,56px) auto 0;aspect-ratio:2.39/1;overflow:hidden;
-  background:linear-gradient(to bottom,var(--sky-a),var(--sky-b) 64%,var(--earth) 64.2%,var(--earth))}
-@media (max-width:700px){.shot{aspect-ratio:1.66/1}}
-.shot h1{position:absolute;inset:0;display:grid;place-items:center;margin:0;font:400 clamp(2rem,6.5vw,5rem)/1 var(--f-disp);letter-spacing:.14em;color:#f4f4f2;text-shadow:0 2px 30px rgba(0,0,0,.35)}
-:root[data-theme="light"] .shot h1{color:#0f0f0f;text-shadow:none}
-.shot .land{position:absolute;inset:0;background:inherit;transform-origin:50% 64%}
-.shot .tc{position:absolute;right:18px;bottom:14px;font:400 .8rem/1 var(--f-disp);letter-spacing:.2em;color:rgba(255,255,255,.45);font-variant-numeric:tabular-nums}
-:root[data-theme="light"] .shot .tc{color:rgba(255,255,255,.7)}
+/* the opening shot: 2.39:1, a slow push in, the shot's own clock */
+.shot{position:relative;aspect-ratio:2.39/1;overflow:hidden;background:#000}
+@media (max-width:700px){.shot{aspect-ratio:1.5/1}}
+.shot canvas{position:absolute;inset:0;width:100%;height:100%;display:block;transform-origin:50% 52%}
+.shot h1{position:absolute;left:0;right:0;top:12%;margin:0;text-align:center;font:400 clamp(2rem,6vw,4.4rem)/1 var(--f-disp);letter-spacing:.16em;color:#f2f2f0;text-shadow:0 2px 30px rgba(0,0,0,.6)}
+.shot .tc{position:absolute;right:16px;bottom:12px;font:400 .78rem/1 var(--f-disp);letter-spacing:.2em;color:rgba(255,255,255,.5);font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion:no-preference){
   .shot h1{animation:arrive 5s ease-in 1.2s both}
-  .shot .land{animation:dolly 90s linear both}
+  .shot canvas{animation:dolly 120s linear both}
   @keyframes arrive{from{opacity:0}to{opacity:1}}
-  @keyframes dolly{from{transform:scale(1)}to{transform:scale(1.06)}}
+  @keyframes dolly{from{transform:scale(1)}to{transform:scale(1.08)}}
 }
 
-.wrap{max-width:720px;margin:0 auto;padding-inline:clamp(16px,5vw,48px)}
-.lede{margin:56px 0 0;color:var(--dim);font-style:italic;text-align:center}
-
-/* each screenplay opens with a chapter card, as Marketa Lazarova does */
-.chapter{padding-top:96px}
+.wrap{padding-inline:clamp(16px,5vw,48px)}
+.lede{margin:48px auto 0;max-width:560px;color:var(--dim);font-style:italic;text-align:center}
+.chapter{max-width:620px;margin:0 auto;padding-top:80px}
 .card{border-block:1px solid var(--ink);padding:26px 0 22px;text-align:center}
 .card .no{font:400 .95rem/1 var(--f-disp);letter-spacing:.3em;color:var(--dim)}
 .card h2{margin:14px 0 0;font:400 clamp(1.6rem,4vw,2.3rem)/1.15 var(--f-disp);letter-spacing:.08em}
 .card .where{margin:10px 0 0;font-style:italic;color:var(--dim)}
-.chapter p{margin:22px 0 0}
-.chapter .read{display:flex;justify-content:center;gap:28px;margin-top:22px;font:400 1rem var(--f-disp);letter-spacing:.14em}
-.chapter .read a{text-decoration:none;border-bottom:1px solid var(--line)}
-.chapter .read a:hover{border-bottom-color:var(--ink)}
-footer{margin-top:120px;border-top:1px solid var(--line);padding-block:20px 48px;color:var(--dim);font-size:.9rem}
-footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;max-width:1040px}
+footer{margin-top:96px;border-top:1px solid var(--line);padding-block:20px 24px;color:var(--dim);font-size:.9rem}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 footer a{text-decoration:none}
 </style>
 <link rel="stylesheet" href="../assets/bar.css">
 </head>
 <body>
+<canvas class="backdrop" id="field" aria-hidden="true"></canvas>
+<div class="page">
 <header class="bar"><div class="bar-in">
   <nav class="sites" aria-label="Sites"><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a><a class="here" href="../" aria-current="true">Bucatini Mickey</a></nav>
   <nav class="pages" aria-label="Pages"><a href="../films/">Film</a><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="./" aria-current="page">Writing</a><a href="../art/">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 
-<div class="shot"><div class="land" aria-hidden="true"></div><h1>Writing</h1><span class="tc" id="tc" aria-hidden="true">SHOT 1 · 00:00</span></div>
+<div class="shot">
+  <canvas id="cloister" aria-hidden="true"></canvas>
+  <h1>Writing</h1>
+  <span class="tc" id="tc" aria-hidden="true">SHOT 1 · 00:00</span>
+</div>
 
 <main class="wrap">
   <p class="lede">Screenplays, mostly cold and mostly medieval.</p>
-
   <section class="chapter">
     <div class="card"><div class="no">I</div><h2>To follow</h2><p class="where">The first screenplays are on their way.</p></div>
   </section>
 </main>
 
 <footer><div class="wrap"><span>Bucatini Mickey · Writing</span><span><a href="../">Portfolio</a></span></div></footer>
+</div>
+
 <script>
-/* the shot runs as long as you stay on it */
-(function(){const t0=Date.now(),el=document.getElementById('tc');
-  setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);el.textContent='SHOT 1 · '+String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')},1000)})();
-/* site-wide light/dark switch, remembered in this browser */
 (function(){
-  const root=document.documentElement,btn=document.getElementById('mode');
-  const set=m=>{if(m==='light')root.dataset.theme='light';else delete root.dataset.theme;btn.textContent=m==='light'?'Dark':'Light'};
+  const root=document.documentElement;
+  function rng(seed){let s=seed>>>0||1;return()=>((s=Math.imul(s^s>>>15,1|s)+0x6D2B79F5|0,((s^s>>>14)>>>0)/4294967296))}
+  const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- the field: horizon, snow, a monastery far off, two wolf trails in single file, snow falling ---- */
+  const fc=document.getElementById('field'); let flakes=[], ground=null;
+  function print(c,x,y,s,a,night){
+    if(s<.6) return;
+    c.save(); c.translate(x,y); c.scale(1,.5); c.rotate(a); c.fillStyle=night?'rgba(18,18,18,.6)':'rgba(70,70,70,.55)';
+    c.beginPath(); c.ellipse(0,s*.35,s*.42,s*.36,0,0,Math.PI*2); c.fill();                                   // heel pad
+    for(const [dx,dy] of [[-.42,-.18],[.42,-.18],[-.15,-.55],[.15,-.55]]){c.beginPath();c.ellipse(dx*s,dy*s,s*.16,s*.21,0,0,Math.PI*2);c.fill()}  // toes
+    c.restore();
+  }
+  function field(){
+    const r=rng(1967), dpr=Math.min(2,devicePixelRatio||1), W=innerWidth, H=innerHeight, night=root.dataset.theme!=='light';
+    fc.width=Math.round(W*dpr); fc.height=Math.round(H*dpr);
+    const c=fc.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
+    const hz=H*.36;
+    const sky=c.createLinearGradient(0,0,0,hz); sky.addColorStop(0,night?'#151515':'#9a9a98'); sky.addColorStop(1,night?'#3a3a39':'#d6d6d3');
+    c.fillStyle=sky; c.fillRect(0,0,W,hz);
+    const snow=c.createLinearGradient(0,hz,0,H); snow.addColorStop(0,night?'#4a4a49':'#e2e2df'); snow.addColorStop(1,night?'#7a7a78':'#f7f7f5');
+    c.fillStyle=snow; c.fillRect(0,hz,W,H-hz);
+    // the monastery: a long nave, a gabled roof and a square tower, small and dark on the horizon, inside its wall
+    const mx=W>1100?Math.max(110,(W-980)/4):W*.5, s=Math.max(.6,W/1600), ink=night?'#0d0d0d':'#3a3a39';
+    c.fillStyle=ink;
+    c.fillRect(mx-60*s,hz-14*s,110*s,14*s);
+    c.beginPath(); c.moveTo(mx-64*s,hz-14*s); c.lineTo(mx-5*s,hz-30*s); c.lineTo(mx+54*s,hz-14*s); c.closePath(); c.fill();
+    c.fillRect(mx+30*s,hz-44*s,16*s,44*s);
+    c.beginPath(); c.moveTo(mx+28*s,hz-44*s); c.lineTo(mx+38*s,hz-60*s); c.lineTo(mx+48*s,hz-44*s); c.closePath(); c.fill();
+    c.fillRect(mx-150*s,hz-3*s,320*s,3*s);
+    // wolf trails: prints in a near-straight line (a wolf steps into its own tracks), shrinking towards the monastery
+    function trail(x0,x1,seed){
+      let side=1;
+      for(let t=0;t<1;){
+        const y=H*1.02-(H*1.02-hz-3)*Math.pow(t,.55), d=(y-hz)/(H-hz);
+        if(d<.012) break;
+        const x=x0+(x1-x0)*Math.pow(t,.8)+Math.sin(t*7+seed)*W*.012*d, sc=d*15;
+        const dirx=(x1-x0)*.8, diry=-(H-hz);
+        print(c,x+side*sc*.5,y,sc,Math.atan2(diry*.5,dirx)+Math.PI/2,night);
+        side=-side; t+=Math.max(.005,.028*d*d);
+      }
+    }
+    trail(W*.04,mx-16*s,3); trail(W*.96,mx+14*s,9);
+    ground=c.getImageData(0,0,fc.width,fc.height);
+    flakes=Array.from({length:Math.round(W*H/9000)},()=>({x:r()*W,y:r()*H,z:.3+r()*.7,s:r()}));
+  }
+  let falling=false;
+  function fall(){
+    if(!ground) return;
+    const c=fc.getContext('2d'), dpr=Math.min(2,devicePixelRatio||1), W=innerWidth, H=innerHeight, night=root.dataset.theme!=='light';
+    c.setTransform(1,0,0,1,0,0); c.putImageData(ground,0,0); c.setTransform(dpr,0,0,dpr,0,0);
+    c.fillStyle=night?'rgba(235,235,232,.75)':'rgba(255,255,255,.95)';
+    for(const f of flakes){
+      if(!still){f.y+=.25+f.z*.6; f.x+=Math.sin((f.y+f.s*300)/90)*.25*f.z; if(f.y>H+4){f.y=-4;f.x=Math.random()*W}}
+      c.beginPath(); c.arc(f.x,f.y,.6+f.z*1.6,0,Math.PI*2); c.fill();
+    }
+    if(!still) requestAnimationFrame(fall);
+  }
+
+  /* ---- the cloister, ray-cast a pixel at a time: walls at x=+-1, flagstones at y=-1, vault at y=1.25.
+     Each 1.6 m bay has a pointed (equilateral) arch open to the snow, a transverse rib and two diagonal ribs
+     overhead, and its snowlight falls in a pool on the floor beside the wall. At the end, a pointed door, lit. ---- */
+  const cc=document.getElementById('cloister');
+  function lancet(zz,Y,a,y0,yb){return Y>yb&&Math.abs(zz)<a&&(Y<y0||((zz-a)*(zz-a)+(Y-y0)*(Y-y0)<4*a*a&&(zz+a)*(zz+a)+(Y-y0)*(Y-y0)<4*a*a))}
+  function hash(i,j){let h=Math.imul(i*374761393+j*668265263,1274126177);h^=h>>>13;return (h>>>0)/4294967296}
+  function cloister(){
+    const W=cc.clientWidth, H=cc.clientHeight; if(!W||!H) return;
+    const scale=Math.min(1.5,devicePixelRatio||1), w=Math.round(W*scale), h=Math.round(H*scale);
+    cc.width=w; cc.height=h;
+    const c=cc.getContext('2d'), img=c.createImageData(w,h), d=img.data;
+    const f=h*.95, cx=w/2, cy=h*.5, END=22, P=1.6, A=.42;
+    for(let py=0;py<h;py++) for(let px=0;px<w;px++){
+      const dx=(px-cx)/f, dy=-(py-cy)/f;
+      let t=1e9, v=0, lit=false;
+      if(dy<0){const tf=-1/dy; if(tf<t){t=tf; const X=dx*t, Z=t;
+        // flagstones in staggered courses, each slab its own grey, dark joints between
+        const row=Math.floor(Z/.9), off=(row%2)*.33, col=Math.floor((X+5+off)/.66), fx=((X+5+off)%.66)/.66, fz=(Z%.9)/.9;
+        v=(fx<.04||fz<.05)?.05:.15+hash(row,col)*.09;
+        // snowlight through the arcade, pooled on the floor beside each wall
+        const zz=(Z%P)-P/2, edge=1-Math.abs(X); if(Math.abs(zz)<A*1.1&&edge<.55) v+= .55*(1-edge/.55)*(1-Math.abs(zz)/(A*1.1))}}
+      if(dy>0){const tv=1.25/dy; if(tv<t){t=tv; const X=dx*t, zz=(t%P)-P/2, u=Math.abs(zz)/(P/2);
+        const rib=(t%P)<.06||Math.abs(Math.abs(X)-u)<.035;            // transverse and diagonal ribs
+        v=rib?.34:.07+.05*(1-Math.abs(X))}}
+      if(dx!==0){const tw=1/Math.abs(dx); if(tw<t){t=tw; const Y=dy*t, zz=(t%P)-P/2;
+        v=lancet(zz,Y,A,.15,-.55)?.95:(.16+.05*Math.cos(zz*4))}}
+      if(t>END){t=END; const X=dx*END, Y=dy*END; lit=lancet(X,Y,.3,.1,-1); v=lit?1:.06}
+      const fog=Math.exp(-t*.1), l=lit?1:v*fog+(1-fog)*.015;
+      const g=Math.round(Math.min(1,l)*255), i=(py*w+px)*4; d[i]=d[i+1]=d[i+2]=g; d[i+3]=255;
+    }
+    c.putImageData(img,0,0);
+  }
+
+  /* the shot runs as long as you stay on it */
+  const t0=Date.now(),tc=document.getElementById('tc');
+  setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);tc.textContent='SHOT 1 · '+String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')},1000);
+
+  /* site-wide light/dark switch, remembered in this browser */
+  const btn=document.getElementById('mode');
+  const set=m=>{if(m==='light')root.dataset.theme='light';else delete root.dataset.theme;btn.textContent=m==='light'?'Dark':'Light';field();if(still)fall()};
   let m='dark';try{m=localStorage.getItem('bm-theme')||'dark'}catch(e){}
-  set(m); btn.onclick=()=>{m=m==='dark'?'light':'dark';try{localStorage.setItem('bm-theme',m)}catch(e){}set(m)};
+  btn.onclick=()=>{m=m==='dark'?'light':'dark';try{localStorage.setItem('bm-theme',m)}catch(e){}set(m)};
+  let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{field();cloister();if(still)fall()},200)});
+  set(m); cloister(); if(!falling){falling=true;fall()}
 })();
 </script>
 </body>
