@@ -150,37 +150,22 @@ span.th{background:none}
 .empty{color:var(--dim);margin:0}
 @media (max-width:620px){.grp>.inner,.body,.tree,#tagres{padding-left:10px}}
 
-/* ---- Faust, after Svankmajer ---- */
-/* Outside the stage: painted heaven, swirled clouds as on his cloud flats, turning to hell's red as you go down.
-   On the stage: a painted backdrop of a vaulted corridor in forced perspective, receding to a lit door;
-   the title hangs from Mephisto's control bar. */
+/* ---- the theatre ---- */
+/* Around the page: a red curtain that parts as you scroll, on a Czech puppet-theatre set of painted flats
+   (sky cloth, cloud flats, rocking wave flats, the boards). On the page: a painted corridor behind the title. */
 h1,.sec h2,.grp>summary .nm{font-variation-settings:"SOFT" 100,"WONK" 1,"opsz" 96}
 h1{font-weight:500;letter-spacing:0}
 .sec h2{font-weight:500}
-body{background:#1d2a30}
-.hell{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:var(--hell,0);
-  background:radial-gradient(120% 70% at 50% 110%,rgba(255,90,20,.55),transparent 60%),linear-gradient(rgba(70,6,4,.25),rgba(120,12,6,.7));mix-blend-mode:multiply}
-.hellglow{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:var(--hell,0);background:radial-gradient(90% 45% at 50% 105%,rgba(255,120,40,.5),transparent 70%);mix-blend-mode:screen}
+body{background:#3c070c}
 /* the stage: a gilded frame round the page */
 .page{box-shadow:0 0 0 2px var(--gilt-hi),0 0 0 8px var(--gilt),0 0 0 10px #4a3412,0 40px 90px -30px #000}
-/* the painted backdrop behind the title */
 .mast{position:relative;padding-top:clamp(150px,26vh,230px);overflow:hidden}
 .mast>*{position:relative;z-index:1}
 .mast canvas.corridor{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
 .mast::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(to bottom,transparent 30%,color-mix(in srgb,var(--bg) 70%,transparent) 62%,var(--bg) 96%);pointer-events:none}
 .mast h1{color:#f6ead0;text-shadow:0 2px 18px rgba(0,0,0,.55)}
 :root[data-theme="light"] .mast h1{color:#2a1a12;text-shadow:0 1px 14px rgba(255,245,225,.8)}
-/* marionette strings: the strings fan out from a short control bar to the figure */
-.title{position:relative}
-.title h1{position:relative;display:inline-block}
-.title h1::before,.sec h2::before{content:"";position:absolute;left:0;width:var(--span,100%);bottom:100%;height:var(--drop,110px);background:var(--string);
-  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M38 0L8 100M62 0L92 100M50 0L50 100' stroke='%23000' stroke-width='1' vector-effect='non-scaling-stroke' fill='none'/%3E%3C/svg%3E") 0 0/100% 100%;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M38 0L8 100M62 0L92 100M50 0L50 100' stroke='%23000' stroke-width='1' vector-effect='non-scaling-stroke' fill='none'/%3E%3C/svg%3E") 0 0/100% 100%}
-.title h1::after,.sec h2::after{content:"";position:absolute;left:calc(var(--span,100%) * .33);width:calc(var(--span,100%) * .34);bottom:calc(100% + var(--drop,110px));height:5px;border-radius:3px;background:var(--wood);box-shadow:0 1px 0 rgba(255,255,255,.12) inset}
-.title h1::before{background:rgba(246,234,208,.6)}
-/* Mephisto's control bar has horns */
-.title .horns{position:absolute;left:calc(33% - 16px);width:calc(34% + 32px);bottom:calc(100% + 113px);height:30px;pointer-events:none}
-.title .horns svg{width:100%;height:100%;display:block;overflow:visible}
-.sec h2{position:relative;--drop:52px;--span:min(70%,260px);margin-top:64px}
+.sec h2{margin-top:40px}
 .enso{border-color:var(--gilt);border-right-color:transparent}
 .tabs{background:var(--bg)}
 .tabs button[aria-selected="true"]{border-bottom-color:var(--acc)}
@@ -188,15 +173,15 @@ body{background:#1d2a30}
 <link rel="stylesheet" href="../assets/bar.css">
 </head>
 <body>
-<canvas class="backdrop heaven" aria-hidden="true"></canvas><div class="hell" aria-hidden="true"></div><div class="hellglow" aria-hidden="true"></div>
+<canvas class="backdrop" id="stage" aria-hidden="true"></canvas>
 <div class="page">
 <header class="bar"><div class="bar-in">
-  <nav class="sites" aria-label="Sites"><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a><a class="here" href="../" aria-current="true">Bucatini Mickey</a></nav>
+  <nav class="sites" aria-label="Sites"><a class="here" href="../" aria-current="true"><span class="seal" aria-hidden="true">BM</span>Bucatini Mickey</a><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a></nav>
   <nav class="pages" aria-label="Pages"><a href="../films/" aria-current="page">Film</a><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="../writing/">Writing</a><a href="../art/">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 <header class="wrap mast">
   <canvas class="corridor" aria-hidden="true"></canvas>
-  <div class="title"><h1>Film Index<span class="horns" aria-hidden="true"><svg viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M9 20 C 3 13, 2 5, 7 0 C 8 7, 12 13, 19 18 Z M91 20 C 97 13, 98 5, 93 0 C 92 7, 88 13, 81 18 Z" fill="#b23a2a" stroke="#3a120c" stroke-width=".8" vector-effect="non-scaling-stroke"/></svg></span></h1></div>
+  <div class="title"><h1>Film Index</h1></div>
   <p class="lede">Everything I keep on <a class="lb" href="https://letterboxd.com/bucatini_mickey/">Letterboxd</a>.</p>
   <div class="search"><input id="q" type="search" placeholder="Search lists or films" autocomplete="off" aria-label="Search lists and films"></div>
 </header>
@@ -379,22 +364,23 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
 })();
 </script>
 <script>
-/* Heaven: rows of painted cloud swirls, small and far at the top, large and near at the bottom. Each swirl is
-   shaded from a warm highlight at the upper left to slate at the lower right, with a curl painted in and a dark
-   rim underneath, as on Svankmajer's painted cloud flats. Scrolling down the page leads into hell. */
+/* The theatre around the page. At the top of the page the red curtain is closed; scrolling draws it back to the
+   sides, gathering its pleats, and shows the set behind it, built from painted flats as in a Czech puppet
+   theatre: a sky cloth, cloud flats hung from the flies, four rows of wave flats rocking against each other like
+   an old wave machine, and the boards of the stage, lit from the footlights. A scalloped valance stays above it all. */
 (function(){
-  const cv=document.querySelector('canvas.heaven'), root=document.documentElement;
+  const cv=document.getElementById('stage'), root=document.documentElement, still=matchMedia('(prefers-reduced-motion: reduce)').matches;
   function rng(seed){let s=seed>>>0||1;return()=>((s=Math.imul(s^s>>>15,1|s)+0x6D2B79F5|0,((s^s>>>14)>>>0)/4294967296))}
-  const HI=['#a9b49c','#bba878','#93a68c','#a3b2aa','#ad9d70'], MID=['#3f5759','#4b6462','#34494f','#506659','#3a5059'];
-  /* one cloud: a few flattened lobes, each painted flat in two tones (lit top-left, shaded lower right),
-     outlined underneath with a dark painted contour, and the largest carrying a light scroll curl */
+  let W=0,H=0,dpr=1,set=null;
+  const HI=['#c9cfb4','#d6c592','#aebf9c','#bccbc0'], MID=['#5f7a78','#6d8780','#4f6870','#738a7c'];
+
   function lobe(c,r,x,y,rx,ry,hi,mid,curl){
     c.save(); c.beginPath(); c.ellipse(x,y,rx,ry,0,0,Math.PI*2); c.fillStyle=mid; c.fill(); c.clip();
-    c.beginPath(); c.ellipse(x-rx*.28,y-ry*.38,rx*.8,ry*.7,0,0,Math.PI*2); c.fillStyle=hi; c.globalAlpha=.8; c.fill(); c.globalAlpha=1;
+    c.beginPath(); c.ellipse(x-rx*.28,y-ry*.38,rx*.8,ry*.7,0,0,Math.PI*2); c.fillStyle=hi; c.globalAlpha=.85; c.fill(); c.globalAlpha=1;
     if(curl){
       const dir=r()<.5?1:-1, a0=dir>0?-Math.PI*.95:-Math.PI*.05, turns=1.05+r()*.35;
       c.lineCap='round';
-      for(const [w,col,al] of [[ry*.2,'#1d2a32',.45],[ry*.13,'#ddd3b4',.9]]){
+      for(const [w,col,al] of [[ry*.2,'#1d2a32',.4],[ry*.13,'#e6dcc0',.9]]){
         c.strokeStyle=col; c.globalAlpha=al; c.lineWidth=w; c.beginPath();
         for(let t=0;t<=1.0001;t+=.015){const a=a0+dir*t*turns*Math.PI*2, k=1-t*.78; const px=x+Math.cos(a)*rx*.8*k, py=y+Math.sin(a)*ry*.75*k; t?c.lineTo(px,py):c.moveTo(px,py)}
         c.stroke();
@@ -402,74 +388,119 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
       c.globalAlpha=1;
     }
     c.restore();
-    c.strokeStyle='#18232b'; c.globalAlpha=.7; c.lineWidth=Math.max(1.5,ry*.09);
+    c.strokeStyle='#18232b'; c.globalAlpha=.65; c.lineWidth=Math.max(1.5,ry*.09);
     c.beginPath(); c.ellipse(x,y,rx,ry,0,-.25,Math.PI*1.05); c.stroke(); c.globalAlpha=1;
   }
   function cloud(c,r,x,y,s){
-    const hi=HI[Math.floor(r()*HI.length)], mid=MID[Math.floor(r()*MID.length)];
-    const n=2+Math.floor(r()*3);
+    const hi=HI[Math.floor(r()*HI.length)], mid=MID[Math.floor(r()*MID.length)], n=2+Math.floor(r()*3);
     for(let i=0;i<n;i++){const ox=(i-(n-1)/2)*s*.75+(r()-.5)*s*.2, oy=-Math.abs(ox)*.15-r()*s*.15; lobe(c,r,x+ox,y+oy,s*(.62+r()*.25),s*(.42+r()*.15),hi,mid,false)}
     lobe(c,r,x+(r()-.5)*s*.3,y-s*.18,s*(.85+r()*.2),s*(.58+r()*.12),hi,mid,true);
   }
-  function draw(){
-    const r=rng(1994), dpr=Math.min(2,devicePixelRatio||1), W=innerWidth, H=innerHeight;
-    cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
-    const c=cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
-    const sky=c.createLinearGradient(0,0,0,H); sky.addColorStop(0,'#8f957f'); sky.addColorStop(1,'#1f2c33');
+  /* the fixed parts of the set, painted once: sky cloth, cloud flats, the boards */
+  function paintSet(){
+    const r=rng(1994); set=document.createElement('canvas'); set.width=cv.width; set.height=cv.height;
+    const c=set.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
+    const sky=c.createLinearGradient(0,0,0,H*.7); sky.addColorStop(0,'#34484f'); sky.addColorStop(1,'#cbbd8f');
     c.fillStyle=sky; c.fillRect(0,0,W,H);
-    let y=-20;
-    while(y<H+120){
-      const t=Math.max(0,y/H), s=48+t*t*120+r()*20;
-      for(let x=-s*r();x<W+s;x+=s*(1.9+r()*.7)) cloud(c,r,x,y+(r()-.5)*s*.4,s*(.85+r()*.3));
-      y+=s*.55;
+    // cloud flats in two hung rows
+    for(const [y,s] of [[H*.12,54],[H*.3,70]]) for(let x=-s*r();x<W+s;x+=s*(2.1+r()*.8)) cloud(c,r,x,y+(r()-.5)*s*.4,s*(.85+r()*.3));
+    // the boards: planks running to a vanishing point, lit from the front
+    const top=H*.82, vx=W/2, n=28;
+    for(let i=0;i<n;i++){
+      const x0=-W*.6+i*(W*2.2/n), x1=x0+W*2.2/n, t0=vx+(x0-vx)*.35, t1=vx+(x1-vx)*.35;
+      c.fillStyle=i%2?'#6b4a2c':'#7a5636'; c.beginPath(); c.moveTo(t0,top); c.lineTo(t1,top); c.lineTo(x1,H); c.lineTo(x0,H); c.closePath(); c.fill();
+      c.strokeStyle='rgba(30,18,10,.55)'; c.lineWidth=1; c.stroke();
     }
-    const v=c.createRadialGradient(W/2,H*.45,Math.min(W,H)*.3,W/2,H*.45,Math.max(W,H)*.75);
-    v.addColorStop(0,'rgba(10,16,20,0)'); v.addColorStop(1,'rgba(10,16,20,.55)'); c.fillStyle=v; c.fillRect(0,0,W,H);
+    const fl=c.createLinearGradient(0,top,0,H); fl.addColorStop(0,'rgba(20,12,6,.55)'); fl.addColorStop(1,'rgba(255,190,110,.18)');
+    c.fillStyle=fl; c.fillRect(0,top,W,H-top);
   }
-  /* heaven above, hell below: how far down the page you are sets the hell overlay */
-  let q=false;function sink(){const h=document.documentElement.scrollHeight-innerHeight;const f=h>0?scrollY/h:0;root.style.setProperty('--hell',Math.max(0,Math.min(1,(f-.45)/.5)).toFixed(3));q=false}
-  addEventListener('scroll',()=>{if(!q){q=true;requestAnimationFrame(sink)}},{passive:true});
+  /* one row of wave flats: a painted band whose top edge is a run of crests, each curling over */
+  function waves(c,row,t){
+    const y0=H*(.52+row*.06), P=150-row*22, sway=(row%2?1:-1)*Math.sin(t*.7+row*1.3)*P*.32, bob=Math.sin(t*.9+row)*4;
+    const body=['#3f6670','#355a63','#2b4c55','#213f47'][row], crest=['#cfd8c4','#c5cfb8','#bcc6ae','#b2bca4'][row];
+    c.save(); c.translate(sway,bob);
+    const floor=H*.83;
+    c.beginPath(); c.moveTo(-P*2,floor);
+    for(let x=-P*2;x<W+P*2;x+=P){c.lineTo(x,y0); c.quadraticCurveTo(x+P*.35,y0-P*.42,x+P*.62,y0-P*.3); c.quadraticCurveTo(x+P*.8,y0-P*.06,x+P,y0)}
+    c.lineTo(W+P*2,floor); c.closePath(); c.fillStyle=body; c.fill();
+    c.strokeStyle='#14262c'; c.lineWidth=2; c.stroke();
+    c.lineCap='round';
+    for(let x=-P*2;x<W+P*2;x+=P){
+      const cx=x+P*.6, cy=y0-P*.17, rr=P*.14;
+      c.strokeStyle=crest; c.lineWidth=Math.max(2,P*.05); c.beginPath();
+      for(let k=0;k<=1.0001;k+=.04){const a=-Math.PI*.9+k*Math.PI*2.1, q=rr*(1-k*.75); const px=cx+Math.cos(a)*q, py=cy+Math.sin(a)*q; k?c.lineTo(px,py):c.moveTo(px,py)}
+      c.stroke();
+    }
+    c.restore();
+  }
+  /* the curtain: two halves of red velvet that part and gather as you scroll */
+  function curtain(c,p){
+    const half=W/2, pleats=16;
+    for(const side of [-1,1]){
+      const outer=side<0?0:W, width=half*(1-p*.86), inner=outer-side*width, lift=p*H*.2;
+      c.save(); c.beginPath();
+      c.moveTo(outer,0); c.lineTo(inner,0);
+      c.quadraticCurveTo(inner-side*width*.05,H*.55,inner-side*width*.18*p,H-lift);
+      c.lineTo(outer,H); c.closePath(); c.clip();
+      const pw=width/pleats;
+      for(let k=0;k<pleats+1;k++){
+        const x=side<0?k*pw:W-(k+1)*pw;
+        const g=c.createLinearGradient(x,0,x+pw,0);
+        g.addColorStop(0,'#3c070c'); g.addColorStop(.3,'#8a1820'); g.addColorStop(.55,'#b8343a'); g.addColorStop(.8,'#7a141b'); g.addColorStop(1,'#3c070c');
+        c.fillStyle=g; c.fillRect(x,0,pw+1,H);
+      }
+      const v=c.createLinearGradient(0,0,0,H); v.addColorStop(0,'rgba(0,0,0,.5)'); v.addColorStop(.35,'rgba(0,0,0,0)'); v.addColorStop(1,'rgba(255,140,60,.12)');
+      c.fillStyle=v; c.fillRect(0,0,W,H);
+      c.restore();
+    }
+  }
+  function valance(c){
+    const h=Math.min(90,H*.1);
+    c.fillStyle='#5e0d13'; c.fillRect(0,0,W,h*.62);
+    for(let x=0;x<W+46;x+=46){
+      c.fillStyle='#c99a3c'; c.beginPath(); c.arc(x+23,h*.62,24,0,Math.PI); c.fill();
+      c.fillStyle='#6e1219'; c.beginPath(); c.arc(x+23,h*.62,21,0,Math.PI); c.fill();
+    }
+    c.fillStyle='rgba(0,0,0,.18)'; for(let x=0;x<W;x+=22) c.fillRect(x,0,2,h*.62);
+  }
+  function size(){dpr=Math.min(2,devicePixelRatio||1); W=innerWidth; H=innerHeight; cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); paintSet()}
+  function draw(t){
+    const c=cv.getContext('2d'); c.setTransform(1,0,0,1,0,0); c.drawImage(set,0,0); c.setTransform(dpr,0,0,dpr,0,0);
+    for(let row=0;row<4;row++) waves(c,row,t);
+    const room=document.documentElement.scrollHeight-innerHeight, p=Math.max(0,Math.min(1,scrollY/Math.max(120,Math.min(innerHeight*.6,room*.6))));   // opens within the first stretch of scrolling, however short the page
+    curtain(c,p);
+    valance(c);
+  }
+  let last=0,t0=performance.now();
+  function loop(ts){ if(!document.hidden&&ts-last>33){last=ts;draw((ts-t0)/1000)} requestAnimationFrame(loop) }
+  addEventListener('resize',()=>{size();draw((performance.now()-t0)/1000)});
+  if(still) addEventListener('scroll',()=>requestAnimationFrame(()=>draw(0)),{passive:true});
+  size(); draw(0); if(!still) requestAnimationFrame(loop);
 
-  /* The stage backdrop: arches receding to a vanishing point, each a painted band of stone in rose, ochre and
-     slate, a stepped floor in perspective between them, and a warm lit door at the end. */
+  /* The painted backdrop behind the title: arches receding to a vanishing point, a stepped floor, a lit door. */
   const cc=document.querySelector('canvas.corridor');
   function corridor(){
-    const r=rng(7), dpr=Math.min(2,devicePixelRatio||1), W=cc.clientWidth, H=cc.clientHeight;
-    if(!W||!H) return;
-    cc.width=Math.round(W*dpr); cc.height=Math.round(H*dpr);
-    const c=cc.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
-    const vx=W*.5, vy=H*.4, N=10, k=.72;
-    const STONE=['#b48a7c','#b8935e','#8d8a83','#a5776a','#c3a37a','#7f7a74'];
-    c.fillStyle='#2a1c18'; c.fillRect(0,0,W,H);
-    const at=i=>{const t=Math.pow(k,i);return {t,w:W*1.15*t,h:H*1.5*t,base:vy+(H*1.05-vy)*t}};
-    // floor: alternating steps between the feet of successive arches
-    for(let i=N;i>=0;i--){
-      const A=at(i),B=at(i+1);
-      c.fillStyle=i%2?'#6e6058':'#9a8a78';
-      c.beginPath();c.moveTo(vx-A.w/2,A.base);c.lineTo(vx+A.w/2,A.base);c.lineTo(vx+B.w/2,B.base);c.lineTo(vx-B.w/2,B.base);c.closePath();c.fill();
-    }
-    // the lit door at the end
+    const r=rng(7), d=Math.min(2,devicePixelRatio||1), w=cc.clientWidth, h=cc.clientHeight;
+    if(!w||!h) return;
+    cc.width=Math.round(w*d); cc.height=Math.round(h*d);
+    const c=cc.getContext('2d'); c.setTransform(d,0,0,d,0,0);
+    const vx=w*.5, vy=h*.4, N=10, k=.72, STONE=['#b48a7c','#b8935e','#8d8a83','#a5776a','#c3a37a','#7f7a74'];
+    c.fillStyle='#2a1c18'; c.fillRect(0,0,w,h);
+    const at=i=>{const t=Math.pow(k,i);return {t,w:w*1.15*t,h:h*1.5*t,base:vy+(h*1.05-vy)*t}};
+    for(let i=N;i>=0;i--){const A=at(i),B=at(i+1); c.fillStyle=i%2?'#6e6058':'#9a8a78'; c.beginPath();c.moveTo(vx-A.w/2,A.base);c.lineTo(vx+A.w/2,A.base);c.lineTo(vx+B.w/2,B.base);c.lineTo(vx-B.w/2,B.base);c.closePath();c.fill()}
     const D=at(N+1), gl=c.createRadialGradient(vx,D.base-D.h*.35,0,vx,D.base-D.h*.35,D.w*2.4);
-    gl.addColorStop(0,'#fff1b0');gl.addColorStop(.25,'#e8c860');gl.addColorStop(1,'rgba(232,200,96,0)');
-    c.fillStyle=gl;c.fillRect(vx-D.w*3,D.base-D.h*2,D.w*6,D.h*2.2);
-    // arches, far to near: a ring of painted stone with a round-headed opening cut through it
+    gl.addColorStop(0,'#fff1b0');gl.addColorStop(.25,'#e8c860');gl.addColorStop(1,'rgba(232,200,96,0)'); c.fillStyle=gl; c.fillRect(vx-D.w*3,D.base-D.h*2,D.w*6,D.h*2.2);
     for(let i=N;i>=0;i--){
-      const A=at(i), w=A.w, h=A.h, x0=vx-w/2, top=A.base-h, ow=w*.74, oh=h*.86, ox=vx-ow/2, otop=A.base-oh, rr=ow/2;
-      const col=STONE[(i+Math.floor(r()*2))%STONE.length];
-      c.beginPath();
-      c.rect(x0,top,w,h);
-      c.moveTo(ox,A.base);c.lineTo(ox,otop+rr);c.arc(vx,otop+rr,rr,Math.PI,0,false);c.lineTo(ox+ow,A.base);c.closePath();
-      const g=c.createLinearGradient(x0,0,x0+w,0);
-      g.addColorStop(0,col);g.addColorStop(.1,'#e2cfae');g.addColorStop(.18,col);g.addColorStop(.82,col);g.addColorStop(.92,'#4a3a33');g.addColorStop(1,col);
-      c.fillStyle=g; c.fill('evenodd');
-      c.strokeStyle='rgba(30,18,14,.45)';c.lineWidth=Math.max(1,2*A.t);c.stroke();
+      const A=at(i), aw=A.w, ah=A.h, x0=vx-aw/2, top=A.base-ah, ow=aw*.74, oh=ah*.86, ox=vx-ow/2, otop=A.base-oh, rr=ow/2, col=STONE[(i+Math.floor(r()*2))%STONE.length];
+      c.beginPath(); c.rect(x0,top,aw,ah); c.moveTo(ox,A.base);c.lineTo(ox,otop+rr);c.arc(vx,otop+rr,rr,Math.PI,0,false);c.lineTo(ox+ow,A.base);c.closePath();
+      const g=c.createLinearGradient(x0,0,x0+aw,0); g.addColorStop(0,col);g.addColorStop(.1,'#e2cfae');g.addColorStop(.18,col);g.addColorStop(.82,col);g.addColorStop(.92,'#4a3a33');g.addColorStop(1,col);
+      c.fillStyle=g; c.fill('evenodd'); c.strokeStyle='rgba(30,18,14,.45)'; c.lineWidth=Math.max(1,2*A.t); c.stroke();
     }
-    // the side walls in shadow, so the corridor reads as a tunnel
-    const sv=c.createLinearGradient(0,0,W,0);sv.addColorStop(0,'rgba(20,12,10,.65)');sv.addColorStop(.22,'rgba(20,12,10,0)');sv.addColorStop(.78,'rgba(20,12,10,0)');sv.addColorStop(1,'rgba(20,12,10,.65)');
-    c.fillStyle=sv;c.fillRect(0,0,W,H);
+    const sv=c.createLinearGradient(0,0,w,0); sv.addColorStop(0,'rgba(20,12,10,.65)');sv.addColorStop(.22,'rgba(20,12,10,0)');sv.addColorStop(.78,'rgba(20,12,10,0)');sv.addColorStop(1,'rgba(20,12,10,.65)');
+    c.fillStyle=sv; c.fillRect(0,0,w,h);
   }
-  let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(()=>{draw();corridor()},200)});
-  document.fonts?.ready.then(()=>{draw();corridor()}); draw(); corridor(); sink();
+  let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(corridor,200)});
+  document.fonts?.ready.then(corridor); corridor();
 })();
 </script>
 </body>

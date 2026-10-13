@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Mulish:wght@500;600&display=swap">
 <style>
-/* Gothic, in black and white. Outside the page: a winter field after Marketa Lazarova, snow falling, two wolf
+/* Gothic, in black and white. Outside the page (drifting up more slowly than the page as you scroll): a winter field after Marketa Lazarova, snow falling, two wolf
    trails crossing to a monastery on the horizon. On the page: the monastery's cloister, pointed arches open to the
    snow, a rib vault overhead, light pooling on the flagstones, and a door lit at the far end. */
 :root{
@@ -52,10 +52,10 @@ footer a{text-decoration:none}
 <link rel="stylesheet" href="../assets/bar.css">
 </head>
 <body>
-<canvas class="backdrop" id="field" aria-hidden="true"></canvas>
+<canvas class="backdrop tall" id="field" data-parallax=".25" aria-hidden="true"></canvas>
 <div class="page">
 <header class="bar"><div class="bar-in">
-  <nav class="sites" aria-label="Sites"><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a><a class="here" href="../" aria-current="true">Bucatini Mickey</a></nav>
+  <nav class="sites" aria-label="Sites"><a class="here" href="../" aria-current="true"><span class="seal" aria-hidden="true">BM</span>Bucatini Mickey</a><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a></nav>
   <nav class="pages" aria-label="Pages"><a href="../films/">Film</a><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="./" aria-current="page">Writing</a><a href="../art/">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 
@@ -91,10 +91,10 @@ footer a{text-decoration:none}
     c.restore();
   }
   function field(){
-    const r=rng(1967), dpr=Math.min(2,devicePixelRatio||1), W=innerWidth, H=innerHeight, night=root.dataset.theme!=='light';
+    const r=rng(1967), dpr=Math.min(2,devicePixelRatio||1), W=fc.clientWidth, H=fc.clientHeight, night=root.dataset.theme!=='light';
     fc.width=Math.round(W*dpr); fc.height=Math.round(H*dpr);
     const c=fc.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
-    const hz=H*.36;
+    const hz=H*.3;
     const sky=c.createLinearGradient(0,0,0,hz); sky.addColorStop(0,night?'#151515':'#9a9a98'); sky.addColorStop(1,night?'#3a3a39':'#d6d6d3');
     c.fillStyle=sky; c.fillRect(0,0,W,hz);
     const snow=c.createLinearGradient(0,hz,0,H); snow.addColorStop(0,night?'#4a4a49':'#e2e2df'); snow.addColorStop(1,night?'#7a7a78':'#f7f7f5');
@@ -126,7 +126,7 @@ footer a{text-decoration:none}
   let falling=false;
   function fall(){
     if(!ground) return;
-    const c=fc.getContext('2d'), dpr=Math.min(2,devicePixelRatio||1), W=innerWidth, H=innerHeight, night=root.dataset.theme!=='light';
+    const c=fc.getContext('2d'), dpr=Math.min(2,devicePixelRatio||1), W=fc.clientWidth, H=fc.clientHeight, night=root.dataset.theme!=='light';
     c.setTransform(1,0,0,1,0,0); c.putImageData(ground,0,0); c.setTransform(dpr,0,0,dpr,0,0);
     c.fillStyle=night?'rgba(235,235,232,.75)':'rgba(255,255,255,.95)';
     for(const f of flakes){
@@ -182,5 +182,6 @@ footer a{text-decoration:none}
   set(m); cloister(); if(!falling){falling=true;fall()}
 })();
 </script>
+<script src="../assets/parallax.js"></script>
 </body>
 </html>

@@ -1,39 +1,39 @@
-/* The top bar, shared by jsonsummers.github.io and bucatini-mickey.github.io. Keep both copies identical.
-   Left: the two sites as tabs. The one you are on is raised, joined to the page and written in full;
-   the other is recessed and abbreviated. Right: this site's pages.
-   Each page themes it through --bg --ink --dim --line --acc --f-disp --f-body. */
-.bar{position:relative;z-index:5;background:var(--bar-bg,var(--bg));border-bottom:1px solid var(--line);font-family:var(--f-body)}
-.bar-in{max-width:var(--bar-w,1040px);margin:0 auto;padding:10px clamp(16px,5vw,48px) 0;display:flex;align-items:stretch;justify-content:space-between;gap:8px 24px;flex-wrap:wrap}
-.sites{display:flex;align-items:flex-end;margin:0;padding:0}
-.sites a{display:flex;align-items:center;text-decoration:none;white-space:nowrap;border:1px solid var(--line);border-bottom:0;border-radius:6px 6px 0 0}
-.sites .here{position:relative;z-index:1;height:44px;padding:0 16px;margin-bottom:-1px;background:var(--bar-bg,var(--bg));color:var(--ink);font:500 var(--here-size,.95rem)/1 var(--f-disp);letter-spacing:.02em}
-.sites .here::after{content:"";position:absolute;left:12px;right:12px;top:-1px;height:2px;border-radius:2px;background:var(--acc)}
-.sites .away{height:36px;padding:0 11px;margin-left:-1px;color:var(--dim);background:color-mix(in srgb,var(--ink) 6%,var(--bar-bg,var(--bg)));font:600 .74rem/1 var(--f-body);letter-spacing:.12em}
-.sites .away:first-child{margin-left:0;margin-right:-1px}
-.sites .away:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 11%,var(--bar-bg,var(--bg)))}
-.pages{display:flex;align-items:center;gap:clamp(14px,2.6vw,26px);padding-bottom:4px;font:500 .78rem/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase}
-.pages a,.pages button{color:var(--dim);text-decoration:none;padding:8px 0;border:0;border-bottom:1px solid transparent;background:none;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer}
+/* The top bar and the floating page, shared by jsonsummers.github.io and bucatini-mickey.github.io.
+   Keep both copies identical.
+
+   Bar: the site you are on comes first, its name beside a small vermilion seal (a hanko), so the seal sits in
+   the same place on both sites; a hairline divides it from the other site, written quietly as its initials.
+   On the right, this site's pages. One typeface on both sites, so the bar measures the same everywhere;
+   each page colours it through --bg --ink --dim --line --acc.
+
+   Floating page: every page's theme fills the window as a fixed .backdrop and the page sits on it as a panel of
+   the same width and offset everywhere, so nothing moves when you change page or site. */
+.bar{position:relative;z-index:5;background:var(--bar-bg,var(--bg));border-bottom:1px solid var(--line);
+  --f-bar:'Cormorant Garamond',Garamond,Georgia,serif;--f-barsans:'Mulish',system-ui,sans-serif}
+.bar-in{max-width:var(--bar-w,1040px);margin:0 auto;padding:0 clamp(16px,5vw,48px);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:8px 24px;flex-wrap:wrap}
+.sites{display:flex;align-items:center;margin:0;padding:0}
+.sites a{display:flex;align-items:center;gap:10px;text-decoration:none;white-space:nowrap}
+.sites>*+*{margin-left:16px;padding-left:16px;border-left:1px solid var(--line)}
+.sites .here{color:var(--ink);font:500 1.12rem/1 var(--f-bar);letter-spacing:.02em}
+.sites .away{color:var(--dim);font:500 .7rem/1 var(--f-barsans);letter-spacing:.22em}
+.sites .away:hover{color:var(--ink)}
+.seal{display:inline-grid;place-items:center;width:24px;height:24px;flex:none;border-radius:3px;background:#b8382a;color:#f7efe4;
+  font:600 .6rem/1 var(--f-barsans);letter-spacing:.04em;box-shadow:inset 0 0 0 2px #b8382a,inset 0 0 0 3px rgba(247,239,228,.75)}
+.pages{display:flex;align-items:center;gap:clamp(14px,2.6vw,28px);font:500 .7rem/1 var(--f-barsans);letter-spacing:.2em;text-transform:uppercase}
+.pages a,.pages button{position:relative;color:var(--dim);text-decoration:none;padding:8px 0;border:0;background:none;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer}
 .pages a:hover,.pages button:hover{color:var(--ink)}
-.pages a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--acc)}
-.pages .soon{opacity:.5;cursor:default}
+.pages a[aria-current="page"]{color:var(--ink)}
+.pages a[aria-current="page"]::after{content:"";position:absolute;left:50%;bottom:0;width:14px;height:1px;margin-left:-7px;background:var(--acc)}
 @media (max-width:620px){
-  .bar{border-bottom:0}
-  .bar-in{flex-direction:column;gap:0}
-  .sites{box-shadow:inset 0 -1px var(--line)}
-  .sites .here{margin-bottom:0}
-  .pages{flex-wrap:wrap;gap:4px 18px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .bar-in{flex-direction:column;align-items:flex-start;gap:0;padding-block:14px 6px}
+  .pages{flex-wrap:wrap;gap:2px 13px;padding-top:10px;letter-spacing:.13em;font-size:.66rem}
 }
 
-/* The floating page, used by every bucatini-mickey room: the room's theme fills the window as a fixed
-   .backdrop and the page sits on it as a panel. The panel's width, top offset and bar are the same in every
-   room, so the navigation never moves when you change rooms. Rooms only colour it (--bg, --line). */
-.backdrop{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;display:block}
+.backdrop{position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:0;pointer-events:none;display:block;will-change:transform}
+.backdrop.tall{height:140vh}
 .page{position:relative;z-index:1;max-width:980px;margin:48px auto;background:var(--bg);border-radius:4px;box-shadow:0 30px 80px -40px rgba(0,0,0,.45),0 0 0 1px var(--line)}
 .page>.bar{border-radius:4px 4px 0 0}
 .page>.bar .bar-in{max-width:none}
 .page>footer:last-child{border-radius:0 0 4px 4px}
 @media (max-width:1040px){.page{margin:28px 24px}}
 @media (max-width:620px){.page{margin:14px 10px}}
-/* In the floating page the bar keeps one typeface in every room, so the tabs and links never shift by a pixel;
-   only the colours follow the room. */
-.page>.bar{--f-disp:'Cormorant Garamond',Garamond,Georgia,serif;--f-body:'Mulish',system-ui,sans-serif;--here-size:1.1rem}

@@ -7,38 +7,35 @@
 <meta name="description" content="Paintings and other art by Mickey.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italianno&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=EB+Garamond:ital@0;1&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Mulish:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=EB+Garamond:ital@0;1&family=Mulish:wght@500;600&display=swap">
 <style>
-/* Leonardo's notebooks. Around the page: parchment written over in red chalk, his notes in mirror writing,
-   with the construction drawings he kept returning to (the circle and square, a spiral, water turning on itself).
-   On the page: a skeletal solid as he drew them for Pacioli, turning slowly. Dark mode is the same by candlelight. */
+/* Baroque geometry on parchment, drawn with compass and rule in red chalk and gilt: Borromini's plan for
+   San Carlo (an oval built from two equilateral triangles and four circles), the coffers of an oval dome, and
+   Vignola's construction of the Ionic volute. No writing but the page's own. The parchment drifts up more slowly
+   than the page. Dark mode is the same sheet by candlelight. */
 :root{
-  --bg:#f3e8cf; --ink:#3b2a1a; --dim:#7a6248; --line:#dcc9a3; --acc:#b4532a;
-  --parch:#e6d3a8; --parch-hi:#efe0bd; --parch-lo:#c9ae7c; --sanguine:#b4532a; --sepia:#5a3c22;
+  --bg:#f3e7cb; --ink:#3b2a1a; --dim:#7a6248; --line:#d9c497; --acc:#a9472a;
+  --parch:#e4cf9f; --parch-hi:#efdfb8; --parch-lo:#c6a46b; --sanguine:#a9472a; --gilt:#b8913a; --gilt-hi:#e3c77a; --sepia:#5a3c22;
   --f-disp:'Cormorant Garamond',Garamond,Georgia,serif; --f-body:'EB Garamond',Georgia,serif;
-  --here-size:1.12rem;
   color-scheme:light;
 }
 :root[data-theme="dark"]{
-  --bg:#2e2318; --ink:#ecdcbc; --dim:#b39c7c; --line:#4a3a29; --acc:#e08a5a;
-  --parch:#3a2b1c; --parch-hi:#4a3825; --parch-lo:#241a10; --sanguine:#d9814f; --sepia:#e2c79d;
+  --bg:#2c2116; --ink:#ecdcbc; --dim:#b39c7c; --line:#4f3d27; --acc:#e08a5a;
+  --parch:#35281a; --parch-hi:#4a3825; --parch-lo:#1e160e; --sanguine:#d0754a; --gilt:#d4ad55; --gilt-hi:#f0d68e; --sepia:#e2c79d;
   color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--parch);color:var(--ink);font:400 19px/1.65 var(--f-body)}
 a{color:inherit;text-underline-offset:4px}
 :focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+/* a gilt frame: a bright fillet, a broad gold band, a dark sight edge */
+.page{box-shadow:0 0 0 1px var(--gilt-hi),0 0 0 7px var(--gilt),0 0 0 8px #6b4f1c,0 0 0 9px var(--gilt-hi),0 40px 90px -30px rgba(40,25,10,.6)}
 
-.folio{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:clamp(16px,4vw,48px);align-items:center;padding:clamp(40px,8vh,80px) clamp(16px,5vw,48px) 24px}
+.folio{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(16px,4vw,48px);align-items:center;padding:clamp(40px,8vh,80px) clamp(20px,5vw,56px) 16px}
 @media (max-width:720px){.folio{grid-template-columns:minmax(0,1fr)}}
-.folio h1{margin:0;font:400 clamp(3.2rem,9vw,6rem)/1 var(--f-disp);color:var(--sanguine);letter-spacing:.01em}
-.folio .lede{margin:16px 0 0;color:var(--dim);font-style:italic;max-width:34ch}
-.folio .note{margin:22px 0 0;font:400 1.9rem/1.1 'Italianno',cursive;color:var(--sanguine);transform:scaleX(-1);text-align:right;opacity:.85}
-.solid{display:flex;flex-direction:column;align-items:center;gap:6px}
-.solid canvas{width:min(100%,380px);aspect-ratio:1;display:block}
-.solid .cap{font:400 .8rem/1 var(--f-disp);letter-spacing:.3em;text-transform:uppercase;color:var(--sepia)}
-.wrap{padding-inline:clamp(16px,5vw,48px)}
-.soon{margin:40px 0 0;font:italic 400 1.35rem var(--f-disp);color:var(--dim)}
+.folio h1{margin:0;font:400 clamp(3.4rem,10vw,6.4rem)/1 var(--f-disp);color:var(--sanguine)}
+.folio canvas{width:min(100%,400px);aspect-ratio:1;display:block;justify-self:center}
+.wrap{padding-inline:clamp(20px,5vw,56px)}
+.soon{margin:24px 0 0;font:italic 400 1.35rem var(--f-disp);color:var(--dim)}
 footer{margin-top:80px;border-top:1px solid var(--line);padding-block:20px 24px;color:var(--dim);font-size:.9rem}
 footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 footer a{text-decoration:none}
@@ -46,20 +43,16 @@ footer a{text-decoration:none}
 <link rel="stylesheet" href="../assets/bar.css">
 </head>
 <body>
-<canvas class="backdrop" id="notebook" aria-hidden="true"></canvas>
+<canvas class="backdrop tall" id="sheet" data-parallax=".3" aria-hidden="true"></canvas>
 <div class="page">
 <header class="bar"><div class="bar-in">
-  <nav class="sites" aria-label="Sites"><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a><a class="here" href="../" aria-current="true">Bucatini Mickey</a></nav>
+  <nav class="sites" aria-label="Sites"><a class="here" href="../" aria-current="true"><span class="seal" aria-hidden="true">BM</span>Bucatini Mickey</a><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a></nav>
   <nav class="pages" aria-label="Pages"><a href="../films/">Film</a><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="../writing/">Writing</a><a href="./" aria-current="page">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Dark</button></nav>
 </div></header>
 
 <section class="folio">
-  <div>
-    <h1>Art</h1>
-    <p class="lede">Paintings, mostly watercolour and acrylic.</p>
-    <p class="note" aria-hidden="true">la pittura è una poesia che si vede</p>
-  </div>
-  <div class="solid"><canvas id="solid" role="img" aria-label="A hollow rhombicuboctahedron, after Leonardo's drawings for Pacioli, turning slowly"></canvas><span class="cap">Vigintisex basium vacuum</span></div>
+  <h1>Art</h1>
+  <canvas id="volute" role="img" aria-label="The construction of an Ionic volute, in compass arcs, after Vignola"></canvas>
 </section>
 
 <main class="wrap">
@@ -71,98 +64,94 @@ footer a{text-decoration:none}
 
 <script>
 (function(){
-  const root=document.documentElement, still=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function rng(seed){let s=seed>>>0||1;return()=>((s=Math.imul(s^s>>>15,1|s)+0x6D2B79F5|0,((s^s>>>14)>>>0)/4294967296))}
-  const col=v=>getComputedStyle(root).getPropertyValue(v).trim();
+  const root=document.documentElement, col=v=>getComputedStyle(root).getPropertyValue(v).trim();
 
-  /* ---- the notebook around the page ---- */
-  const NOTES=['il sole non si move','chi poco pensa molto erra','l’acqua è il vetturale della natura',
-    'ogni nostra cognizione principia da’ sentimenti','la pittura è una poesia che si vede e non si sente','del moto e peso dell’acqua'];
-  const nb=document.getElementById('notebook');
-  function notebook(){
-    const r=rng(1490), dpr=Math.min(2,devicePixelRatio||1), W=innerWidth, H=innerHeight;
-    nb.width=Math.round(W*dpr); nb.height=Math.round(H*dpr);
-    const c=nb.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
-    // the sheet: even parchment, slightly darker and warmer towards the edges
-    c.fillStyle=col('--parch'); c.fillRect(0,0,W,H);
-    const g=c.createRadialGradient(W/2,H/2,Math.min(W,H)*.3,W/2,H/2,Math.max(W,H)*.75);
-    g.addColorStop(0,col('--parch-hi')); g.addColorStop(1,col('--parch-lo')); c.globalAlpha=.7; c.fillStyle=g; c.fillRect(0,0,W,H); c.globalAlpha=1;
-    const red=col('--sanguine'), ink=col('--sepia');
-    // construction drawings in red chalk
-    c.strokeStyle=red; c.lineWidth=1.1; c.globalAlpha=.5;
-    const vx=W*.1, vy=H*.62, R=Math.min(W,H)*.26;       // circle and square, as in the Vitruvian study
-    c.beginPath(); c.arc(vx,vy,R,0,Math.PI*2); c.stroke();
-    const sq=R*1.65; c.strokeRect(vx-sq/2,vy+R-sq,sq,sq);
-    c.beginPath(); c.moveTo(vx,vy-R); c.lineTo(vx,vy+R); c.moveTo(vx-R,vy); c.lineTo(vx+R,vy); c.stroke();
-    // a golden spiral in quarter circles, with its rectangles
-    let x=W*.84, y=H*.16, s=Math.min(W,H)*.2, phi=1.618;
-    c.globalAlpha=.45; c.beginPath();
-    for(let i=0;i<9;i++){
-      const k=i%4;
-      c.strokeRect(x,y,s,s);
-      const [ax,ay,a0]=[[x+s,y+s,Math.PI],[x,y+s,1.5*Math.PI],[x,y,0],[x+s,y,.5*Math.PI]][k];
-      c.moveTo(ax+s*Math.cos(a0),ay+s*Math.sin(a0)); c.arc(ax,ay,s,a0,a0+Math.PI/2);
-      const ns=s/phi;
-      if(k===0){x=x+s;y=y+s-ns}else if(k===1){x=x+s-ns;y=y+s}else if(k===2){x=x-ns;y=y+s-ns}else{y=y-ns;x=x}
-      s=ns; if(s<2) break;
+  /* Vignola's Ionic volute: twelve quarter-circle arcs whose centres step inward towards the eye, each radius a
+     little shorter than the last. With its construction lines. */
+  function volute(c,cx,cy,R,lines){
+    const red=col('--sanguine'), gold=col('--gilt'), e=R*.11, n=12, centres=[];
+    // each centre steps along the last radius, so every arc meets the next one tangent; the steps shrink
+    // geometrically and end in the eye, as the centres in Vignola's construction do
+    const q=.82, d0=(R-e)*(1-q)/(1-Math.pow(q,n));
+    let x=cx, y=cy-(R-e)*.06, r=R, a=-Math.PI/2;
+    c.lineWidth=2.2; c.strokeStyle=gold; c.beginPath();
+    for(let i=0;i<n;i++){
+      centres.push([x,y]);
+      if(i===0) c.moveTo(x+Math.cos(a)*r,y+Math.sin(a)*r);
+      c.arc(x,y,r,a,a+Math.PI/2); a+=Math.PI/2;
+      const d=d0*Math.pow(q,i); x+=Math.cos(a)*d; y+=Math.sin(a)*d; r-=d;
     }
     c.stroke();
-    // water turning on itself: a few spiralling eddies in a stream, as in his studies of flow
-    c.globalAlpha=.4; c.lineWidth=.9;
-    for(let e=0;e<4;e++){
-      const ex=W*(.78+e*.05), ey=H*(.72+(e%2)*.08), er=30+e*8;
-      c.beginPath();
-      for(let t=0;t<=1;t+=.01){const a=t*Math.PI*6, rr=er*(1-t); const px=ex+Math.cos(a)*rr, py=ey+Math.sin(a)*rr*.8; t?c.lineTo(px,py):c.moveTo(px,py)}
-      c.stroke();
+    if(lines){
+      c.lineWidth=.8; c.strokeStyle=red; c.globalAlpha=.75;
+      c.beginPath(); c.arc(cx,cy,e,0,Math.PI*2); c.stroke();
+      c.beginPath(); c.moveTo(cx-R*1.15,cy); c.lineTo(cx+R*1.15,cy); c.moveTo(cx,cy-R*1.15); c.lineTo(cx,cy+R*1.15); c.stroke();
+      c.setLineDash([3,4]); c.beginPath(); c.arc(cx,cy,R,0,Math.PI*2); c.stroke(); c.setLineDash([]);
+      c.beginPath(); centres.forEach(([px,py],i)=>i?c.lineTo(px,py):c.moveTo(px,py)); c.stroke();
+      for(const [px,py] of centres){c.beginPath(); c.arc(px,py,1.6,0,Math.PI*2); c.fillStyle=red; c.fill()}
+      c.globalAlpha=1;
     }
-    // his notes, in mirror writing, in red chalk and in ink
-    c.globalAlpha=1; c.textBaseline='alphabetic';
-    for(let i=0;i<34;i++){
-      const tx=r()*W, ty=40+r()*(H-40), size=20+r()*14, txt=NOTES[Math.floor(r()*NOTES.length)];
-      c.save(); c.translate(tx,ty); c.scale(-1,1); c.rotate((r()-.5)*.06);
-      c.font=`${size}px Italianno, cursive`; c.fillStyle=r()<.7?red:ink; c.globalAlpha=.32+r()*.3;
-      c.fillText(txt,0,0); c.restore();
-    }
-    c.globalAlpha=1;
+  }
+  /* Borromini's San Carlo: two equilateral triangles back to back, a circle in each, and the oval drawn round them
+     from four centres. */
+  function sanCarlo(c,cx,cy,s){
+    const red=col('--sanguine'), gold=col('--gilt'), h=s*Math.sqrt(3)/2, r=h/3;
+    c.lineWidth=.9; c.strokeStyle=red; c.globalAlpha=.7;
+    c.beginPath(); c.moveTo(cx-s/2,cy); c.lineTo(cx+s/2,cy); c.lineTo(cx,cy-h); c.closePath(); c.stroke();
+    c.beginPath(); c.moveTo(cx-s/2,cy); c.lineTo(cx+s/2,cy); c.lineTo(cx,cy+h); c.closePath(); c.stroke();
+    for(const y of [cy-h/3,cy+h/3]){c.beginPath(); c.arc(cx,y,r,0,Math.PI*2); c.stroke()}
+    c.beginPath(); c.moveTo(cx,cy-h*1.25); c.lineTo(cx,cy+h*1.25); c.moveTo(cx-s*.75,cy); c.lineTo(cx+s*.75,cy); c.stroke();
+    c.globalAlpha=1; c.lineWidth=2.2; c.strokeStyle=gold;
+    // four-centred oval: big arcs from the triangle apexes' opposite points, small arcs at the ends
+    const R1=h*1.1, R2=R1-(h*2/3);
+    c.beginPath();
+    c.arc(cx,cy+h*2/3*.5,R1,-Math.PI*.5-.55,-Math.PI*.5+.55);
+    c.arc(cx+s*.42,cy,R2*.9,-.62,.62);
+    c.arc(cx,cy-h*2/3*.5,R1,Math.PI*.5-.55,Math.PI*.5+.55);
+    c.arc(cx-s*.42,cy,R2*.9,Math.PI-.62,Math.PI+.62);
+    c.closePath(); c.stroke();
+  }
+  /* an oval dome seen from below: rings of coffers, narrowing to the lantern */
+  function dome(c,cx,cy,rx,ry){
+    const red=col('--sanguine'), gold=col('--gilt');
+    c.lineWidth=.9;
+    for(let i=0;i<7;i++){const t=1-i/8; c.strokeStyle=i%2?red:gold; c.globalAlpha=i%2?.6:.9; c.beginPath(); c.ellipse(cx,cy,rx*t,ry*t,0,0,Math.PI*2); c.stroke()}
+    c.strokeStyle=red; c.globalAlpha=.5;
+    for(let k=0;k<24;k++){const a=k/24*Math.PI*2; c.beginPath(); c.moveTo(cx+Math.cos(a)*rx*.25,cy+Math.sin(a)*ry*.25); c.lineTo(cx+Math.cos(a)*rx,cy+Math.sin(a)*ry); c.stroke()}
+    c.globalAlpha=1; c.strokeStyle=gold; c.lineWidth=2; c.beginPath(); c.ellipse(cx,cy,rx*.12,ry*.12,0,0,Math.PI*2); c.stroke();
   }
 
-  /* ---- the solid: a rhombicuboctahedron (every permutation of +-1, +-1, +-(1+sqrt2)) drawn hollow,
-     each edge a squared bar of wood as in Leonardo's plates, turning slowly ---- */
-  const sc=document.getElementById('solid');
-  const q=1+Math.SQRT2, V=[];
-  for(const a of [1,-1]) for(const b of [1,-1]) for(const cc of [q,-q]){V.push([a,b,cc],[a,cc,b],[cc,a,b])}
-  const E=[]; for(let i=0;i<V.length;i++) for(let j=i+1;j<V.length;j++){const d=Math.hypot(V[i][0]-V[j][0],V[i][1]-V[j][1],V[i][2]-V[j][2]); if(Math.abs(d-2)<1e-6) E.push([i,j])}
-  let ang=.6;
-  function solid(){
-    const S=sc.clientWidth; if(!S) return;
-    const dpr=Math.min(2,devicePixelRatio||1); if(sc.width!==Math.round(S*dpr)){sc.width=sc.height=Math.round(S*dpr)}
-    const c=sc.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,S,S);
-    const ca=Math.cos(ang), sa=Math.sin(ang), tilt=.42, ct=Math.cos(tilt), st=Math.sin(tilt), k=S*.17;
-    const P=V.map(([x,y,z])=>{const X=x*ca+z*sa, Z=-x*sa+z*ca, Y=y*ct-Z*st, Z2=y*st+Z*ct, p=6/(6+Z2*.35); return [S/2+X*k*p,S/2-Y*k*p,Z2]});
-    const ink=col('--sepia'), red=col('--sanguine');
-    const order=E.map(e=>[e,(P[e[0]][2]+P[e[1]][2])/2]).sort((a,b)=>a[1]-b[1]);
-    for(const [[i,j],z] of order){
-      const [x1,y1]=P[i],[x2,y2]=P[j], dx=x2-x1, dy=y2-y1, L=Math.hypot(dx,dy), nx=-dy/L, ny=dx/L, w=S*.012, front=z>0;
-      c.globalAlpha=front?1:.45;
-      c.fillStyle=front?col('--bg'):'transparent';
-      c.beginPath(); c.moveTo(x1+nx*w,y1+ny*w); c.lineTo(x2+nx*w,y2+ny*w); c.lineTo(x2-nx*w,y2-ny*w); c.lineTo(x1-nx*w,y1-ny*w); c.closePath();
-      if(front) c.fill();
-      c.strokeStyle=front?ink:red; c.lineWidth=front?1.1:.8; c.stroke();
-    }
-    c.globalAlpha=1;
+  const sh=document.getElementById('sheet');
+  function sheet(){
+    const dpr=Math.min(2,devicePixelRatio||1), W=sh.clientWidth, H=sh.clientHeight;
+    sh.width=Math.round(W*dpr); sh.height=Math.round(H*dpr);
+    const c=sh.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
+    c.fillStyle=col('--parch'); c.fillRect(0,0,W,H);
+    const g=c.createRadialGradient(W/2,H*.4,Math.min(W,H)*.25,W/2,H*.4,Math.max(W,H)*.75);
+    g.addColorStop(0,col('--parch-hi')); g.addColorStop(1,col('--parch-lo')); c.globalAlpha=.75; c.fillStyle=g; c.fillRect(0,0,W,H); c.globalAlpha=1;
+    const m=Math.min(W,H);
+    volute(c,W*.1,H*.32,m*.2,true);
+    sanCarlo(c,W*.9,H*.36,m*.32);
+    dome(c,W*.5,H*.04,m*.62,m*.24);
+    volute(c,W*.92,H*.82,m*.12,true);
+    sanCarlo(c,W*.08,H*.8,m*.22);
   }
-  function spin(){ang+=.0025; solid(); requestAnimationFrame(spin)}
+  const vc=document.getElementById('volute');
+  function hero(){
+    const S=vc.clientWidth; if(!S) return; const dpr=Math.min(2,devicePixelRatio||1);
+    vc.width=vc.height=Math.round(S*dpr); const c=vc.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,S,S);
+    volute(c,S*.5,S*.5,S*.4,true);
+  }
 
   /* site-wide light/dark switch; this page is a daylight page */
   const btn=document.getElementById('mode');
-  const set=m=>{if(m==='dark')root.dataset.theme='dark';else delete root.dataset.theme;btn.textContent=m==='dark'?'Light':'Dark';notebook();solid()};
+  const set=m=>{if(m==='dark')root.dataset.theme='dark';else delete root.dataset.theme;btn.textContent=m==='dark'?'Light':'Dark';sheet();hero()};
   let m='dark';try{m=localStorage.getItem('bm-theme')||'dark'}catch(e){}
   btn.onclick=()=>{m=m==='dark'?'light':'dark';try{localStorage.setItem('bm-theme',m)}catch(e){}set(m)};
-  let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{notebook();solid()},200)});
+  let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{sheet();hero()},200)});
   set(m);
-  document.fonts?.load('30px Italianno').then(notebook);
-  if(still) solid(); else spin();
 })();
 </script>
+<script src="../assets/parallax.js"></script>
 </body>
 </html>
