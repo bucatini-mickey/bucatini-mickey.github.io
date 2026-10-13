@@ -1,8 +1,8 @@
 /* The top bar and the floating page, shared by jsonsummers.github.io and bucatini-mickey.github.io.
    Keep both copies identical.
 
-   Bar: the site you are on comes first, its name beside a small vermilion seal (a hanko), so the seal sits in
-   the same place on both sites; a hairline divides it from the other site, written quietly as its initials.
+   Bar: the site you are on comes first, its name in the display face; a hairline divides it from the other site,
+   written quietly as its initials, so the two sites read as one bar.
    On the right, this site's pages. One typeface on both sites, so the bar measures the same everywhere;
    each page colours it through --bg --ink --dim --line --acc.
 
@@ -17,8 +17,6 @@
 .sites .here{color:var(--ink);font:500 1.12rem/1 var(--f-bar);letter-spacing:.02em}
 .sites .away{color:var(--dim);font:500 .7rem/1 var(--f-barsans);letter-spacing:.22em}
 .sites .away:hover{color:var(--ink)}
-.seal{display:inline-grid;place-items:center;width:24px;height:24px;flex:none;border-radius:3px;background:#b8382a;color:#f7efe4;
-  font:600 .6rem/1 var(--f-barsans);letter-spacing:.04em;box-shadow:inset 0 0 0 2px #b8382a,inset 0 0 0 3px rgba(247,239,228,.75)}
 .pages{display:flex;align-items:center;gap:clamp(14px,2.6vw,28px);font:500 .7rem/1 var(--f-barsans);letter-spacing:.2em;text-transform:uppercase}
 .pages a,.pages button{position:relative;color:var(--dim);text-decoration:none;padding:8px 0;border:0;background:none;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer}
 .pages a:hover,.pages button:hover{color:var(--ink)}

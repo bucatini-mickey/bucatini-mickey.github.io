@@ -3,7 +3,7 @@
    It reads the colour tokens --kaki --kuchiba --koke --ai --fuji --beni from :root. */
 /* Impressionist brushstroke field: short strokes follow a swirling flow (a few vortices, Starry Night style), coloured from the theme's autumn tokens. Drawn once; redrawn on resize or theme change. */
 (function(){
-  function rng(seed){let s=seed>>>0||1;return()=>((s=Math.imul(s^s>>>15,1|s)+0x6D2B79F5|0,((s^s>>>14)>>>0)/4294967296))}
+  function rng(seed){let s=seed>>>0;return()=>{s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
   function draw(cv){
     const seed=+cv.dataset.seed||7, dens=+cv.dataset.density||1;
     const r=rng(seed), dpr=Math.min(2,window.devicePixelRatio||1);
