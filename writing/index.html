@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Writing · Bucatini Mickey</title>
+<meta name="description" content="Screenplays by Mickey.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+/* After Bela Tarr and Frantisek Vlacil: black and white only, the wide frame, chapter cards, and time.
+   Nothing here has a colour; the title takes as long to arrive as a Tarr shot takes to start moving. */
+:root{
+  --bg:#0b0b0b; --ink:#e8e8e6; --dim:#8d8d8a; --line:#2c2c2b; --acc:#e8e8e6;
+  --sky-a:#2a2a2a; --sky-b:#6b6b69; --earth:#141414;
+  --f-disp:'IM Fell English SC',Georgia,serif; --f-body:'EB Garamond',Georgia,serif;
+  --here-size:1.05rem;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#f2f2f0; --ink:#121212; --dim:#5e5e5c; --line:#cfcfcc; --acc:#121212;
+  --sky-a:#bdbdbb; --sky-b:#efefed; --earth:#4a4a49;
+  color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 19px/1.65 var(--f-body);filter:grayscale(1)}
+a{color:inherit;text-underline-offset:4px;text-decoration-thickness:1px}
+:focus-visible{outline:1px solid var(--ink);outline-offset:3px}
+
+/* the opening shot: a 2.39:1 frame, a low grey sky, one horizon, and the title held in the middle of it */
+.shot{position:relative;max-width:1400px;margin:clamp(24px,5vh,56px) auto 0;aspect-ratio:2.39/1;overflow:hidden;
+  background:linear-gradient(to bottom,var(--sky-a),var(--sky-b) 64%,var(--earth) 64.2%,var(--earth))}
+@media (max-width:700px){.shot{aspect-ratio:1.66/1}}
+.shot h1{position:absolute;inset:0;display:grid;place-items:center;margin:0;font:400 clamp(2rem,6.5vw,5rem)/1 var(--f-disp);letter-spacing:.14em;color:#f4f4f2;text-shadow:0 2px 30px rgba(0,0,0,.35)}
+:root[data-theme="light"] .shot h1{color:#0f0f0f;text-shadow:none}
+.shot .land{position:absolute;inset:0;background:inherit;transform-origin:50% 64%}
+.shot .tc{position:absolute;right:18px;bottom:14px;font:400 .8rem/1 var(--f-disp);letter-spacing:.2em;color:rgba(255,255,255,.45);font-variant-numeric:tabular-nums}
+:root[data-theme="light"] .shot .tc{color:rgba(255,255,255,.7)}
+@media (prefers-reduced-motion:no-preference){
+  .shot h1{animation:arrive 5s ease-in 1.2s both}
+  .shot .land{animation:dolly 90s linear both}
+  @keyframes arrive{from{opacity:0}to{opacity:1}}
+  @keyframes dolly{from{transform:scale(1)}to{transform:scale(1.06)}}
+}
+
+.wrap{max-width:720px;margin:0 auto;padding-inline:clamp(16px,5vw,48px)}
+.lede{margin:56px 0 0;color:var(--dim);font-style:italic;text-align:center}
+
+/* each screenplay opens with a chapter card, as Marketa Lazarova does */
+.chapter{padding-top:96px}
+.card{border-block:1px solid var(--ink);padding:26px 0 22px;text-align:center}
+.card .no{font:400 .95rem/1 var(--f-disp);letter-spacing:.3em;color:var(--dim)}
+.card h2{margin:14px 0 0;font:400 clamp(1.6rem,4vw,2.3rem)/1.15 var(--f-disp);letter-spacing:.08em}
+.card .where{margin:10px 0 0;font-style:italic;color:var(--dim)}
+.chapter p{margin:22px 0 0}
+.chapter .read{display:flex;justify-content:center;gap:28px;margin-top:22px;font:400 1rem var(--f-disp);letter-spacing:.14em}
+.chapter .read a{text-decoration:none;border-bottom:1px solid var(--line)}
+.chapter .read a:hover{border-bottom-color:var(--ink)}
+.todo{outline:1px dashed var(--dim);outline-offset:3px}
+footer{margin-top:120px;border-top:1px solid var(--line);padding-block:20px 48px;color:var(--dim);font-size:.9rem}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;max-width:1040px}
+footer a{text-decoration:none}
+</style>
+<link rel="stylesheet" href="../assets/bar.css">
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+  <nav class="sites" aria-label="Sites"><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a><a class="here" href="../" aria-current="true">Bucatini Mickey</a></nav>
+  <nav class="pages" aria-label="Pages"><a href="../films/">Film</a><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="./" aria-current="page">Writing</a><a href="../art/">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
+</div></header>
+
+<div class="shot"><div class="land" aria-hidden="true"></div><h1>Writing</h1><span class="tc" id="tc" aria-hidden="true">SHOT 1 · 00:00</span></div>
+
+<main class="wrap">
+  <p class="lede">Screenplays, mostly cold and mostly medieval.</p>
+
+  <section class="chapter">
+    <div class="card"><div class="no">I</div><h2 class="todo">Title of the first screenplay</h2><p class="where todo">Feature · draft, year</p></div>
+    <p class="todo">A logline of two or three sentences: who, where, and what goes wrong.</p>
+    <p class="read"><a href="#" class="todo">Read the script</a><a href="#" class="todo">Notes</a></p>
+  </section>
+
+  <section class="chapter">
+    <div class="card"><div class="no">II</div><h2 class="todo">Title of the second</h2><p class="where todo">Short · year</p></div>
+    <p class="todo">Logline.</p>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>Bucatini Mickey · Writing</span><span><a href="../">Portfolio</a></span></div></footer>
+<script>
+/* the shot runs as long as you stay on it */
+(function(){const t0=Date.now(),el=document.getElementById('tc');
+  setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);el.textContent='SHOT 1 · '+String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')},1000)})();
+/* site-wide light/dark switch, remembered in this browser */
+(function(){
+  const root=document.documentElement,btn=document.getElementById('mode');
+  const set=m=>{if(m==='light')root.dataset.theme='light';else delete root.dataset.theme;btn.textContent=m==='light'?'Dark':'Light'};
+  let m='dark';try{m=localStorage.getItem('bm-theme')||'dark'}catch(e){}
+  set(m); btn.onclick=()=>{m=m==='dark'?'light':'dark';try{localStorage.setItem('bm-theme',m)}catch(e){}set(m)};
+})();
+</script>
+</body>
+</html>

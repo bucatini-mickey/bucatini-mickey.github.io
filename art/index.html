@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Art · Bucatini Mickey</title>
+<meta name="description" content="Paintings and other art by Mickey.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Mulish:wght@300;400;600&display=swap">
+<style>
+/* After Monet's Water Lilies: watercolour glazed onto cold-press paper. The pond is laid out as in the
+   Orangerie panels: horizontal washes of water, willow reflections hanging from the top edge, and rows of
+   lily pads that shrink towards the far bank. Dark mode is the same pond at dusk. */
+:root{
+  --bg:#f4efe3; --ink:#2c2a36; --dim:#6f6a78; --line:#ddd5c4; --acc:#5c6fa8;
+  --f-disp:'Cormorant Garamond',Garamond,Georgia,serif; --f-body:'Mulish',system-ui,sans-serif;
+  --here-size:1.1rem;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#12151d; --ink:#ebe6f2; --dim:#a29eb2; --line:#2a2e3a; --acc:#a9b6e6;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:300 17px/1.75 var(--f-body)}
+a{color:inherit;text-underline-offset:4px}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+
+.pond{position:relative;height:clamp(320px,62vh,640px)}
+.pond canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.pond::after{content:"";position:absolute;left:0;right:0;bottom:0;height:30%;background:linear-gradient(transparent,var(--bg))}
+.pond h1{position:absolute;left:0;right:0;bottom:8%;z-index:1;margin:0 auto;max-width:1040px;padding-inline:clamp(16px,5vw,48px);
+  font:400 clamp(3rem,10vw,6.5rem)/1 var(--f-disp);letter-spacing:.01em}
+
+.wrap{max-width:1040px;margin:0 auto;padding-inline:clamp(16px,5vw,48px)}
+.lede{margin:8px 0 0;max-width:56ch;color:var(--dim)}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:clamp(18px,3vw,36px);margin:56px 0 0;padding:0;list-style:none}
+.gallery figure{margin:0}
+.gallery .frame{aspect-ratio:4/5;background:color-mix(in srgb,var(--ink) 5%,var(--bg));border:1px dashed var(--line);display:grid;place-items:center;color:var(--dim);font:italic 400 1.1rem var(--f-disp)}
+.gallery figcaption{margin-top:10px;font-size:.92rem}
+.gallery figcaption b{font:500 1.15rem var(--f-disp);display:block}
+.gallery figcaption span{color:var(--dim)}
+footer{margin-top:96px;border-top:1px solid var(--line);padding-block:20px 48px;color:var(--dim);font-size:.85rem}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+footer a{text-decoration:none}
+</style>
+<link rel="stylesheet" href="../assets/bar.css">
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+  <nav class="sites" aria-label="Sites"><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a><a class="here" href="../" aria-current="true">Bucatini Mickey</a></nav>
+  <nav class="pages" aria-label="Pages"><a href="../films/">Film</a><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="../writing/">Writing</a><a href="./" aria-current="page">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Dark</button></nav>
+</div></header>
+
+<div class="pond"><canvas id="pond" data-seed="1926" aria-hidden="true"></canvas><h1>Art</h1></div>
+
+<main class="wrap">
+  <p class="lede">Paintings, mostly watercolour and acrylic.</p>
+  <ul class="gallery">
+    <li><figure><div class="frame">painting</div><figcaption><b>Title</b><span>Watercolour, year</span></figcaption></figure></li>
+    <li><figure><div class="frame">painting</div><figcaption><b>Title</b><span>Acrylic on canvas, year</span></figcaption></figure></li>
+    <li><figure><div class="frame">painting</div><figcaption><b>Title</b><span>Medium, year</span></figcaption></figure></li>
+  </ul>
+</main>
+
+<footer><div class="wrap"><span>Bucatini Mickey · Art</span><span><a href="../">Portfolio</a></span></div></footer>
+
+<script>
+/* Watercolour by glazing: each wash is a polygon deformed by recursive midpoint displacement, then painted
+   as many slightly different, nearly transparent layers so edges pool and soften like pigment in water. */
+(function(){
+  const cv=document.getElementById('pond'), root=document.documentElement;
+  function rng(seed){let s=seed>>>0||1;return()=>((s=Math.imul(s^s>>>15,1|s)+0x6D2B79F5|0,((s^s>>>14)>>>0)/4294967296))}
+  function draw(){
+    const r=rng(+cv.dataset.seed), dpr=Math.min(2,devicePixelRatio||1), W=cv.clientWidth, H=cv.clientHeight;
+    if(!W||!H) return;
+    cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
+    const c=cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,W,H);
+    const dusk=root.dataset.theme==='dark', k=dusk?1:.62;
+    c.globalCompositeOperation=dusk?'screen':'multiply';
+    const gauss=()=>{let u=0,v=0;while(!u)u=r();while(!v)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
+    function deform(pts,depth,amt){
+      for(let d=0;d<depth;d++){
+        const out=[];
+        for(let i=0;i<pts.length;i++){
+          const [x1,y1,v1]=pts[i],[x2,y2]=pts[(i+1)%pts.length], len=Math.hypot(x2-x1,y2-y1);
+          out.push(pts[i]);
+          out.push([(x1+x2)/2+gauss()*len*amt*v1,(y1+y2)/2+gauss()*len*amt*v1,v1*(.7+r()*.6)]);
+        }
+        pts=out;
+      }
+      return pts;
+    }
+    function wash(cx,cy,rx,ry,col,layers,alpha){
+      const n=12, base=deform(Array.from({length:n},(_,i)=>{const a=i/n*Math.PI*2;return[cx+Math.cos(a)*rx,cy+Math.sin(a)*ry,.4+r()*.8]}),3,.28);
+      c.fillStyle=col; c.globalAlpha=alpha*k;
+      for(let l=0;l<layers;l++){
+        const p=deform(base,2,.18);
+        c.beginPath(); c.moveTo(p[0][0],p[0][1]); for(const q of p) c.lineTo(q[0],q[1]); c.closePath(); c.fill();
+      }
+    }
+    const P=dusk
+      ? {water:['#24305a','#3a3f78','#2a5560','#4b3f6e'],willow:['#2f5a4a','#3d3a66'],pad:['#2f6a48','#3f7a50','#2a5a3e'],bloom:['#c98aa0','#e8d6c8','#d9b85a']}
+      : {water:['#a9b8e0','#bcb0dc','#a6cddc','#cdc1e4'],willow:['#a3c4a2','#ada3d2'],pad:['#9cc196','#b0cc98','#93bba4'],bloom:['#f0b6c6','#fff6ea','#f2dc92']};
+    // water: wide horizontal washes, laid in bands
+    for(let b=0;b<7;b++){
+      const y=H*(b/6), col=P.water[b%P.water.length];
+      for(let k=0;k<3;k++) wash(W*(k/2.2+r()*.2),y+gauss()*H*.04,W*(.35+r()*.2),H*(.07+r()*.05),col,28,.045);
+    }
+    // willow reflections hang from the top edge in vertical streaks
+    for(let i=0;i<9;i++){const x=W*(.05+i/8.5+gauss()*.02);wash(x,H*.12,W*(.012+r()*.02),H*(.22+r()*.18),P.willow[i%2],24,.05)}
+    // lily pads in rows, smaller and flatter towards the far bank
+    for(let row=0;row<6;row++){
+      const t=row/5, y=H*(.3+t*.6), s=W*(.018+t*.045), count=Math.round(5+r()*4);
+      for(let i=0;i<count;i++){
+        const x=W*((i+.5+gauss()*.18)/count), rx=s*(.8+r()*.5);
+        wash(x,y+gauss()*H*.02,rx,rx*(.28+t*.12),P.pad[(row+i)%3],22,.045);
+        if(r()<.35) wash(x+rx*.15*gauss(),y-rx*.12,rx*.22,rx*.12,P.bloom[Math.floor(r()*3)],14,.09);
+      }
+    }
+    c.globalAlpha=1; c.globalCompositeOperation='source-over';
+  }
+  let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(draw,200)});
+
+  /* site-wide light/dark switch; this page is a daylight page, so it reads the same remembered choice */
+  const btn=document.getElementById('mode');
+  const set=m=>{if(m==='dark')root.dataset.theme='dark';else delete root.dataset.theme;btn.textContent=m==='dark'?'Light':'Dark';draw()};
+  let m='dark';try{m=localStorage.getItem('bm-theme')||'dark'}catch(e){}
+  btn.onclick=()=>{m=m==='dark'?'light':'dark';try{localStorage.setItem('bm-theme',m)}catch(e){}set(m)};
+  set(m);
+})();
+</script>
+</body>
+</html>

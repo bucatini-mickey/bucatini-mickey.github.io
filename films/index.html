@@ -6,22 +6,29 @@
 <title>Film Index · Bucatini Mickey</title>
 <meta name="description" content="Every public Letterboxd list by bucatini_mickey, nested and searchable.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Mulish:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..700,0..100,0..1&family=Mulish:wght@300;400;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
 /* Bucatini Mickey — shared theme. Night-forest dark by default, autumn + psychedelic accents, washi paper light mode on request. */
 :root{
-  --bg:#14120e; --bg2:#1c1913; --ink:#efe6d4; --dim:#a69c88; --line:#2f2a21;
-  --kaki:#e8743b; --kuchiba:#d6a14a; --koke:#86a35a; --ai:#5b77bd; --fuji:#a07ccb; --beni:#d0473c;
-  --acc:#d3895c; --hair:color-mix(in srgb,var(--line) 70%,transparent);
-  --f-disp:'Cormorant Garamond',Garamond,Georgia,serif;
+  /* Czech marionette theatre: the house is dark, the stage is lit from above and from the footlights.
+     Velvet red, gilded frame, painted wood; Fraunces for the hand-carved look. */
+  --bg:#18110d; --bg2:#22180f; --ink:#f1e4c8; --dim:#b29d7c; --line:#3a2a1c;
+  --kaki:#d9773a; --kuchiba:#d6a14a; --koke:#86a35a; --ai:#5b77bd; --fuji:#a07ccb; --beni:#d0473c;
+  --velvet:#7c1820; --velvet-hi:#b0333a; --velvet-lo:#3e0a0f; --gilt:#c99a3c; --gilt-hi:#f0d38a; --wood:#6b4527;
+  --string:rgba(241,228,200,.45);
+  --acc:#e0a24a; --hair:color-mix(in srgb,var(--line) 70%,transparent);
+  --f-disp:'Fraunces',Georgia,serif;
   --f-body:'Mulish',system-ui,sans-serif;
   --f-mono:'IBM Plex Mono',ui-monospace,monospace;
+  --here-size:1.05rem;
   color-scheme:dark;
 }
 :root[data-theme="light"]{
-  --bg:#ece6da; --bg2:#f5f0e6; --ink:#1d1a15; --dim:#6b6253; --line:#d6ccbb;
-  --kaki:#c4561f; --kuchiba:#a2761b; --koke:#557a2c; --ai:#33508f; --fuji:#6f4a95; --beni:#a8302a;
-  --acc:#a95a32; color-scheme:light}
+  /* the matinee programme: cream paper, red and gilt ink */
+  --bg:#f1e6cd; --bg2:#e8dabb; --ink:#2a1a12; --dim:#73604a; --line:#d8c7a4;
+  --kaki:#b4521f; --kuchiba:#9a6d16; --koke:#557a2c; --ai:#33508f; --fuji:#6f4a95; --beni:#a8302a;
+  --string:rgba(42,26,18,.4);
+  --acc:#9c2a24; color-scheme:light}
 *{box-sizing:border-box}
 html{scroll-padding-top:20px}
 body{margin:0;background:var(--bg);color:var(--ink);font:300 16px/1.8 var(--f-body);letter-spacing:.015em}
@@ -59,7 +66,7 @@ footer a{text-decoration:none}footer a:hover{color:var(--acc)}
 /* one painted background for the whole site; content sits on a paper column down the middle */
 .backdrop{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;display:block}
 .page{position:relative;max-width:980px;margin:48px auto;background:var(--bg);border-radius:4px;box-shadow:0 30px 80px -40px rgba(0,0,0,.45),0 0 0 1px var(--line)}
-.page>.top{border-radius:4px 4px 0 0}
+.page>.bar{border-radius:4px 4px 0 0}
 .page>footer{border-radius:0 0 4px 4px}
 @media (max-width:1040px){.page{margin:28px 24px}}
 @media (max-width:620px){.page{margin:14px 10px}}
@@ -147,12 +154,55 @@ span.th{background:none}
 .scale dt{color:var(--acc);letter-spacing:.05em}.scale dd{margin:0}
 .empty{color:var(--dim);margin:0}
 @media (max-width:620px){.grp>.inner,.body,.tree,#tagres{padding-left:10px}}
+
+/* ---- the theatre ---- */
+h1,.sec h2,.grp>summary .nm{font-variation-settings:"SOFT" 100,"WONK" 1,"opsz" 96}
+h1{font-weight:500;letter-spacing:0}
+.sec h2{font-weight:500}
+.theatre{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(70% 45% at 50% 100%,rgba(255,180,90,.16),transparent 70%),#0b0807}
+/* side curtains: velvet in clean pleats, darker at the top, catching the footlights at the bottom */
+.curtain{position:absolute;top:0;bottom:0;width:calc((100vw - 980px)/2 + 40px);min-width:60px;
+  background:
+    linear-gradient(to bottom,rgba(0,0,0,.55),transparent 30%,transparent 70%,rgba(255,170,90,.18)),
+    repeating-linear-gradient(90deg,var(--velvet-lo) 0,var(--velvet) 14px,var(--velvet-hi) 22px,var(--velvet) 30px,var(--velvet-lo) 44px)}
+.curtain.l{left:0;box-shadow:inset -18px 0 24px -12px rgba(0,0,0,.6)}
+.curtain.r{right:0;box-shadow:inset 18px 0 24px -12px rgba(0,0,0,.6)}
+@media (max-width:1040px){.curtain{width:34px;min-width:0}}
+/* the proscenium: a gilded frame with an arched top; the page is the lit stage inside it */
+.page{background:radial-gradient(90% 420px at 50% 0%,rgba(255,214,150,.09),transparent 70%),var(--bg);border-radius:46% 46% 4px 4px/80px 80px 4px 4px;
+  box-shadow:0 0 0 2px var(--gilt-hi),0 0 0 9px var(--gilt),0 0 0 11px #5c4318,0 40px 90px -30px #000;margin-top:96px;overflow:visible}
+.page>.bar{border-radius:46% 46% 0 0/80px 80px 0 0;padding-top:34px}
+:root[data-theme="light"] .page{background:var(--bg)}
+/* valance: velvet band with a scalloped, gold-fringed edge */
+.page::before{content:"";position:absolute;left:-30px;right:-30px;top:-70px;height:84px;z-index:6;pointer-events:none;
+  background:
+    repeating-linear-gradient(90deg,rgba(0,0,0,.18) 0 2px,transparent 2px 22px),
+    radial-gradient(circle at 50% 0,var(--velvet) 0 21px,transparent 22px) 0 44px/46px 40px repeat-x,
+    radial-gradient(circle at 50% 0,var(--gilt-hi) 0 21px,var(--gilt) 22px 25px,transparent 26px) 0 44px/46px 40px repeat-x,
+    linear-gradient(var(--velvet-lo),var(--velvet) 60%,var(--velvet) 100%) 0 0/100% 46px no-repeat;
+  filter:drop-shadow(0 8px 10px rgba(0,0,0,.45))}
+@media (max-width:620px){.page{border-radius:30% 30% 4px 4px/40px 40px 4px 4px;margin-top:70px}.page>.bar{border-radius:30% 30% 0 0/40px 40px 0 0;padding-top:18px}.page::before{left:-12px;right:-12px;top:-56px}}
+/* marionette strings: the title and each section heading hang from a wooden control bar */
+.mast{padding-top:140px}
+.title h1{position:relative}
+/* the strings fan out from a short control bar to the figure; the bar is painted wood */
+.title h1::before,.sec h2::before{content:"";position:absolute;left:0;width:var(--span,100%);bottom:100%;height:var(--drop,110px);background:var(--string);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M38 0L8 100M62 0L92 100M50 0L50 100' stroke='%23000' stroke-width='1' vector-effect='non-scaling-stroke' fill='none'/%3E%3C/svg%3E") 0 0/100% 100%;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M38 0L8 100M62 0L92 100M50 0L50 100' stroke='%23000' stroke-width='1' vector-effect='non-scaling-stroke' fill='none'/%3E%3C/svg%3E") 0 0/100% 100%}
+.title h1::after,.sec h2::after{content:"";position:absolute;left:calc(var(--span,100%) * .33);width:calc(var(--span,100%) * .34);bottom:calc(100% + var(--drop,110px));height:5px;border-radius:3px;background:var(--wood);box-shadow:0 1px 0 rgba(255,255,255,.12) inset}
+.sec h2{position:relative;--drop:52px;--span:min(70%,260px);margin-top:64px}
+.enso{border-color:var(--gilt);border-right-color:transparent}
+.tabs{background:var(--bg)}
+.tabs button[aria-selected="true"]{border-bottom-color:var(--acc)}
 </style>
+<link rel="stylesheet" href="../assets/bar.css">
 </head>
 <body>
-<canvas class="swirl backdrop" data-seed="57" data-density=".8" aria-hidden="true"></canvas>
+<div class="theatre" aria-hidden="true"><i class="curtain l"></i><i class="curtain r"></i></div>
 <div class="page">
-<div class="top"><div class="wrap"><span class="brand"><span class="js" title="Jason Summers: professional site coming soon" aria-label="JS, professional site coming soon">JS</span><a class="home" href="../">Bucatini Mickey</a></span><nav aria-label="Site"><a href="../films/" aria-current="page">Film</a><span class="later" title="Coming soon">Game Dev</span><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav></div></div>
+<header class="bar"><div class="bar-in">
+  <nav class="sites" aria-label="Sites"><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a><a class="here" href="../" aria-current="true">Bucatini Mickey</a></nav>
+  <nav class="pages" aria-label="Pages"><a href="../films/" aria-current="page">Film</a><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="../writing/">Writing</a><a href="../art/">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
+</div></header>
 <header class="wrap mast">
   <div class="title"><h1>Film Index</h1></div>
   <p class="lede">Everything I keep on <a class="lb" href="https://letterboxd.com/bucatini_mickey/">Letterboxd</a>.</p>

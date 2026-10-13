@@ -16,6 +16,7 @@
   --f-disp:'Cormorant Garamond',Garamond,Georgia,serif;
   --f-body:'Mulish',system-ui,sans-serif;
   --f-mono:'IBM Plex Mono',ui-monospace,monospace;
+  --here-size:1.1rem;
   color-scheme:dark;
 }
 :root[data-theme="light"]{
@@ -59,7 +60,7 @@ footer a{text-decoration:none}footer a:hover{color:var(--acc)}
 /* one painted background for the whole site; content sits on a paper column down the middle */
 .backdrop{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;display:block}
 .page{position:relative;max-width:980px;margin:48px auto;background:var(--bg);border-radius:4px;box-shadow:0 30px 80px -40px rgba(0,0,0,.45),0 0 0 1px var(--line)}
-.page>.top{border-radius:4px 4px 0 0}
+.page>.bar{border-radius:4px 4px 0 0}
 .page>footer{border-radius:0 0 4px 4px}
 @media (max-width:1040px){.page{margin:28px 24px}}
 @media (max-width:620px){.page{margin:14px 10px}}
@@ -88,11 +89,15 @@ a.room:hover .go{text-decoration:underline;text-underline-offset:4px}
 .soon{font:500 .72rem var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);border:1px solid var(--acc);border-radius:99px;padding:3px 10px;white-space:nowrap}
 @media (max-width:620px){.room{grid-template-columns:auto minmax(0,1fr)}.stats{grid-column:2;flex-direction:row;gap:20px;text-align:left}.soon{grid-column:2;justify-self:start}}
 </style>
+<link rel="stylesheet" href="assets/bar.css">
 </head>
 <body>
 <canvas class="swirl backdrop" data-seed="57" data-density=".8" aria-hidden="true"></canvas>
 <div class="page">
-<div class="top"><div class="wrap"><span class="brand"><span class="js" title="Jason Summers: professional site coming soon" aria-label="JS, professional site coming soon">JS</span><a class="home" href="./">Bucatini Mickey</a></span><nav aria-label="Site"><a href="./films/">Film</a><a href="./game-dev/">Game Dev</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav></div></div>
+<header class="bar"><div class="bar-in">
+  <nav class="sites" aria-label="Sites"><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a><a class="here" href="./" aria-current="true">Bucatini Mickey</a></nav>
+  <nav class="pages" aria-label="Pages"><a href="films/">Film</a><a href="game-dev/">Games</a><a href="photos/">Photos</a><a href="writing/">Writing</a><a href="art/">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
+</div></header>
 <header class="wrap mast">
     <div class="title"><h1>Bucatini Mickey</h1></div>
   <p class="lede">Things I make and keep track of outside work and the PhD. One room for each hobby.</p>
@@ -110,11 +115,38 @@ a.room:hover .go{text-decoration:underline;text-underline-offset:4px}
   <a class="room game" href="game-dev/">
     <span class="enso" aria-hidden="true"></span>
     <div>
-      <h2>Game Dev</h2>
+      <h2>Games</h2>
       <p>Grimoire, a Storyteller's companion for Blood on the Clocktower that runs on your phone, with a foggy medieval village to walk and talk in. Plus the Tachyon engine and the games growing on it.</p>
       <span class="go">Enter →</span>
     </div>
     <span class="soon">Play</span>
+  </a>
+  <a class="room" href="photos/">
+    <span class="enso" aria-hidden="true"></span>
+    <div>
+      <h2>Photos</h2>
+      <p>Photographs, shown large.</p>
+      <span class="go">Enter →</span>
+    </div>
+    <span class="soon">Soon</span>
+  </a>
+  <a class="room" href="writing/">
+    <span class="enso" aria-hidden="true"></span>
+    <div>
+      <h2>Writing</h2>
+      <p>Screenplays, mostly cold and mostly medieval.</p>
+      <span class="go">Enter →</span>
+    </div>
+    <span class="soon">Soon</span>
+  </a>
+  <a class="room" href="art/">
+    <span class="enso" aria-hidden="true"></span>
+    <div>
+      <h2>Art</h2>
+      <p>Paintings, mostly watercolour and acrylic.</p>
+      <span class="go">Enter →</span>
+    </div>
+    <span class="soon">Soon</span>
   </a>
 </main>
 <footer class="wrap"><span>Bucatini Mickey</span><span><a href="https://letterboxd.com/bucatini_mickey/">Letterboxd ↗</a> · <a href="https://github.com/bucatini-mickey">GitHub ↗</a></span></footer>
