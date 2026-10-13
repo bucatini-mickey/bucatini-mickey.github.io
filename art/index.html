@@ -9,51 +9,49 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=EB+Garamond:ital@0;1&family=Mulish:wght@500;600&display=swap">
 <style>
-/* Baroque geometry on parchment, drawn with compass and rule in red chalk and gilt: Borromini's plan for
-   San Carlo (an oval built from two equilateral triangles and four circles), the coffers of an oval dome, and
-   Vignola's construction of the Ionic volute. No writing but the page's own. The parchment drifts up more slowly
-   than the page. Dark mode is the same sheet by candlelight. */
+/* After Rembrandt. In the dark, a painting: warm light falling from the upper left into umber darkness, the lit
+   area built up in thick impasto strokes, the shadows sketched over in etched hatching that thickens as the light
+   goes. In the light, the same picture as one of his etchings: sepia lines on ivory paper. One faint compass
+   circle is all that is left of the geometry. No writing but the page's own. The picture drifts up more slowly
+   than the page; the page hangs in a gilt frame. */
 :root{
-  --bg:#f3e7cb; --ink:#3b2a1a; --dim:#7a6248; --line:#d9c497; --acc:#a9472a;
-  --parch:#e4cf9f; --parch-hi:#efdfb8; --parch-lo:#c6a46b; --sanguine:#a9472a; --gilt:#b8913a; --gilt-hi:#e3c77a; --sepia:#5a3c22;
+  --bg:#f1e9d8; --ink:#2b1d12; --dim:#7a6248; --line:#d9c9a8; --acc:#8a4a1e;
+  --gilt:#b8913a; --gilt-hi:#e3c77a;
   --f-disp:'Cormorant Garamond',Garamond,Georgia,serif; --f-body:'EB Garamond',Georgia,serif;
   color-scheme:light;
 }
 :root[data-theme="dark"]{
-  --bg:#2c2116; --ink:#ecdcbc; --dim:#b39c7c; --line:#4f3d27; --acc:#e08a5a;
-  --parch:#35281a; --parch-hi:#4a3825; --parch-lo:#1e160e; --sanguine:#d0754a; --gilt:#d4ad55; --gilt-hi:#f0d68e; --sepia:#e2c79d;
+  --bg:#1a120b; --ink:#ead8b6; --dim:#a68d6c; --line:#3a2a1a; --acc:#d9a75a;
+  --gilt:#c9a24a; --gilt-hi:#f0d68e;
   color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;background:var(--parch);color:var(--ink);font:400 19px/1.65 var(--f-body)}
+body{margin:0;background:#0e0905;color:var(--ink);font:400 19px/1.65 var(--f-body)}
+:root:not([data-theme="dark"]) body{background:#efe6d2}
 a{color:inherit;text-underline-offset:4px}
 :focus-visible{outline:2px solid var(--acc);outline-offset:3px}
-/* a gilt frame: a bright fillet, a broad gold band, a dark sight edge */
-.page{box-shadow:0 0 0 1px var(--gilt-hi),0 0 0 7px var(--gilt),0 0 0 8px #6b4f1c,0 0 0 9px var(--gilt-hi),0 40px 90px -30px rgba(40,25,10,.6)}
+.page{box-shadow:0 0 0 1px var(--gilt-hi),0 0 0 7px var(--gilt),0 0 0 8px #6b4f1c,0 0 0 9px var(--gilt-hi),0 40px 90px -30px rgba(20,10,4,.7)}
+:root[data-theme="dark"] .page{background:radial-gradient(80% 60% at 18% 0%,rgba(217,167,90,.12),transparent 70%),var(--bg)}
 
-.folio{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(16px,4vw,48px);align-items:center;padding:clamp(40px,8vh,80px) clamp(20px,5vw,56px) 16px}
-@media (max-width:720px){.folio{grid-template-columns:minmax(0,1fr)}}
-.folio h1{margin:0;font:400 clamp(3.4rem,10vw,6.4rem)/1 var(--f-disp);color:var(--sanguine)}
-.folio canvas{width:min(100%,400px);aspect-ratio:1;display:block;justify-self:center}
+.folio{padding:clamp(56px,12vh,120px) clamp(20px,5vw,56px) 16px}
+.folio h1{margin:0;font:400 clamp(3.4rem,10vw,6.4rem)/1 var(--f-disp);color:var(--acc)}
+:root[data-theme="dark"] .folio h1{text-shadow:0 0 40px rgba(217,167,90,.25)}
 .wrap{padding-inline:clamp(20px,5vw,56px)}
 .soon{margin:24px 0 0;font:italic 400 1.35rem var(--f-disp);color:var(--dim)}
-footer{margin-top:80px;border-top:1px solid var(--line);padding-block:20px 24px;color:var(--dim);font-size:.9rem}
+footer{margin-top:120px;border-top:1px solid var(--line);padding-block:20px 24px;color:var(--dim);font-size:.9rem}
 footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 footer a{text-decoration:none}
 </style>
 <link rel="stylesheet" href="../assets/bar.css">
 </head>
 <body>
-<canvas class="backdrop tall" id="sheet" data-parallax=".3" aria-hidden="true"></canvas>
+<canvas class="backdrop tall" id="canvas" data-parallax=".3" aria-hidden="true"></canvas>
 <div class="page">
 <header class="bar"><div class="bar-in">
   <nav class="sites" aria-label="Sites"><a class="here" href="../" aria-current="true"><span class="seal" aria-hidden="true">BM</span>Bucatini Mickey</a><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a></nav>
   <nav class="pages" aria-label="Pages"><a href="../films/">Film</a><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="../writing/">Writing</a><a href="./" aria-current="page">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Dark</button></nav>
 </div></header>
 
-<section class="folio">
-  <h1>Art</h1>
-  <canvas id="volute" role="img" aria-label="The construction of an Ionic volute, in compass arcs, after Vignola"></canvas>
-</section>
+<section class="folio"><h1>Art</h1></section>
 
 <main class="wrap">
   <p class="soon">The first paintings are on their way.</p>
@@ -64,91 +62,60 @@ footer a{text-decoration:none}
 
 <script>
 (function(){
-  const root=document.documentElement, col=v=>getComputedStyle(root).getPropertyValue(v).trim();
-
-  /* Vignola's Ionic volute: twelve quarter-circle arcs whose centres step inward towards the eye, each radius a
-     little shorter than the last. With its construction lines. */
-  function volute(c,cx,cy,R,lines){
-    const red=col('--sanguine'), gold=col('--gilt'), e=R*.11, n=12, centres=[];
-    // each centre steps along the last radius, so every arc meets the next one tangent; the steps shrink
-    // geometrically and end in the eye, as the centres in Vignola's construction do
-    const q=.82, d0=(R-e)*(1-q)/(1-Math.pow(q,n));
-    let x=cx, y=cy-(R-e)*.06, r=R, a=-Math.PI/2;
-    c.lineWidth=2.2; c.strokeStyle=gold; c.beginPath();
-    for(let i=0;i<n;i++){
-      centres.push([x,y]);
-      if(i===0) c.moveTo(x+Math.cos(a)*r,y+Math.sin(a)*r);
-      c.arc(x,y,r,a,a+Math.PI/2); a+=Math.PI/2;
-      const d=d0*Math.pow(q,i); x+=Math.cos(a)*d; y+=Math.sin(a)*d; r-=d;
+  const root=document.documentElement, cv=document.getElementById('canvas');
+  function rng(seed){let s=seed>>>0||1;return()=>((s=Math.imul(s^s>>>15,1|s)+0x6D2B79F5|0,((s^s>>>14)>>>0)/4294967296))}
+  /* how much light reaches a point: a soft pool from the upper left, as from a high window */
+  function light(x,y,W,H){const dx=(x-W*.2)/W, dy=(y-H*.16)/H; return Math.max(0,1-Math.sqrt(dx*dx*1.1+dy*dy*1.6)*1.45)}
+  function paint(){
+    const r=rng(1606), dpr=Math.min(2,devicePixelRatio||1), W=cv.clientWidth, H=cv.clientHeight, oil=root.dataset.theme==='dark';
+    cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
+    const c=cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
+    if(oil){
+      // ground: umber darkness, warming to gold where the light falls
+      const g=c.createRadialGradient(W*.2,H*.16,0,W*.2,H*.16,Math.max(W,H)*.85);
+      g.addColorStop(0,'#c99448'); g.addColorStop(.18,'#8a5a2a'); g.addColorStop(.42,'#3d2614'); g.addColorStop(.75,'#170e07'); g.addColorStop(1,'#0b0704');
+      c.fillStyle=g; c.fillRect(0,0,W,H);
+      // glazes: broad, faint strokes laid round the light in layers, so the glow is mottled and brushed, never flat
+      c.lineCap='round';
+      for(let i=0;i<Math.round(W*H/1600);i++){
+        const x=r()*W, y=r()*H, L=light(x,y,W,H); if(r()>L*1.4+.08) continue;
+        const toL=Math.atan2(y-H*.16,x-W*.2)+Math.PI/2+(r()-.5)*.6, len=40+r()*120, w=14+r()*34;
+        const tone=L>.35?[230,180,110]:L>.12?[150,96,48]:[40,24,12];
+        c.strokeStyle=`rgba(${tone},${.025+L*.05})`; c.lineWidth=w;
+        c.beginPath(); c.moveTo(x,y); c.quadraticCurveTo(x+Math.cos(toL)*len*.5+(r()-.5)*20,y+Math.sin(toL)*len*.5+(r()-.5)*20,x+Math.cos(toL)*len,y+Math.sin(toL)*len); c.stroke();
+      }
+    } else {
+      c.fillStyle='#f1e8d4'; c.fillRect(0,0,W,H);
+      const g=c.createRadialGradient(W/2,H/2,Math.min(W,H)*.3,W/2,H/2,Math.max(W,H)*.8); g.addColorStop(0,'rgba(0,0,0,0)'); g.addColorStop(1,'rgba(120,90,50,.16)'); c.fillStyle=g; c.fillRect(0,0,W,H);
     }
-    c.stroke();
-    if(lines){
-      c.lineWidth=.8; c.strokeStyle=red; c.globalAlpha=.75;
-      c.beginPath(); c.arc(cx,cy,e,0,Math.PI*2); c.stroke();
-      c.beginPath(); c.moveTo(cx-R*1.15,cy); c.lineTo(cx+R*1.15,cy); c.moveTo(cx,cy-R*1.15); c.lineTo(cx,cy+R*1.15); c.stroke();
-      c.setLineDash([3,4]); c.beginPath(); c.arc(cx,cy,R,0,Math.PI*2); c.stroke(); c.setLineDash([]);
-      c.beginPath(); centres.forEach(([px,py],i)=>i?c.lineTo(px,py):c.moveTo(px,py)); c.stroke();
-      for(const [px,py] of centres){c.beginPath(); c.arc(px,py,1.6,0,Math.PI*2); c.fillStyle=red; c.fill()}
-      c.globalAlpha=1;
+    /* sketched hatching: short loose strokes in clusters, their direction drifting across the picture, more of
+       them as it darkens and crossed where it is darkest. On paper they are bitten lines in sepia; in the
+       painting they are scratched into the dark paint, so they show pale. */
+    const cell=16, ink=oil?'232,196,140':'64,40,22';
+    for(let y=0;y<H+cell;y+=cell) for(let x=0;x<W+cell;x+=cell){
+      const L=light(x,y,W,H), shade=oil?Math.min(1,(1-L)*1.15-.25):1-L*1.6;
+      if(shade<.18) continue;
+      const base=-.9+Math.sin(x*.004+y*.003)*.5+Math.cos(y*.006)*.3, n=Math.round(shade*3.2+r()*.6);
+      c.strokeStyle=`rgba(${ink},${oil?.05+shade*.09:.18+shade*.32})`; c.lineWidth=oil?.7:.75; c.lineCap='round';
+      for(let k=0;k<n;k++){
+        const px=x+r()*cell, py=y+r()*cell, len=9+r()*12, ang=base+(r()-.5)*.25+(k>=3&&shade>.6?1.25:0);
+        const ex=px+Math.cos(ang)*len, ey=py+Math.sin(ang)*len;
+        c.beginPath(); c.moveTo(px,py); c.quadraticCurveTo((px+ex)/2+(r()-.5)*2,(py+ey)/2+(r()-.5)*2,ex,ey); c.stroke();
+      }
     }
-  }
-  /* Borromini's San Carlo: two equilateral triangles back to back, a circle in each, and the oval drawn round them
-     from four centres. */
-  function sanCarlo(c,cx,cy,s){
-    const red=col('--sanguine'), gold=col('--gilt'), h=s*Math.sqrt(3)/2, r=h/3;
-    c.lineWidth=.9; c.strokeStyle=red; c.globalAlpha=.7;
-    c.beginPath(); c.moveTo(cx-s/2,cy); c.lineTo(cx+s/2,cy); c.lineTo(cx,cy-h); c.closePath(); c.stroke();
-    c.beginPath(); c.moveTo(cx-s/2,cy); c.lineTo(cx+s/2,cy); c.lineTo(cx,cy+h); c.closePath(); c.stroke();
-    for(const y of [cy-h/3,cy+h/3]){c.beginPath(); c.arc(cx,y,r,0,Math.PI*2); c.stroke()}
-    c.beginPath(); c.moveTo(cx,cy-h*1.25); c.lineTo(cx,cy+h*1.25); c.moveTo(cx-s*.75,cy); c.lineTo(cx+s*.75,cy); c.stroke();
-    c.globalAlpha=1; c.lineWidth=2.2; c.strokeStyle=gold;
-    // four-centred oval: big arcs from the triangle apexes' opposite points, small arcs at the ends
-    const R1=h*1.1, R2=R1-(h*2/3);
-    c.beginPath();
-    c.arc(cx,cy+h*2/3*.5,R1,-Math.PI*.5-.55,-Math.PI*.5+.55);
-    c.arc(cx+s*.42,cy,R2*.9,-.62,.62);
-    c.arc(cx,cy-h*2/3*.5,R1,Math.PI*.5-.55,Math.PI*.5+.55);
-    c.arc(cx-s*.42,cy,R2*.9,Math.PI-.62,Math.PI+.62);
-    c.closePath(); c.stroke();
-  }
-  /* an oval dome seen from below: rings of coffers, narrowing to the lantern */
-  function dome(c,cx,cy,rx,ry){
-    const red=col('--sanguine'), gold=col('--gilt');
-    c.lineWidth=.9;
-    for(let i=0;i<7;i++){const t=1-i/8; c.strokeStyle=i%2?red:gold; c.globalAlpha=i%2?.6:.9; c.beginPath(); c.ellipse(cx,cy,rx*t,ry*t,0,0,Math.PI*2); c.stroke()}
-    c.strokeStyle=red; c.globalAlpha=.5;
-    for(let k=0;k<24;k++){const a=k/24*Math.PI*2; c.beginPath(); c.moveTo(cx+Math.cos(a)*rx*.25,cy+Math.sin(a)*ry*.25); c.lineTo(cx+Math.cos(a)*rx,cy+Math.sin(a)*ry); c.stroke()}
-    c.globalAlpha=1; c.strokeStyle=gold; c.lineWidth=2; c.beginPath(); c.ellipse(cx,cy,rx*.12,ry*.12,0,0,Math.PI*2); c.stroke();
+    // a faint compass circle and its centre lines, sketched once in the lower right
+    c.strokeStyle=oil?'rgba(217,167,90,.22)':'rgba(138,74,30,.3)'; c.lineWidth=.8;
+    const R=Math.min(W,H)*.22, cx=W*.86, cy=H*.72;
+    c.beginPath(); c.arc(cx,cy,R,0,Math.PI*2); c.stroke();
+    c.beginPath(); c.moveTo(cx-R*1.2,cy); c.lineTo(cx+R*1.2,cy); c.moveTo(cx,cy-R*1.2); c.lineTo(cx,cy+R*1.2); c.stroke();
   }
 
-  const sh=document.getElementById('sheet');
-  function sheet(){
-    const dpr=Math.min(2,devicePixelRatio||1), W=sh.clientWidth, H=sh.clientHeight;
-    sh.width=Math.round(W*dpr); sh.height=Math.round(H*dpr);
-    const c=sh.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
-    c.fillStyle=col('--parch'); c.fillRect(0,0,W,H);
-    const g=c.createRadialGradient(W/2,H*.4,Math.min(W,H)*.25,W/2,H*.4,Math.max(W,H)*.75);
-    g.addColorStop(0,col('--parch-hi')); g.addColorStop(1,col('--parch-lo')); c.globalAlpha=.75; c.fillStyle=g; c.fillRect(0,0,W,H); c.globalAlpha=1;
-    const m=Math.min(W,H);
-    volute(c,W*.1,H*.32,m*.2,true);
-    sanCarlo(c,W*.9,H*.36,m*.32);
-    dome(c,W*.5,H*.04,m*.62,m*.24);
-    volute(c,W*.92,H*.82,m*.12,true);
-    sanCarlo(c,W*.08,H*.8,m*.22);
-  }
-  const vc=document.getElementById('volute');
-  function hero(){
-    const S=vc.clientWidth; if(!S) return; const dpr=Math.min(2,devicePixelRatio||1);
-    vc.width=vc.height=Math.round(S*dpr); const c=vc.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,S,S);
-    volute(c,S*.5,S*.5,S*.4,true);
-  }
-
-  /* site-wide light/dark switch; this page is a daylight page */
+  /* site-wide light/dark switch: dark is the painting, light the etching */
   const btn=document.getElementById('mode');
-  const set=m=>{if(m==='dark')root.dataset.theme='dark';else delete root.dataset.theme;btn.textContent=m==='dark'?'Light':'Dark';sheet();hero()};
+  const set=m=>{if(m==='dark')root.dataset.theme='dark';else delete root.dataset.theme;btn.textContent=m==='dark'?'Light':'Dark';paint()};
   let m='dark';try{m=localStorage.getItem('bm-theme')||'dark'}catch(e){}
   btn.onclick=()=>{m=m==='dark'?'light':'dark';try{localStorage.setItem('bm-theme',m)}catch(e){}set(m)};
-  let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{sheet();hero()},200)});
+  let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(paint,200)});
   set(m);
 })();
 </script>

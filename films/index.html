@@ -152,7 +152,8 @@ span.th{background:none}
 
 /* ---- the theatre ---- */
 /* Around the page: a red curtain that parts as you scroll, on a Czech puppet-theatre set of painted flats
-   (sky cloth, cloud flats, rocking wave flats, the boards). On the page: a painted corridor behind the title. */
+   (sky cloth, cloud flats, rocking wave flats, the boards). On the page: my Letterboxd backdrop (Faust) hung as
+   the stage picture behind the title, and my top four in gilt frames. */
 h1,.sec h2,.grp>summary .nm{font-variation-settings:"SOFT" 100,"WONK" 1,"opsz" 96}
 h1{font-weight:500;letter-spacing:0}
 .sec h2{font-weight:500}
@@ -161,7 +162,23 @@ body{background:#3c070c}
 .page{box-shadow:0 0 0 2px var(--gilt-hi),0 0 0 8px var(--gilt),0 0 0 10px #4a3412,0 40px 90px -30px #000}
 .mast{position:relative;padding-top:clamp(150px,26vh,230px);overflow:hidden}
 .mast>*{position:relative;z-index:1}
-.mast canvas.corridor{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
+.mast img.still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 28%;z-index:0;display:block}
+/* the still is hung like a painted back-cloth: a faint canvas weave and a darkened edge */
+.mast::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.35;mix-blend-mode:overlay;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"),
+  repeating-linear-gradient(90deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px),repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0 1px,transparent 1px 3px)}
+/* my top four, in gilt frames */
+.four{padding-block:8px 36px}
+.four h2{font:500 .72rem/1 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin:0 0 16px}
+.four ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,2.4vw,26px)}
+.four a{display:flex;flex-direction:column;gap:4px;text-decoration:none}
+.four .frame{display:block;padding:5px;background:linear-gradient(135deg,#f0d38a,#a67a28 45%,#e8c56e 60%,#7a5518);box-shadow:0 0 0 1px #4a3412,0 14px 30px -14px #000;transition:transform .25s}
+.four img{display:block;width:100%;height:auto;aspect-ratio:2/3;object-fit:cover;box-shadow:inset 0 0 0 1px rgba(0,0,0,.4)}
+.four b{margin-top:8px;font:500 1rem/1.2 var(--f-disp);font-variation-settings:"SOFT" 100,"WONK" 1}
+.four small{color:var(--dim);font:500 .74rem var(--f-mono)}
+.four a:hover .frame{transform:translateY(-4px)}
+.four a:hover b{color:var(--acc)}
+@media (max-width:560px){.four ol{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .mast::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(to bottom,transparent 30%,color-mix(in srgb,var(--bg) 70%,transparent) 62%,var(--bg) 96%);pointer-events:none}
 .mast h1{color:#f6ead0;text-shadow:0 2px 18px rgba(0,0,0,.55)}
 :root[data-theme="light"] .mast h1{color:#2a1a12;text-shadow:0 1px 14px rgba(255,245,225,.8)}
@@ -180,11 +197,12 @@ body{background:#3c070c}
   <nav class="pages" aria-label="Pages"><a href="../films/" aria-current="page">Film</a><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="../writing/">Writing</a><a href="../art/">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 <header class="wrap mast">
-  <canvas class="corridor" aria-hidden="true"></canvas>
+  <img class="still" src="https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1200-1200-675-675-crop-000000.jpg?v=1e6d6ff5ca" srcset="https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-960-960-540-540-crop-000000.jpg?v=1e6d6ff5ca 960w, https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1200-1200-675-675-crop-000000.jpg?v=1e6d6ff5ca 1200w, https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1920-1920-1080-1080-crop-000000.jpg?v=1e6d6ff5ca 1920w" sizes="(max-width:1040px) 100vw, 980px" alt="Mephistopheles and his devils, marionettes in Švankmajer's Faust (1994): my Letterboxd backdrop">
   <div class="title"><h1>Film Index</h1></div>
   <p class="lede">Everything I keep on <a class="lb" href="https://letterboxd.com/bucatini_mickey/">Letterboxd</a>.</p>
   <div class="search"><input id="q" type="search" placeholder="Search lists or films" autocomplete="off" aria-label="Search lists and films"></div>
 </header>
+<section class="wrap four" aria-label="My top four"><h2>Top four</h2><ol><li><a href="https://letterboxd.com/film/faust/"><span class="frame"><img src="https://a.ltrbxd.com/resized/film-poster/3/9/9/9/8/39998-faust-0-600-0-900-crop.jpg?v=234ad485f9" alt="Faust (1994) poster" loading="lazy" width="300" height="450"></span><b>Faust</b><small>1994</small></a></li><li><a href="https://letterboxd.com/film/hour-of-the-wolf/"><span class="frame"><img src="https://a.ltrbxd.com/resized/film-poster/4/0/4/2/2/40422-hour-of-the-wolf-0-600-0-900-crop.jpg?v=328a5ea98c" alt="Hour of the Wolf (1968) poster" loading="lazy" width="300" height="450"></span><b>Hour of the Wolf</b><small>1968</small></a></li><li><a href="https://letterboxd.com/film/portrait-of-a-lady-on-fire/"><span class="frame"><img src="https://a.ltrbxd.com/resized/film-poster/4/6/0/8/3/0/460830-portrait-of-a-lady-on-fire-0-600-0-900-crop.jpg?v=79b0f67aa9" alt="Portrait of a Lady on Fire (2019) poster" loading="lazy" width="300" height="450"></span><b>Portrait of a Lady on Fire</b><small>2019</small></a></li><li><a href="https://letterboxd.com/film/the-boxers-omen/"><span class="frame"><img src="https://a.ltrbxd.com/resized/film-poster/1/6/3/5/0/16350-the-boxers-omen-0-600-0-900-crop.jpg?v=4eecb9e461" alt="The Boxer's Omen (1983) poster" loading="lazy" width="300" height="450"></span><b>The Boxer's Omen</b><small>1983</small></a></li></ol></section>
 <div class="tabs"><div class="wrap" id="tabs" role="tablist" aria-label="Film Index sections"></div></div>
 <main class="wrap" id="main"></main>
 <footer class="wrap" id="foot"></footer>
@@ -365,18 +383,47 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
 </script>
 <script>
 /* The theatre around the page. At the top of the page the red curtain is closed; scrolling draws it back to the
-   sides, gathering its pleats, and shows the set behind it, built from painted flats as in a Czech puppet
-   theatre: a sky cloth, cloud flats hung from the flies, four rows of wave flats rocking against each other like
-   an old wave machine, and the boards of the stage, lit from the footlights. A scalloped valance stays above it all. */
+   sides, gathering its pleats, and shows the set behind it, built as a Czech puppet theatre builds one: a painted
+   sky cloth, cloud flats hung from the flies, four rows of wave flats rocking against each other like an old wave
+   machine, and the boards of the stage. Everything has the texture of what it is made of: the curtain is velvet,
+   the cloth is canvas, the flats are painted plywood with pale cut edges, the stage is planks. */
 (function(){
-  const cv=document.getElementById('stage'), root=document.documentElement, still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cv=document.getElementById('stage'), still=matchMedia('(prefers-reduced-motion: reduce)').matches;
   function rng(seed){let s=seed>>>0||1;return()=>((s=Math.imul(s^s>>>15,1|s)+0x6D2B79F5|0,((s^s>>>14)>>>0)/4294967296))}
-  let W=0,H=0,dpr=1,set=null;
-  const HI=['#c9cfb4','#d6c592','#aebf9c','#bccbc0'], MID=['#5f7a78','#6d8780','#4f6870','#738a7c'];
+  let W=0,H=0,dpr=1,set=null,velvet=null,sheen=null,grain=null,brush=null;
+  const HI=['#c9cfb4','#d6c592','#aebf9c','#bccbc0'], MID=['#5f7a78','#6d8780','#4f6870','#738a7c'], EDGE='#d8c7a0';
 
+  /* ---- textures, made once ---- */
+  function tile(w,h,fn){const t=document.createElement('canvas');t.width=w;t.height=h;fn(t.getContext('2d'),w,h);return t}
+  function textures(){
+    const r=rng(77);
+    // velvet: fine vertical pile with a little crosswise weave and speckle
+    velvet=tile(96,96,(c,w,h)=>{
+      for(let x=0;x<w;x++){c.fillStyle=`rgba(${r()<.5?'0,0,0':'255,220,220'},${.04+r()*.07})`;c.fillRect(x,0,1,h)}
+      for(let y=0;y<h;y+=3){c.fillStyle='rgba(0,0,0,.05)';c.fillRect(0,y,w,1)}
+      for(let i=0;i<500;i++){c.fillStyle=`rgba(${r()<.5?'0,0,0':'255,200,200'},${r()*.12})`;c.fillRect(r()*w,r()*h,1,1+r()*2)}
+    });
+    // crushed sheen: soft, irregular light and dark patches stretched down the drop
+    sheen=tile(64,64,(c,w,h)=>{
+      for(let i=0;i<40;i++){const x=r()*w,y=r()*h,s=4+r()*12,g=c.createRadialGradient(x,y,0,x,y,s);const l=r()<.5;g.addColorStop(0,l?'rgba(255,170,170,.25)':'rgba(0,0,0,.3)');g.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=g;c.fillRect(0,0,w,h)}
+    });
+    // wood grain: long wavering lines with the odd knot
+    grain=tile(320,80,(c,w,h)=>{
+      for(let y=0;y<h;y+=1.5){c.strokeStyle=`rgba(40,22,8,${.05+r()*.12})`;c.lineWidth=.6+r()*.8;c.beginPath();const ph=r()*6,am=.6+r()*1.4;for(let x=0;x<=w;x+=8){const yy=y+Math.sin(x*.02+ph)*am;x?c.lineTo(x,yy):c.moveTo(x,yy)}c.stroke()}
+      for(let k=0;k<2;k++){const x=r()*w,y=r()*h;c.strokeStyle='rgba(40,22,8,.25)';for(let i=1;i<5;i++){c.beginPath();c.ellipse(x,y,i*3,i*1.2,0,0,6.283);c.stroke()}}
+    });
+    // paint: long, slightly uneven brush strokes laid along the board
+    brush=tile(240,60,(c,w,h)=>{
+      for(let i=0;i<70;i++){const y=r()*h,x=r()*w,l=40+r()*120;c.strokeStyle=`rgba(${r()<.5?'255,255,240':'0,0,0'},${.04+r()*.07})`;c.lineWidth=1+r()*3;c.beginPath();c.moveTo(x,y);c.quadraticCurveTo(x+l/2,y+(r()-.5)*4,x+l,y+(r()-.5)*3);c.stroke()}
+    });
+  }
+  function overlay(c,pattern,mode,alpha){c.save();c.globalCompositeOperation=mode;c.globalAlpha=alpha;c.fillStyle=c.createPattern(pattern,'repeat');c.fillRect(-W,-H,W*3,H*3);c.restore()}
+
+  /* ---- cloud flats: painted lobes with a pale cut edge on the lit side ---- */
   function lobe(c,r,x,y,rx,ry,hi,mid,curl){
     c.save(); c.beginPath(); c.ellipse(x,y,rx,ry,0,0,Math.PI*2); c.fillStyle=mid; c.fill(); c.clip();
     c.beginPath(); c.ellipse(x-rx*.28,y-ry*.38,rx*.8,ry*.7,0,0,Math.PI*2); c.fillStyle=hi; c.globalAlpha=.85; c.fill(); c.globalAlpha=1;
+    overlay(c,brush,'overlay',.9);
     if(curl){
       const dir=r()<.5?1:-1, a0=dir>0?-Math.PI*.95:-Math.PI*.05, turns=1.05+r()*.35;
       c.lineCap='round';
@@ -388,42 +435,45 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
       c.globalAlpha=1;
     }
     c.restore();
-    c.strokeStyle='#18232b'; c.globalAlpha=.65; c.lineWidth=Math.max(1.5,ry*.09);
-    c.beginPath(); c.ellipse(x,y,rx,ry,0,-.25,Math.PI*1.05); c.stroke(); c.globalAlpha=1;
+    c.strokeStyle=EDGE; c.lineWidth=2.4; c.globalAlpha=.85; c.beginPath(); c.ellipse(x,y,rx,ry,0,Math.PI*.95,Math.PI*1.75); c.stroke();
+    c.strokeStyle='#18232b'; c.globalAlpha=.65; c.lineWidth=Math.max(1.5,ry*.09); c.beginPath(); c.ellipse(x,y,rx,ry,0,-.25,Math.PI*1.05); c.stroke(); c.globalAlpha=1;
   }
   function cloud(c,r,x,y,s){
     const hi=HI[Math.floor(r()*HI.length)], mid=MID[Math.floor(r()*MID.length)], n=2+Math.floor(r()*3);
+    c.save(); c.shadowColor='rgba(10,16,20,.45)'; c.shadowBlur=14; c.shadowOffsetY=6;
     for(let i=0;i<n;i++){const ox=(i-(n-1)/2)*s*.75+(r()-.5)*s*.2, oy=-Math.abs(ox)*.15-r()*s*.15; lobe(c,r,x+ox,y+oy,s*(.62+r()*.25),s*(.42+r()*.15),hi,mid,false)}
     lobe(c,r,x+(r()-.5)*s*.3,y-s*.18,s*(.85+r()*.2),s*(.58+r()*.12),hi,mid,true);
+    c.restore();
   }
-  /* the fixed parts of the set, painted once: sky cloth, cloud flats, the boards */
+  /* ---- the fixed parts of the set, painted once ---- */
   function paintSet(){
     const r=rng(1994); set=document.createElement('canvas'); set.width=cv.width; set.height=cv.height;
     const c=set.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
     const sky=c.createLinearGradient(0,0,0,H*.7); sky.addColorStop(0,'#34484f'); sky.addColorStop(1,'#cbbd8f');
     c.fillStyle=sky; c.fillRect(0,0,W,H);
-    // cloud flats in two hung rows
+    overlay(c,brush,'overlay',.8); overlay(c,velvet,'soft-light',.25);          // a painted canvas cloth
     for(const [y,s] of [[H*.12,54],[H*.3,70]]) for(let x=-s*r();x<W+s;x+=s*(2.1+r()*.8)) cloud(c,r,x,y+(r()-.5)*s*.4,s*(.85+r()*.3));
-    // the boards: planks running to a vanishing point, lit from the front
     const top=H*.82, vx=W/2, n=28;
     for(let i=0;i<n;i++){
       const x0=-W*.6+i*(W*2.2/n), x1=x0+W*2.2/n, t0=vx+(x0-vx)*.35, t1=vx+(x1-vx)*.35;
-      c.fillStyle=i%2?'#6b4a2c':'#7a5636'; c.beginPath(); c.moveTo(t0,top); c.lineTo(t1,top); c.lineTo(x1,H); c.lineTo(x0,H); c.closePath(); c.fill();
-      c.strokeStyle='rgba(30,18,10,.55)'; c.lineWidth=1; c.stroke();
+      c.save(); c.beginPath(); c.moveTo(t0,top); c.lineTo(t1,top); c.lineTo(x1,H); c.lineTo(x0,H); c.closePath();
+      c.fillStyle=i%2?'#6b4a2c':'#7a5636'; c.fill(); c.clip(); overlay(c,grain,'multiply',.7); c.restore();
+      c.strokeStyle='rgba(30,18,10,.6)'; c.lineWidth=1; c.beginPath(); c.moveTo(t0,top); c.lineTo(x0,H); c.stroke();
     }
     const fl=c.createLinearGradient(0,top,0,H); fl.addColorStop(0,'rgba(20,12,6,.55)'); fl.addColorStop(1,'rgba(255,190,110,.18)');
     c.fillStyle=fl; c.fillRect(0,top,W,H-top);
   }
-  /* one row of wave flats: a painted band whose top edge is a run of crests, each curling over */
+  /* ---- one row of wave flats: a painted plywood board cut into curling crests, joined in planks ---- */
   function waves(c,row,t){
-    const y0=H*(.52+row*.06), P=150-row*22, sway=(row%2?1:-1)*Math.sin(t*.7+row*1.3)*P*.32, bob=Math.sin(t*.9+row)*4;
+    const y0=H*(.52+row*.06), P=150-row*22, sway=(row%2?1:-1)*Math.sin(t*.7+row*1.3)*P*.32, bob=Math.sin(t*.9+row)*4, floor=H*.83;
     const body=['#3f6670','#355a63','#2b4c55','#213f47'][row], crest=['#cfd8c4','#c5cfb8','#bcc6ae','#b2bca4'][row];
     c.save(); c.translate(sway,bob);
-    const floor=H*.83;
-    c.beginPath(); c.moveTo(-P*2,floor);
-    for(let x=-P*2;x<W+P*2;x+=P){c.lineTo(x,y0); c.quadraticCurveTo(x+P*.35,y0-P*.42,x+P*.62,y0-P*.3); c.quadraticCurveTo(x+P*.8,y0-P*.06,x+P,y0)}
-    c.lineTo(W+P*2,floor); c.closePath(); c.fillStyle=body; c.fill();
-    c.strokeStyle='#14262c'; c.lineWidth=2; c.stroke();
+    const edge=new Path2D(); edge.moveTo(-P*2,floor);
+    for(let x=-P*2;x<W+P*2;x+=P){edge.lineTo(x,y0); edge.quadraticCurveTo(x+P*.35,y0-P*.42,x+P*.62,y0-P*.3); edge.quadraticCurveTo(x+P*.8,y0-P*.06,x+P,y0)}
+    edge.lineTo(W+P*2,floor); edge.closePath();
+    c.save(); c.shadowColor='rgba(5,12,16,.55)'; c.shadowBlur=16; c.shadowOffsetY=-4; c.fillStyle=body; c.fill(edge); c.restore();
+    c.save(); c.clip(edge); overlay(c,grain,'multiply',.35); overlay(c,brush,'overlay',1);
+    c.strokeStyle='rgba(10,20,24,.45)'; c.lineWidth=1; for(let x=-P*2;x<W+P*2;x+=P*1.7){c.beginPath(); c.moveTo(x,y0-P*.5); c.lineTo(x,floor); c.stroke()}   // plank joins
     c.lineCap='round';
     for(let x=-P*2;x<W+P*2;x+=P){
       const cx=x+P*.6, cy=y0-P*.17, rr=P*.14;
@@ -432,36 +482,42 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
       c.stroke();
     }
     c.restore();
+    c.strokeStyle=EDGE; c.lineWidth=3; c.stroke(edge);            // the pale cut edge of the plywood
+    c.strokeStyle='#14262c'; c.lineWidth=1.2; c.translate(0,2); c.stroke(edge);
+    c.restore();
   }
-  /* the curtain: two halves of red velvet that part and gather as you scroll */
+  /* ---- the curtain: two halves of red velvet that part and gather, with a gold-trimmed hem ---- */
   function curtain(c,p){
     const half=W/2, pleats=16;
     for(const side of [-1,1]){
-      const outer=side<0?0:W, width=half*(1-p*.86), inner=outer-side*width, lift=p*H*.2;
-      c.save(); c.beginPath();
-      c.moveTo(outer,0); c.lineTo(inner,0);
-      c.quadraticCurveTo(inner-side*width*.05,H*.55,inner-side*width*.18*p,H-lift);
-      c.lineTo(outer,H); c.closePath(); c.clip();
+      const outer=side<0?0:W, width=half*(1-p*.86), inner=outer-side*width, lift=p*H*.2, hemX=inner-side*width*.18*p;
+      const shape=new Path2D(); shape.moveTo(outer,0); shape.lineTo(inner,0); shape.quadraticCurveTo(inner-side*width*.05,H*.55,hemX,H-lift); shape.lineTo(outer,H); shape.closePath();
+      c.save(); c.clip(shape);
       const pw=width/pleats;
       for(let k=0;k<pleats+1;k++){
-        const x=side<0?k*pw:W-(k+1)*pw;
-        const g=c.createLinearGradient(x,0,x+pw,0);
+        const x=side<0?k*pw:W-(k+1)*pw, g=c.createLinearGradient(x,0,x+pw,0);
         g.addColorStop(0,'#3c070c'); g.addColorStop(.3,'#8a1820'); g.addColorStop(.55,'#b8343a'); g.addColorStop(.8,'#7a141b'); g.addColorStop(1,'#3c070c');
         c.fillStyle=g; c.fillRect(x,0,pw+1,H);
       }
+      overlay(c,velvet,'overlay',.9);
+      c.save(); c.globalCompositeOperation='soft-light'; c.globalAlpha=.8; c.drawImage(sheen,side<0?0:W-width,0,width,H); c.restore();
       const v=c.createLinearGradient(0,0,0,H); v.addColorStop(0,'rgba(0,0,0,.5)'); v.addColorStop(.35,'rgba(0,0,0,0)'); v.addColorStop(1,'rgba(255,140,60,.12)');
       c.fillStyle=v; c.fillRect(0,0,W,H);
+      c.restore();
+      // the hem: a gold braid where the curtain's lower edge runs
+      c.save(); c.lineCap='round';
+      c.strokeStyle='#8a6a22'; c.lineWidth=7; c.beginPath(); c.moveTo(outer,H-1); c.lineTo(hemX,H-lift); c.stroke();
+      c.strokeStyle='#d9b45a'; c.lineWidth=3; c.setLineDash([2,3]); c.stroke(); c.setLineDash([]);
       c.restore();
     }
   }
   function valance(c){
     const h=Math.min(90,H*.1);
-    c.fillStyle='#5e0d13'; c.fillRect(0,0,W,h*.62);
-    for(let x=0;x<W+46;x+=46){
-      c.fillStyle='#c99a3c'; c.beginPath(); c.arc(x+23,h*.62,24,0,Math.PI); c.fill();
-      c.fillStyle='#6e1219'; c.beginPath(); c.arc(x+23,h*.62,21,0,Math.PI); c.fill();
-    }
-    c.fillStyle='rgba(0,0,0,.18)'; for(let x=0;x<W;x+=22) c.fillRect(x,0,2,h*.62);
+    c.save(); c.beginPath(); c.rect(0,0,W,h*.62);
+    for(let x=0;x<W+46;x+=46) c.arc(x+23,h*.62,21,0,Math.PI);
+    c.fillStyle='#6e1219'; c.fill(); c.clip(); overlay(c,velvet,'overlay',.9); c.restore();
+    c.strokeStyle='#c99a3c'; c.lineWidth=3; c.beginPath(); for(let x=0;x<W+46;x+=46){c.moveTo(x+44,h*.62); c.arc(x+23,h*.62,21,0,Math.PI)} c.stroke();
+    c.fillStyle='rgba(0,0,0,.2)'; for(let x=0;x<W;x+=22) c.fillRect(x,0,2,h*.62);
   }
   function size(){dpr=Math.min(2,devicePixelRatio||1); W=innerWidth; H=innerHeight; cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); paintSet()}
   function draw(t){
@@ -475,32 +531,7 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
   function loop(ts){ if(!document.hidden&&ts-last>33){last=ts;draw((ts-t0)/1000)} requestAnimationFrame(loop) }
   addEventListener('resize',()=>{size();draw((performance.now()-t0)/1000)});
   if(still) addEventListener('scroll',()=>requestAnimationFrame(()=>draw(0)),{passive:true});
-  size(); draw(0); if(!still) requestAnimationFrame(loop);
-
-  /* The painted backdrop behind the title: arches receding to a vanishing point, a stepped floor, a lit door. */
-  const cc=document.querySelector('canvas.corridor');
-  function corridor(){
-    const r=rng(7), d=Math.min(2,devicePixelRatio||1), w=cc.clientWidth, h=cc.clientHeight;
-    if(!w||!h) return;
-    cc.width=Math.round(w*d); cc.height=Math.round(h*d);
-    const c=cc.getContext('2d'); c.setTransform(d,0,0,d,0,0);
-    const vx=w*.5, vy=h*.4, N=10, k=.72, STONE=['#b48a7c','#b8935e','#8d8a83','#a5776a','#c3a37a','#7f7a74'];
-    c.fillStyle='#2a1c18'; c.fillRect(0,0,w,h);
-    const at=i=>{const t=Math.pow(k,i);return {t,w:w*1.15*t,h:h*1.5*t,base:vy+(h*1.05-vy)*t}};
-    for(let i=N;i>=0;i--){const A=at(i),B=at(i+1); c.fillStyle=i%2?'#6e6058':'#9a8a78'; c.beginPath();c.moveTo(vx-A.w/2,A.base);c.lineTo(vx+A.w/2,A.base);c.lineTo(vx+B.w/2,B.base);c.lineTo(vx-B.w/2,B.base);c.closePath();c.fill()}
-    const D=at(N+1), gl=c.createRadialGradient(vx,D.base-D.h*.35,0,vx,D.base-D.h*.35,D.w*2.4);
-    gl.addColorStop(0,'#fff1b0');gl.addColorStop(.25,'#e8c860');gl.addColorStop(1,'rgba(232,200,96,0)'); c.fillStyle=gl; c.fillRect(vx-D.w*3,D.base-D.h*2,D.w*6,D.h*2.2);
-    for(let i=N;i>=0;i--){
-      const A=at(i), aw=A.w, ah=A.h, x0=vx-aw/2, top=A.base-ah, ow=aw*.74, oh=ah*.86, ox=vx-ow/2, otop=A.base-oh, rr=ow/2, col=STONE[(i+Math.floor(r()*2))%STONE.length];
-      c.beginPath(); c.rect(x0,top,aw,ah); c.moveTo(ox,A.base);c.lineTo(ox,otop+rr);c.arc(vx,otop+rr,rr,Math.PI,0,false);c.lineTo(ox+ow,A.base);c.closePath();
-      const g=c.createLinearGradient(x0,0,x0+aw,0); g.addColorStop(0,col);g.addColorStop(.1,'#e2cfae');g.addColorStop(.18,col);g.addColorStop(.82,col);g.addColorStop(.92,'#4a3a33');g.addColorStop(1,col);
-      c.fillStyle=g; c.fill('evenodd'); c.strokeStyle='rgba(30,18,14,.45)'; c.lineWidth=Math.max(1,2*A.t); c.stroke();
-    }
-    const sv=c.createLinearGradient(0,0,w,0); sv.addColorStop(0,'rgba(20,12,10,.65)');sv.addColorStop(.22,'rgba(20,12,10,0)');sv.addColorStop(.78,'rgba(20,12,10,0)');sv.addColorStop(1,'rgba(20,12,10,.65)');
-    c.fillStyle=sv; c.fillRect(0,0,w,h);
-  }
-  let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(corridor,200)});
-  document.fonts?.ready.then(corridor); corridor();
+  textures(); size(); draw(0); if(!still) requestAnimationFrame(loop);
 })();
 </script>
 </body>
