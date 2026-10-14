@@ -106,7 +106,7 @@ footer a{text-decoration:none}
   const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const set_=(ph,k)=>`../${ph.files[k]}`;
   fetch('../assets/library.json').then(r=>r.ok?r.json():{photos:[]}).then(d=>{
-    const P=(d.photos||[]); if(!P.length) return;
+    const P=(d.photos||[]).filter(p=>(p.tags||['gallery']).includes('gallery')); if(!P.length) return;
     const wide=P.filter(p=>p.w>=p.h), h=(wide.length?wide:P)[Math.floor(Math.random()*(wide.length||P.length))];
     img=new Image(); img.id='hero'; img.alt=h.alt||''; img.decoding='async'; img.fetchPriority='high';
     img.style.backgroundImage=`url(${h.preview})`;

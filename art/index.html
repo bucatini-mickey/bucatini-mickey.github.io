@@ -37,6 +37,12 @@ a{color:inherit;text-underline-offset:4px}
 :root[data-theme="dark"] .folio h1{text-shadow:0 0 40px rgba(217,167,90,.25)}
 .wrap{padding-inline:clamp(20px,5vw,56px)}
 .soon{margin:24px 0 0;font:italic 400 1.35rem var(--f-disp);color:var(--dim)}
+/* the paintings, each hung in a plain gilt slip with a little air around it */
+.hang{list-style:none;margin:40px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:clamp(28px,6vw,64px);align-items:flex-end}
+.hang li{flex:1 1 260px;max-width:420px}
+.hang .slip{display:block;padding:clamp(8px,1.4vw,14px);background:linear-gradient(135deg,#e8c97a,#a8792c 45%,#e3c172 60%,#7a5518);box-shadow:0 0 0 1px #4a3412,0 24px 40px -22px rgba(0,0,0,.6)}
+.hang img{display:block;width:100%;height:auto;background:center/cover no-repeat}
+.hang p{margin:14px 0 0;font:italic 400 1.05rem var(--f-disp);color:var(--dim)}
 footer{margin-top:120px;border-top:1px solid var(--line);padding-block:20px 24px;color:var(--dim);font-size:.9rem}
 footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 footer a{text-decoration:none}
@@ -54,7 +60,13 @@ footer a{text-decoration:none}
 <section class="folio"><h1>Art</h1></section>
 
 <main class="wrap">
-  <p class="soon">The first paintings are on their way.</p>
+  <ul class="hang" id="hang" aria-label="Paintings"></ul>
+  <script>/* the paintings, from assets/library.json (tools/photos.py crops each photograph to its canvas) */
+  fetch('../assets/library.json').then(r=>r.ok?r.json():{}).then(d=>{
+    const P=(d.photos||[]).filter(p=>(p.tags||[]).includes('painting')), esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    if(!P.length) return;
+    document.getElementById('hang').innerHTML=P.map(p=>`<li><span class="slip"><img loading="lazy" decoding="async" width="${p.w}" height="${p.h}" alt="${esc(p.alt)}" style="background-image:url(${p.preview})" sizes="(max-width:700px) 90vw, 420px" srcset="../${p.files[640]} 640w, ../${p.files[1280]} 1280w" src="../${p.files[1280]}"></span>${p.title?`<p>${esc(p.title)}</p>`:''}</li>`).join('');
+  }).catch(()=>{});</script>
 </main>
 
 <footer><div class="wrap"><span>Bucatini Mickey · Art</span><span><a href="../">Portfolio</a></span></div></footer>

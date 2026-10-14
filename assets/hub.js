@@ -7,7 +7,8 @@
      3x zoom joins up with no seam);
    - Julia sets, symmetrical, their shape changing as their c travels a slow path (a different path each time);
    - ink: pastel marbling folding over itself;
-   - photographs from assets/library.json (made by tools/photos.py), slowly pushed in and panned.
+   - photographs from assets/library.json (made by tools/photos.py) tagged for the hub, slowly pushed in and
+     panned, with one of the joke photographs slipped in now and then.
    Every 12 to 16 seconds it cuts to the next, and the cut is bled the datamosh way. Nothing heavy loads first:
    the stepped diamonds start at once, and photographs are fetched one at a time, just before they are shown,
    small on phones. Slow machines lose the mosh, then resolution; reduced motion shows one still frame.
@@ -122,11 +123,11 @@ void main(){
       if(mosh) mosh.resize(cv.width,cv.height);
     }
     // photographs: fetched one at a time, just before they are needed
-    let list=[], next=null, pi=0;
-    fetch(new URL('assets/library.json',document.baseURI)).then(r=>r.ok?r.json():{}).then(d=>{ list=(d.photos||[]).filter(x=>x.files).sort(()=>Math.random()-.5); load() }).catch(()=>{});
+    let list=[], jokes=[], next=null, pi=0, ji=0;
+    fetch(new URL('assets/library.json',document.baseURI)).then(r=>r.ok?r.json():{}).then(d=>{ const all=(d.photos||[]).filter(x=>x.files), tag=t=>all.filter(x=>(x.tags||['home']).includes(t)).sort(()=>Math.random()-.5); list=tag('home'); jokes=tag('joke'); load() }).catch(()=>{});
     function load(){
       if(!list.length||next) return;
-      const ph=list[pi++%list.length], im=new Image(); im.decoding='async';
+      const ph=jokes.length&&Math.random()<.18?jokes[ji++%jokes.length]:list[pi++%list.length], im=new Image();   // now and then, a joke im.decoding='async';
       im.onload=()=>{ const tx=gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D,tx); gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,im);
         for(const [a,b] of [[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR],[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D,a,b);
         next={kind:'photo',tx,w:im.naturalWidth,h:im.naturalHeight,pan:[Math.random()-.5,Math.random()-.5]} };
