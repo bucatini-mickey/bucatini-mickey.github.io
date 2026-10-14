@@ -185,6 +185,53 @@ footer a:hover{color:var(--ink)}
     sx=Math.max(0,(mw-vw)/2); sy=Math.min(room,scrollY*Math.min(.5,room/scroll));
     ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle='#000'; ctx.fillRect(0,0,cv.width,cv.height);
     ctx.drawImage(world,sx*dpr,sy*dpr,Math.min(mw,vw)*dpr,Math.min(mh,vh)*dpr,Math.max(0,(vw-mw)/2)*dpr,0,Math.min(mw,vw)*dpr,Math.min(mh,vh)*dpr);
+    live(performance.now()/1000);
+  }
+  /* The world moves, a cell at a time, the way a terminal game does. Water flows: each water cell's glyph and
+     shade follow a travelling wave, so rivers and the sea shimmer and run. Weather falls through the cells by
+     season: spring rain on a slant, summer motes drifting in warm air, autumn leaves tumbling and sidelong,
+     winter snow sinking slowly. Particles live on the screen, not the map, and snap to the character grid. */
+  let wet=[], drops=[];
+  const WEATHER={
+    spring:{n:.022,g:['/','/',','],c:[[120,170,220],[150,190,230]],vx:-1.4,vy:5.5,sway:0},
+    summer:{n:.004,g:['.',"'"],c:[[230,210,140],[250,240,200]],vx:.2,vy:-.15,sway:.6},
+    autumn:{n:.012,g:['*',',','`','&'],c:[[214,104,38],[196,62,38],[226,170,56],[150,84,40]],vx:1.1,vy:1.1,sway:1.4},
+    winter:{n:.02,g:['.','*','.'],c:[[230,236,242],[200,212,224]],vx:.15,vy:.8,sway:.5},
+  };
+  function seed(){
+    wet=[]; for(let i=0;i<cells.length;i++){const g=cells[i].g; if(g==='~'||g==='-') wet.push(i)}
+    const w=WEATHER[season], cols=Math.ceil(innerWidth/cw), rows=Math.ceil(innerHeight/ch);
+    drops=Array.from({length:Math.round(cols*rows*w.n)},()=>({x:Math.random()*cols,y:Math.random()*rows,k:Math.random()}));
+  }
+  function live(t){
+    if(!world||!W) return;
+    const dpr=Math.min(2,devicePixelRatio||1), c=ctx; c.setTransform(dpr,0,0,dpr,0,0);
+    const ox=Math.max(0,(innerWidth-W*cw)/2), x0=Math.floor(sx/cw), y0=Math.floor(sy/ch), x1=x0+Math.ceil(innerWidth/cw)+1, y1=y0+Math.ceil(innerHeight/ch)+1;
+    c.font=`500 ${Math.round(ch*.78)}px 'IBM Plex Mono',ui-monospace,monospace`; c.textAlign='center'; c.textBaseline='middle';
+    for(const i of wet){
+      const x=i%W, y=(i/W)|0; if(x<x0||x>x1||y<y0||y>y1) continue;
+      const q=inSeason(cells[i],i); if(q.g==='=') continue;
+      const ph=Math.sin(x*.55+y*.35-t*2.4)+.5*Math.sin(x*.21-y*.6-t*1.3), lift=.88+.18*ph;
+      const py=y*ch-sy;
+      c.fillStyle=css(ink(q.bg.map(v=>v*.55*lift),true,q.g)); c.fillRect(ox+x*cw-sx,py,cw+.5,ch+.5);
+      c.fillStyle=css(ink(q.fg.map(v=>v*lift),false,q.g)); c.fillText(ph>.6?'~':ph<-.6?'-':q.g,ox+x*cw-sx+cw/2,py+ch*.54);
+    }
+    const w=WEATHER[season], cols=innerWidth/cw, rows=innerHeight/ch, ground=css(scheme==='natural'?[5,5,5]:scheme==='dracula'?DRAC.bg:ink([0,0,0],true));
+    for(const d of drops){
+      const gx=Math.floor(((d.x%cols)+cols)%cols), gy=Math.floor(((d.y%rows)+rows)%rows);
+      c.fillStyle=ground; c.fillRect(gx*cw,gy*ch,cw,ch);
+      c.fillStyle=css(ink(w.c[Math.floor(d.k*w.c.length)],false,'*')); c.fillText(w.g[Math.floor(d.k*w.g.length*7)%w.g.length],gx*cw+cw/2,gy*ch+ch*.54);
+    }
+  }
+  let lastT=0;
+  function tick(ts){
+    if(!document.hidden&&ts-lastT>90){
+      const dt=lastT?Math.min(.2,(ts-lastT)/1000):0; lastT=ts;
+      const w=WEATHER[season];
+      for(const d of drops){ d.x+=(w.vx+Math.sin(ts/900+d.k*20)*w.sway)*dt*(.7+d.k*.6)*3; d.y+=w.vy*dt*(.7+d.k*.6)*3 }
+      show();
+    }
+    requestAnimationFrame(tick);
   }
   let q=false; addEventListener('scroll',()=>{if(!q){q=true;requestAnimationFrame(()=>{q=false;show()})}},{passive:true});
   function setScheme(s,save){
@@ -196,7 +243,7 @@ footer a:hover{color:var(--ink)}
   const ALL=['natural','dracula','amber','paper'];
   document.querySelectorAll('.schemes button').forEach(b=>b.onclick=()=>{setMode(b.dataset.s==='paper'?'light':'dark',b.dataset.s)});
   function setSeason(v,save){
-    season=v; document.querySelectorAll('.seasons button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.season===v));
+    season=v; seed(); document.querySelectorAll('.seasons button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.season===v));
     if(save){try{localStorage.setItem('bm-season',v)}catch(e){}}
     paint();
   }
@@ -215,9 +262,10 @@ footer a:hover{color:var(--ink)}
     W=m.w;H=m.h;seedTxt=m.seed; const pal=m.pal.map(hex), ix=s=>B64.indexOf(s[0])*64+B64.indexOf(s[1]);
     for(let i=0;i<W*H;i++){const k=i*5;cells.push({g:m.cells[k],fg:pal[ix(m.cells.slice(k+1,k+3))],bg:pal[ix(m.cells.slice(k+3,k+5))]})}
     document.getElementById('dims').textContent=W+'x'+H; document.getElementById('seed').textContent=m.seed;
-    document.fonts?.ready.then(paint); paint();
+    seed(); document.fonts?.ready.then(paint); paint();
+    if(!matchMedia('(prefers-reduced-motion: reduce)').matches) requestAnimationFrame(tick);
   });
-  let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(paint,150)});
+  let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(()=>{seed();paint()},150)});
 
   /* site-wide light/dark switch: light is the paper scheme, dark the last dark scheme used */
   const btn=document.getElementById('mode');

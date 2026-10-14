@@ -6,7 +6,7 @@
 <title>Film Index · Bucatini Mickey</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@96,500,100,1&amp;family=Mulish:wght@300;400;700&amp;family=IBM+Plex+Mono:wght@500&amp;family=Cormorant+Garamond:wght@500&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@96,500,100,1&amp;family=Mulish:wght@300;400;700&amp;family=IBM+Plex+Mono:wght@500&amp;family=Cormorant+Garamond:wght@500&amp;display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500&amp;family=Mulish:wght@300;400;700&amp;family=IBM+Plex+Mono:wght@500&amp;family=Cormorant+Garamond:wght@500&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500&amp;family=Mulish:wght@300;400;700&amp;family=IBM+Plex+Mono:wght@500&amp;family=Cormorant+Garamond:wght@500&amp;display=swap"></noscript>
 <meta name="description" content="Every public Letterboxd list by bucatini_mickey, nested and searchable.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <style>
@@ -120,6 +120,13 @@ summary:hover .th{opacity:1;filter:none}
 .posters img{width:100%;height:auto;aspect-ratio:2/3;object-fit:cover;display:block;border-radius:2px;background:var(--bg2);transition:transform .2s,opacity .2s;opacity:.92}
 .posters a:hover img{transform:translateY(-3px);opacity:1}
 .posters li{position:relative}
+.posters.all{grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:12px 8px}
+.posters.all a{display:block;text-decoration:none}
+.posters.all small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:5px;font:400 .66rem/1.25 var(--f-body);color:var(--dim);text-align:center}
+.posters.all a:hover small{color:var(--ink)}
+.posters.all .np{display:grid;place-items:center;aspect-ratio:2/3;padding:6px;background:var(--bg2);border:1px solid var(--line);font:500 .7rem/1.2 var(--f-disp);text-align:center;color:var(--dim)}
+.ranked .posters.all li::after{position:absolute;top:4px;left:4px;margin:0;min-width:1.4em;padding:2px 4px;background:rgba(0,0,0,.7);border-radius:2px;font-size:.8rem}
+@media (max-width:620px){.posters.all{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .posters img{box-shadow:0 6px 18px -8px rgba(0,0,0,.45)}
 .ranked .posters li{counter-increment:rk}
 .ranked .posters li::after{content:counter(rk);display:block;text-align:center;margin-top:4px;font:500 1.15rem/1 var(--f-disp);color:var(--ink);font-variant-numeric:tabular-nums}
@@ -175,8 +182,8 @@ body{background:#3c070c}
 .four a{display:flex;flex-direction:column;gap:4px;text-decoration:none}
 .four .frame{display:block;padding:5px;background:linear-gradient(135deg,#f0d38a,#a67a28 45%,#e8c56e 60%,#7a5518);box-shadow:0 0 0 1px #4a3412,0 14px 30px -14px #000;transition:transform .25s}
 .four img{display:block;width:100%;height:auto;aspect-ratio:2/3;object-fit:cover;box-shadow:inset 0 0 0 1px rgba(0,0,0,.4)}
-.four b{margin-top:8px;font:500 1rem/1.2 var(--f-disp);font-variation-settings:"SOFT" 100,"WONK" 1}
-.four small{color:var(--dim);font:500 .74rem var(--f-mono)}
+.four b{margin-top:7px;font:500 .78rem/1.2 var(--f-body);color:var(--dim)}
+.four small{display:none}
 .four a:hover .frame{transform:translateY(-4px)}
 .four a:hover b{color:var(--acc)}
 @media (max-width:560px){.four ol{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -198,12 +205,12 @@ body{background:#3c070c}
   <nav class="pages" aria-label="Pages"><a href="../films/" aria-current="page">Film</a><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="../writing/">Writing</a><a href="../art/">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 <header class="wrap mast">
-  <img class="still" src="https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1200-1200-675-675-crop-000000.jpg?v=1e6d6ff5ca" srcset="https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-960-960-540-540-crop-000000.jpg?v=1e6d6ff5ca 960w, https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1200-1200-675-675-crop-000000.jpg?v=1e6d6ff5ca 1200w, https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1920-1920-1080-1080-crop-000000.jpg?v=1e6d6ff5ca 1920w" sizes="(max-width:1040px) 100vw, 980px" alt="Mephistopheles and his devils, marionettes in Švankmajer's Faust (1994): my Letterboxd backdrop">
+  <img class="still" src="https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1200-1200-675-675-crop-000000.jpg?v=1e6d6ff5ca" srcset="https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-960-960-540-540-crop-000000.jpg?v=1e6d6ff5ca 960w, https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1200-1200-675-675-crop-000000.jpg?v=1e6d6ff5ca 1200w, https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1920-1920-1080-1080-crop-000000.jpg?v=1e6d6ff5ca 1920w" sizes="(max-width:1040px) 100vw, 960px" alt="Mephistopheles and his devils, marionettes in Švankmajer's Faust (1994): my Letterboxd backdrop">
   <div class="title"><h1>Film Index</h1></div>
   <p class="lede">Everything I keep on <a class="lb" href="https://letterboxd.com/bucatini_mickey/">Letterboxd</a>.</p>
   <div class="search"><input id="q" type="search" placeholder="Search lists or films" autocomplete="off" aria-label="Search lists and films"></div>
 </header>
-<section class="wrap four" aria-label="My top four"><h2>Top four</h2><ol><li><a href="https://letterboxd.com/film/faust/"><span class="frame"><img src="https://a.ltrbxd.com/resized/film-poster/3/9/9/9/8/39998-faust-0-600-0-900-crop.jpg?v=234ad485f9" alt="Faust (1994) poster" loading="lazy" width="300" height="450"></span><b>Faust</b><small>1994</small></a></li><li><a href="https://letterboxd.com/film/hour-of-the-wolf/"><span class="frame"><img src="https://a.ltrbxd.com/resized/film-poster/4/0/4/2/2/40422-hour-of-the-wolf-0-600-0-900-crop.jpg?v=328a5ea98c" alt="Hour of the Wolf (1968) poster" loading="lazy" width="300" height="450"></span><b>Hour of the Wolf</b><small>1968</small></a></li><li><a href="https://letterboxd.com/film/portrait-of-a-lady-on-fire/"><span class="frame"><img src="https://a.ltrbxd.com/resized/film-poster/4/6/0/8/3/0/460830-portrait-of-a-lady-on-fire-0-600-0-900-crop.jpg?v=79b0f67aa9" alt="Portrait of a Lady on Fire (2019) poster" loading="lazy" width="300" height="450"></span><b>Portrait of a Lady on Fire</b><small>2019</small></a></li><li><a href="https://letterboxd.com/film/the-boxers-omen/"><span class="frame"><img src="https://a.ltrbxd.com/resized/film-poster/1/6/3/5/0/16350-the-boxers-omen-0-600-0-900-crop.jpg?v=4eecb9e461" alt="The Boxer's Omen (1983) poster" loading="lazy" width="300" height="450"></span><b>The Boxer's Omen</b><small>1983</small></a></li></ol></section>
+<section class="wrap four" aria-label="My top four"><h2>Top four</h2><ol><li><a href="https://letterboxd.com/film/faust/"><span class="frame"><img src="https://a.ltrbxd.com/resized/alternative-poster/3/9/9/9/8/p/fF1RaI7nmLVGhf0IQVYXtmE7QBs-0-300-0-450-crop.jpg?v=bc90199363" alt="Faust (1994) poster" loading="lazy" width="300" height="450"></span><b>Faust</b><small>1994</small></a></li><li><a href="https://letterboxd.com/film/hour-of-the-wolf/"><span class="frame"><img src="https://a.ltrbxd.com/resized/alternative-poster/4/0/4/2/2/p/uHdXOS8AbfbM5fDJ6ro5LWkgmLE-0-300-0-450-crop.jpg?v=aa74304bc2" alt="Hour of the Wolf (1968) poster" loading="lazy" width="300" height="450"></span><b>Hour of the Wolf</b><small>1968</small></a></li><li><a href="https://letterboxd.com/film/portrait-of-a-lady-on-fire/"><span class="frame"><img src="https://a.ltrbxd.com/resized/alternative-poster/4/6/0/8/3/0/p/m9i7nj78zhxTSozmqaZk3MIH4oo-0-300-0-450-crop.jpg?v=a245fdc7a1" alt="Portrait of a Lady on Fire (2019) poster" loading="lazy" width="300" height="450"></span><b>Portrait of a Lady on Fire</b><small>2019</small></a></li><li><a href="https://letterboxd.com/film/the-boxers-omen/"><span class="frame"><img src="https://a.ltrbxd.com/resized/alternative-poster/1/6/3/5/0/p/3qYpfxp1ejJQcWi7heW2Ke4kW68-0-300-0-450-crop.jpg?v=e39625d325" alt="The Boxer's Omen (1983) poster" loading="lazy" width="300" height="450"></span><b>The Boxer's Omen</b><small>1983</small></a></li></ol></section>
 <div class="tabs"><div class="wrap" id="tabs" role="tablist" aria-label="Film Index sections"></div></div>
 <main class="wrap" id="main"></main>
 <footer class="wrap" id="foot"></footer>
@@ -264,11 +271,29 @@ function row(l,hits){
   const bd=im.b?`<a class="bd" href="${esc(l.u)}" aria-hidden="true" tabindex="-1"><img src="${esc(im.bm)}" srcset="${esc(im.bm)} 960w, ${esc(im.b)} 1200w" sizes="(max-width:900px) 100vw, 860px" alt="" loading="lazy"></a>`:'';
   const ranked=l.g.some(g=>g==='rank'||g.startsWith('rank:'));
   const strip=ps.length&&!searching?`<ul class="posters">${ps.map(([s,u],i)=>`<li><a href="https://letterboxd.com/film/${esc(s)}/" title="${esc(l.f[i]||'')}"><img src="${esc(u)}" alt="${esc(l.f[i]||s)}" loading="lazy" width="230" height="345"></a></li>`).join('')}</ul>`:'';
-  return `<details class="lst"${hits?' open':''}><summary><span class="tw"></span>${thumb}<span class="nm">${esc(l.n)}</span><span class="ct">${l.c}</span><a class="out" href="${esc(l.u)}" onclick="event.stopPropagation()">open ↗</a></summary>
+  return `<details class="lst" data-s="${esc(l.s)}"${hits?' open':''}><summary><span class="tw"></span>${thumb}<span class="nm">${esc(l.n)}</span><span class="ct">${l.c}</span><a class="out" href="${esc(l.u)}" onclick="event.stopPropagation()">open ↗</a></summary>
    <div class="body${ranked?' ranked':''}">${searching?(l.d?`<p class="d">${esc(l.d)}</p>`:''):`<div class="stage">${bd}${strip}</div>${l.d?`<p class="d">${esc(l.d)}</p>`:''}`}${fl?`<ul class="films${ranked&&!searching?' num':''}">${fl}</ul>`:''}${rest}
    ${l.g.length?`<div class="tags">${l.g.map(g=>`<button class="tag" data-tag="${esc(g)}">${esc(g)}</button>`).join('')}</div>`:''}</div></details>`;
 }
 const rows=(xs,h)=>xs.map(l=>row(l,h&&h.get(l))).join('');
+/* Every film in every list as a poster, using the poster I chose for it on Letterboxd, with its title small
+   underneath. posters.json (made from my public lists) is fetched once, and a list's grid is only built when
+   the list is opened, so the page stays light. */
+let PJ=null;
+const PBASE='https://a.ltrbxd.com/resized/';
+function fill(d){
+  if(!PJ||d.dataset.filled) return;
+  const slugs=PJ.l[d.dataset.s]; if(!slugs||!slugs.length) return;
+  d.dataset.filled=1;
+  const body=d.querySelector('.body'), old=body.querySelector('.posters');
+  const li=slugs.map(sl=>{const f=PJ.f[sl]||[sl,''], nm=f[0].replace(/ \(\d{4}\)$/,'');
+    return `<li><a href="https://letterboxd.com/film/${esc(sl)}/" title="${esc(f[0])}">${f[1]?`<img src="${esc(PBASE+f[1].replace('~','-0-150-0-225-crop.jpg'))}" alt="" loading="lazy" width="150" height="225">`:`<span class="np">${esc(nm)}</span>`}<small>${esc(nm)}</small></a></li>`}).join('');
+  const ul=document.createElement('ul'); ul.className='posters all'; ul.innerHTML=li;
+  if(old) old.replaceWith(ul); else body.querySelector('.stage').appendChild(ul);
+  body.querySelectorAll('.films,.more').forEach(e=>e.remove());
+}
+document.addEventListener('toggle',e=>{if(e.target.matches&&e.target.matches('details.lst')&&e.target.open) fill(e.target)},true);
+fetch('posters.json').then(r=>r.ok?r.json():null).then(j=>{if(!j) return; PJ=j; document.querySelectorAll('details.lst[open]').forEach(fill)}).catch(()=>{});
 const fold_=(t,count,inner,open)=>`<details class="grp"${open?' open':''}><summary><span class="tw"></span><span class="nm">${esc(t)}</span><span class="ct">${count}</span></summary><div class="inner">${inner}</div></details>`;
 
 // resolve a node into {html,n}; 'used' stops a list showing twice in one section
@@ -376,9 +401,9 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
   /* dark by default; light only when the visitor picks it (remembered in this browser) */
   const root=document.documentElement,btn=document.getElementById('mode');
   const set=m=>{if(m==='light')root.dataset.theme='light';else delete root.dataset.theme;if(btn)btn.textContent=m==='light'?'Dark':'Light';};
-  let m='dark';try{m=localStorage.getItem('bm-theme')||'dark'}catch(e){}
+  let m='dark';try{m=localStorage.getItem('bm-theme-film')||'dark'}catch(e){}
   set(m);
-  if(btn)btn.onclick=()=>{m=m==='dark'?'light':'dark';try{localStorage.setItem('bm-theme',m)}catch(e){}set(m);all()};
+  if(btn)btn.onclick=()=>{m=m==='dark'?'light':'dark';try{localStorage.setItem('bm-theme-film',m)}catch(e){}set(m);all()};
   document.fonts?.ready.then(all); all();
 })();
 </script>
