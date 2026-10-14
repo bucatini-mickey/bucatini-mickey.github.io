@@ -2,7 +2,8 @@
    lists what the browser reports about the device and its graphics, so a rendering fault seen on one device can be
    compared with a device where it is fine; "Copy" puts the report on the clipboard to paste into a message.
    Buttons reload the page with the backdrop simplified (?gfx=lowp forces low precision, which is what a fault of
-   that kind would look like; ?gfx=still stops the animation), to narrow down the cause. */
+   that kind would look like; ?gfx=still stops the animation; on the hub, ?mosh=0 turns the datamosh off), to
+   narrow down the cause. */
 (function(){
   const q=new URLSearchParams(location.search), lines=[];
   const add=(k,v)=>lines.push([k,String(v)]);
@@ -28,12 +29,12 @@
   document.body.appendChild(box);
   let fps='measuring…', n=0, t0=performance.now();
   (function count(t){ n++; if(t-t0>2000){ fps=Math.round(n*1000/(t-t0))+' fps'; n=0; t0=t; render() } requestAnimationFrame(count) })(t0);
-  const go=v=>{const u=new URL(location.href); u.searchParams.set('diag',''); if(v) u.searchParams.set('gfx',v); else u.searchParams.delete('gfx'); location.href=u.href};
+  const go=v=>{const u=new URL(location.href); u.searchParams.set('diag',''); u.searchParams.delete('gfx'); u.searchParams.delete('mosh'); if(v==='nomosh') u.searchParams.set('mosh','0'); else if(v) u.searchParams.set('gfx',v); location.href=u.href};
   function render(){
     const g=window.__gfx||{}, extra=Object.entries(g).map(([k,o])=>`${k}: quality ${o.quality?o.quality():'?'}, canvas ${o.canvas?o.canvas():'?'}`);
     const cvs=[...document.querySelectorAll('canvas.backdrop,canvas.print')].map(c=>('canvas #'+(c.id||c.className)).padEnd(13)+`${c.width}x${c.height} drawn, shown ${c.clientWidth}x${c.clientHeight}`);
     box.textContent=[...lines.map(([k,v])=>k.padEnd(13)+v),...cvs,'frame rate'.padEnd(13)+fps,...extra].join('\n')+'\n';
-    for(const [label,v] of [['Copy',null],['normal',''],['low precision','lowp'],['still','still']]){
+    for(const [label,v] of [['Copy',null],['normal',''],['low precision','lowp'],['still','still'],...(document.getElementById('fractal')?[['no glitch','nomosh']]:[])]){
       const b=document.createElement('button'); b.textContent=label; b.style.cssText='margin:6px 6px 0 0;font:inherit;padding:3px 8px';
       b.onclick=v===null?()=>navigator.clipboard?.writeText(box.textContent).then(()=>b.textContent='Copied'):()=>go(v);
       box.appendChild(b);

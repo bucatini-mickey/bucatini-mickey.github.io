@@ -165,7 +165,18 @@ h1{font-weight:500;letter-spacing:0}
 body{background:#120204}
 /* the stage: a gilded frame round the page */
 .page{box-shadow:0 0 0 2px #a8884a,0 0 0 8px #6e5226,0 0 0 10px #2a1c0a,0 40px 90px -30px #000}
-:root:not([data-theme="light"]) .mast img.still{filter:saturate(.55) brightness(.62) contrast(1.12)}
+/* old film: the lens splits colour a little at every edge (chromatic aberration, drawn once by the SVG filter
+   #ca, so it costs nothing per frame), the titles are fringed red and cyan, and a fine grain flickers over all */
+.mast img.still{filter:url(#ca)}
+:root:not([data-theme="light"]) .mast img.still{filter:url(#ca) saturate(.55) brightness(.62) contrast(1.12)}
+.four img{filter:url(#ca)}
+.posters img:hover{filter:url(#ca2)}
+h1,.sec h2,.four h2{text-shadow:-1.2px 0 rgba(255,50,70,.38),1.2px 0 rgba(40,210,255,.32)}
+.mast h1{text-shadow:-2px 0 rgba(255,50,70,.45),2px 0 rgba(40,210,255,.38),0 2px 18px rgba(0,0,0,.55)}
+.grain{position:fixed;inset:-50%;z-index:30;pointer-events:none;opacity:.075;mix-blend-mode:overlay;background-size:160px 160px}
+:root[data-theme="light"] .grain{opacity:.05;mix-blend-mode:multiply}
+@media (prefers-reduced-motion:no-preference){.grain{animation:grain .5s steps(5) infinite}}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-7%,3%)}40%{transform:translate(4%,-6%)}60%{transform:translate(-3%,8%)}80%{transform:translate(8%,-2%)}100%{transform:translate(0,0)}}
 .mast{position:relative;padding-top:clamp(150px,26vh,230px);overflow:hidden}
 .mast>*{position:relative;z-index:1}
 .mast img.still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 28%;z-index:0;display:block}
@@ -197,6 +208,16 @@ body{background:#120204}
 </head>
 <body>
 <canvas class="backdrop" id="stage" aria-hidden="true"></canvas>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<filter id="ca" color-interpolation-filters="sRGB" x="-2%" width="104%"><feColorMatrix in="SourceGraphic" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" result="r"/><feOffset in="r" dx="-1.6" result="r1"/><feColorMatrix in="SourceGraphic" values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0" result="g"/><feColorMatrix in="SourceGraphic" values="0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0" result="b"/><feOffset in="b" dx="1.6" result="b1"/><feBlend in="r1" in2="g" mode="screen" result="rg"/><feBlend in="rg" in2="b1" mode="screen"/></filter>
+<filter id="ca2" color-interpolation-filters="sRGB" x="-4%" width="108%"><feColorMatrix in="SourceGraphic" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" result="r"/><feOffset in="r" dx="-3" dy="1" result="r1"/><feColorMatrix in="SourceGraphic" values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0" result="g"/><feColorMatrix in="SourceGraphic" values="0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0" result="b"/><feOffset in="b" dx="3" dy="-1" result="b1"/><feBlend in="r1" in2="g" mode="screen" result="rg"/><feBlend in="rg" in2="b1" mode="screen"/></filter>
+</defs></svg>
+<div class="grain" id="grain" aria-hidden="true"></div>
+<script>/* the grain: one tile of noise, made here, slid about by CSS */
+(function(){const c=document.createElement('canvas');c.width=c.height=160;const x=c.getContext('2d'),im=x.createImageData(160,160);
+for(let i=0;i<im.data.length;i+=4){const v=Math.random()*255;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=255}x.putImageData(im,0,0);
+document.getElementById('grain').style.backgroundImage=`url(${c.toDataURL()})`})();</script>
+
 <div class="page">
 <header class="bar"><div class="bar-in">
   <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="../" aria-current="true" title="Bucatini Mickey: films, games, photos and other hobbies"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
