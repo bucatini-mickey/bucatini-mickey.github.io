@@ -188,7 +188,7 @@ body{background:#120204}
 .four a:hover .frame{transform:translateY(-4px)}
 .four a:hover b{color:var(--acc)}
 @media (max-width:560px){.four ol{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.mast::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(to bottom,transparent 30%,color-mix(in srgb,var(--bg) 70%,transparent) 62%,var(--bg) 96%);pointer-events:none}
+.mast::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(to bottom,transparent 30%,color-mix(in srgb,var(--bg) 70%,transparent) 62%,color-mix(in srgb,var(--bg) var(--glass),transparent) 96%);pointer-events:none}
 .mast h1{color:#f6ead0;text-shadow:0 2px 18px rgba(0,0,0,.55)}
 :root[data-theme="light"] .mast h1{color:#2a1a12;text-shadow:0 1px 14px rgba(255,245,225,.8)}
 .sec h2{margin-top:40px}

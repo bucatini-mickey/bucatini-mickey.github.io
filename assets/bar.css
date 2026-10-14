@@ -9,7 +9,9 @@
    each page colours it through --bg --ink --dim --line --acc.
 
    Floating page: every page's theme fills the window as a fixed .backdrop and the page sits on it as a panel of
-   the same width and offset everywhere, so nothing moves when you change page or site. */
+   the same width and offset everywhere, so nothing moves when you change page or site. The panel lets a little
+   of the backdrop through (--glass is how much of the page colour it keeps; less on phones, where the margins
+   are too narrow to show the backdrop otherwise); the bar on it stays solid. */
 .bar{position:relative;z-index:5;background:var(--bar-bg,var(--bg));border-bottom:1px solid var(--line);
   --f-bar:'Cormorant Garamond',Garamond,Georgia,serif;--f-barsans:'Mulish',system-ui,sans-serif}
 .bar-in{max-width:var(--bar-w,1040px);margin:0 auto;padding:0 clamp(16px,5vw,48px);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:8px 24px;flex-wrap:wrap}
@@ -36,9 +38,9 @@
 
 .backdrop{position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:0;pointer-events:none;display:block;will-change:transform}
 .backdrop.tall{height:140vh}
-.page{position:relative;z-index:1;max-width:980px;margin:48px auto;background:var(--bg);border-radius:4px;box-shadow:0 30px 80px -40px rgba(0,0,0,.45),0 0 0 1px var(--line)}
+.page{--glass:90%;position:relative;z-index:1;max-width:980px;margin:48px auto;background:color-mix(in srgb,var(--bg) var(--glass),transparent);border-radius:4px;box-shadow:0 30px 80px -40px rgba(0,0,0,.45),0 0 0 1px var(--line)}
 .page>.bar{border-radius:4px 4px 0 0}
 .page>.bar .bar-in{max-width:none}
 .page>footer:last-child{border-radius:0 0 4px 4px}
 @media (max-width:1040px){.page{margin:28px 24px}}
-@media (max-width:620px){.page{margin:14px 10px}}
+@media (max-width:620px){.page{margin:14px 10px;--glass:82%}}

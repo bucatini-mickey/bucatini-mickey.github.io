@@ -69,9 +69,9 @@ span.js{cursor:default;opacity:.85}
 .lb:hover{background-size:100% 100%;color:#14181c}
 </style>
 <style>
-/* the panel lets a little of the fractal through; the bar stays solid */
-body .page{background:color-mix(in srgb,var(--bg) 84%,transparent)}
-body .page>.bar{background:var(--bg)}
+/* the panel lets a little more of the fractal through than other pages do */
+body .page{--glass:84%}
+@media (max-width:620px){body .page{--glass:76%}}
 .rooms{display:flex;flex-direction:column;padding-block:8px 64px}
 .room{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:start;padding:40px 0;border-top:1px solid var(--line);text-decoration:none}
 .room:last-child{border-bottom:1px solid var(--line)}
