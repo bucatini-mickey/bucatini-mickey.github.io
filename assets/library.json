@@ -1,6 +1,78 @@
 {
  "photos": [
   {
+   "id": "dscf0053-1",
+   "src": "photos/img/dscf0053-1-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf0053-1-2560.webp",
+    "1280": "photos/img/dscf0053-1-1280.webp",
+    "640": "photos/img/dscf0053-1-640.webp"
+   },
+   "w": 6240,
+   "h": 4160,
+   "tags": [
+    "gallery"
+   ],
+   "stamp": "eaf1b0e3b0",
+   "colour": "#626557",
+   "preview": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAACQAgCdASoQAAsAAsBMJZAC7AYsjzoiMwv91nGEAAD+98d6/3gEM8C/7izBLzF4KkMTGva/iw9Vy9wel3tlBPmK3mwOgGseqtwvwYQNRG4tNxYw33Ux3YgdOPax4C/T+eGMbV0+AIyTnr6HCJbWKbc4NiAAAA==",
+   "alt": "Two friends walking under trees on a coast path"
+  },
+  {
+   "id": "dscf0222-1",
+   "src": "photos/img/dscf0222-1-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf0222-1-2560.webp",
+    "1280": "photos/img/dscf0222-1-1280.webp",
+    "640": "photos/img/dscf0222-1-640.webp"
+   },
+   "w": 4160,
+   "h": 6240,
+   "tags": [
+    "gallery"
+   ],
+   "stamp": "a03d20bdf8",
+   "colour": "#898c8d",
+   "preview": "data:image/webp;base64,UklGRpwAAABXRUJQVlA4IJAAAACwAwCdASoQABgAPtFWo0uoJKMhsAgBABoJaQAAQyVMnLCNHB0CoAD+mXEh5MMs9z895YMh2EPMXAECK1GUTv2vlRTETgdBd5sirk/BPYrapaT/XVprwUZ6s78vqb9J3WK4Cgd3Z3zsaNBOR4PtpI6n+/tsk7jun/czyAFv6TEPrxGIKgoENhPVsm5iZKaMAAA=",
+   "alt": "A woman by a bright window, in black and white"
+  },
+  {
+   "id": "dscf3191",
+   "src": "photos/img/dscf3191-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf3191-2560.webp",
+    "1280": "photos/img/dscf3191-1280.webp",
+    "640": "photos/img/dscf3191-640.webp"
+   },
+   "w": 6240,
+   "h": 4160,
+   "tags": [
+    "gallery"
+   ],
+   "stamp": "3afa8dd811",
+   "colour": "#835f49",
+   "preview": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAADwAQCdASoQAAsAAsBMJbACdAEKVOObHOAA/vXTTesXuTU4YnvYZJZuw05tIDvPZoYQ7i7/41/Fr3He9uW1mHYFEkBwe6NXdKANYZAtZ+AyaEbN3ew6BSTwXMj43YiOVPI7PuoAK0JMgAAA",
+   "alt": "A long-haired cat resting on a patterned rug"
+  },
+  {
+   "id": "dscf3248",
+   "src": "photos/img/dscf3248-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf3248-2560.webp",
+    "1280": "photos/img/dscf3248-1280.webp",
+    "640": "photos/img/dscf3248-640.webp"
+   },
+   "w": 4160,
+   "h": 6240,
+   "tags": [
+    "gallery"
+   ],
+   "stamp": "54f78d04a3",
+   "colour": "#593f2b",
+   "preview": "data:image/webp;base64,UklGRtoAAABXRUJQVlA4IM4AAAAwBQCdASoQABgAPtFUo0uoJKMhsAgBABoJbACdMoAvXzPoyxk2hpFdXN8dUGnKpJr3oAD+7IV9OdYcLHozvPNAfxakHpIeRFswMCXkf5VhtUlN+oaG+/A6PdLrYnwNHViKNt0IBKwSLtL+HvZhr6b5pZdPHtheUTe3hS+QG3XlqjbGA6jGMKd+RpdIGvjX2pxxDgisn9Z7MkuidVE6KMEFuah/ctA3dHn7jikf7/irgMhmFtU/Vw8v7fDMLp8/k2cacP479sT39n5lfwAAAA==",
+   "alt": "A lizard on a branch in a lit vivarium"
+  },
+  {
    "id": "dscf3485",
    "src": "photos/img/dscf3485-1280.webp",
    "files": {
@@ -89,6 +161,24 @@
    "colour": "#5f4526",
    "preview": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAABwAgCdASoQAAsAAsBMJbACdGuAAs3b0gndLiAAAP7a0Pj3n70dTg/UPQP7IK+430cFL7dmkBameL/QujK9b3XpOYgAAA==",
    "alt": "The sun setting over the sea beyond a dark headland"
+  },
+  {
+   "id": "dscf3792-2",
+   "src": "photos/img/dscf3792-2-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf3792-2-2560.webp",
+    "1280": "photos/img/dscf3792-2-1280.webp",
+    "640": "photos/img/dscf3792-2-640.webp"
+   },
+   "w": 1636,
+   "h": 1637,
+   "tags": [
+    "gallery"
+   ],
+   "stamp": "21605f7abf",
+   "colour": "#646464",
+   "preview": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAAAwAgCdASoQABAAAsBMJaQAD5RQe8f6ir1gAAD++vaKrmNo+Fu1E6EjRWwnYSvlybzySbaz0w1eiPPaGGDj3dg9o11RA9WSi18opq3SX3gOKJfr5PIiARuvMfrYWw1YDsuE7rUkIAAAAA==",
+   "alt": "A turkey and a hen in a doorway, in black and white"
   },
   {
    "id": "dscf3903",
@@ -667,6 +757,151 @@
    "alt": "Tall cypress trees against a blue sky"
   },
   {
+   "id": "dscf8226-1",
+   "src": "photos/img/dscf8226-1-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf8226-1-2560.webp",
+    "1280": "photos/img/dscf8226-1-1280.webp",
+    "640": "photos/img/dscf8226-1-640.webp"
+   },
+   "w": 4160,
+   "h": 6240,
+   "tags": [
+    "gallery"
+   ],
+   "stamp": "77b9a12574",
+   "colour": "#9a825c",
+   "preview": "data:image/webp;base64,UklGRsgAAABXRUJQVlA4ILwAAACwBACdASoQABgAPtFUo0uoJKMhsAgBABoJZACdMoMYA0c1dZKdAKinzFjt7RoAAO+jpD8iNsNmw7u6YShdhk3p1KeIByuFsPuKfoBbw8IaMujpXE21OlGHB+Bze5gh8J6TgeuCPzLgAFCmeuteD5OlnhJ7Yewb25zyaujD6WBnvXWMHnhatlv/Lx1h73tny70FUDzyv1ZO1POueFeA1gVjaNcqFCqGaRyC0/L2b1QSxjS6CkczG9C0SmsAAA==",
+   "alt": "A spaniel lying in the dirt with its tongue out"
+  },
+  {
+   "id": "dscf8290-1",
+   "src": "photos/img/dscf8290-1-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf8290-1-2560.webp",
+    "1280": "photos/img/dscf8290-1-1280.webp",
+    "640": "photos/img/dscf8290-1-640.webp"
+   },
+   "w": 3746,
+   "h": 3746,
+   "tags": [
+    "gallery"
+   ],
+   "stamp": "2cc1b10bb1",
+   "colour": "#aaa37f",
+   "preview": "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAADwAQCdASoQABAAAsBMJbACdAYv1wTMjAAA/oUbrBSoQEbx8PM/yI/j4wxjSeeTwSHvhdx0raARinwV6opLkWA5cikhDdApaBrrJXO219gdjukBoRABSFs5lrvtsCgcvN/jaufjScdD/e9MPCmbcB4jXP9iPdZtwAA=",
+   "alt": "A white cow wading at a beach, the herd behind"
+  },
+  {
+   "id": "dscf9404-2",
+   "src": "photos/img/dscf9404-2-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf9404-2-2560.webp",
+    "1280": "photos/img/dscf9404-2-1280.webp",
+    "640": "photos/img/dscf9404-2-640.webp"
+   },
+   "w": 3327,
+   "h": 4159,
+   "tags": [
+    "gallery"
+   ],
+   "stamp": "438c97028d",
+   "colour": "#474747",
+   "preview": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAAAwBACdASoQABQAPtFUo0uoJKMhsAgBABoJaQAD5PmB1qnRs1IS0zpG7+AA/vER0xm90eHkxKujfmqU/6PE9a1iad2xKSgaSHuj4sUVRqqng07kHxd3eubkL59ve0Imx+mHGJNM2SxoDBltmeCGIsA5Qildm+c8vgAAAA==",
+   "alt": "Two women at a cafe table, in black and white"
+  },
+  {
+   "id": "dscf9749-1",
+   "src": "photos/img/dscf9749-1-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf9749-1-2560.webp",
+    "1280": "photos/img/dscf9749-1-1280.webp",
+    "640": "photos/img/dscf9749-1-640.webp"
+   },
+   "w": 6240,
+   "h": 4160,
+   "tags": [
+    "gallery"
+   ],
+   "stamp": "d66d7c7239",
+   "colour": "#a18e79",
+   "preview": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAADQAQCdASoQAAsAAsBMJaACdAEOgfU2MAD+63nxySCixLSTHpcDUxglCYrL8rpXCRlOSxqyr1GdK6um6uUHw21erPnTCfx1AwXf2ZiESawpEicvsN/ndwjdycw53fabrIhgAA==",
+   "alt": "A woman sitting among wild lavender in a field"
+  },
+  {
+   "id": "dscf9790-1",
+   "src": "photos/img/dscf9790-1-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf9790-1-2560.webp",
+    "1280": "photos/img/dscf9790-1-1280.webp",
+    "640": "photos/img/dscf9790-1-640.webp"
+   },
+   "w": 6240,
+   "h": 4160,
+   "tags": [
+    "gallery"
+   ],
+   "stamp": "4982d06fd4",
+   "colour": "#b8b19f",
+   "preview": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADwAQCdASoQAAsAAsBMJbAC7AEPg9sxO1AA/vTtJPVb/WOlvakVxutyGxy51gd4k1/78+Dl0M91PfKxgDTJUwk55fisdqRUAAA=",
+   "alt": "Two friends on a clifftop looking out to Worm's Head"
+  },
+  {
+   "id": "dscf9890-1",
+   "src": "photos/img/dscf9890-1-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf9890-1-2560.webp",
+    "1280": "photos/img/dscf9890-1-1280.webp",
+    "640": "photos/img/dscf9890-1-640.webp"
+   },
+   "w": 6240,
+   "h": 4160,
+   "tags": [
+    "gallery"
+   ],
+   "stamp": "4efa3635d8",
+   "colour": "#44603a",
+   "preview": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAQAgCdASoQAAsAAsBMJaACdAEVwhvLQYKAAP7s3BdnONfeR+jZZVwVwtpXvZQaZ0rcd2G0zUJOP2veccBgZIjZGOIOcAIQFQK1H9Ub9Fju5K4YuIpNn0wH8AAAAA==",
+   "alt": "A smiling walker in a green wood"
+  },
+  {
+   "id": "dscf9909-1",
+   "src": "photos/img/dscf9909-1-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf9909-1-2560.webp",
+    "1280": "photos/img/dscf9909-1-1280.webp",
+    "640": "photos/img/dscf9909-1-640.webp"
+   },
+   "w": 6240,
+   "h": 4160,
+   "tags": [
+    "gallery"
+   ],
+   "stamp": "2b2a8a72bb",
+   "colour": "#605a2d",
+   "preview": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADQAQCdASoQAAsAAsBMJZgCdADc5MiBAAD+vhIowWhq4MH7VLdQKdXBXYRyqSAngUqjBhqUcXrnygWUQuX4e5Ba7+GpqUzI0i95A3V+MH191jeOzYgAAA==",
+   "alt": "Walkers on a woodland path, one looking back"
+  },
+  {
+   "id": "dscf3271",
+   "src": "photos/img/dscf3271-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf3271-2560.webp",
+    "1280": "photos/img/dscf3271-1280.webp",
+    "640": "photos/img/dscf3271-640.webp"
+   },
+   "w": 6240,
+   "h": 4160,
+   "tags": [
+    "home",
+    "gallery"
+   ],
+   "stamp": "574db4f382",
+   "colour": "#9c8669",
+   "preview": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAADwAQCdASoQAAsAAsBMJZgCdADvskx3zAAA/tb+iip8M7Bf08wHX6U+DyIoLo0dS5thNxKW4uSBXrvLw15d7iI2MJclog3Uq4PLUstbrrM3M+Fyzfib3FqJFMoAAA==",
+   "alt": "A golden pheasant in an aviary"
+  },
+  {
    "id": "dscf3511",
    "src": "photos/img/dscf3511-1280.webp",
    "files": {
@@ -743,6 +978,25 @@
    "alt": "Bare branches lit orange against a blue sky"
   },
   {
+   "id": "dscf3759-1",
+   "src": "photos/img/dscf3759-1-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf3759-1-2560.webp",
+    "1280": "photos/img/dscf3759-1-1280.webp",
+    "640": "photos/img/dscf3759-1-640.webp"
+   },
+   "w": 6240,
+   "h": 4160,
+   "tags": [
+    "home",
+    "gallery"
+   ],
+   "stamp": "268068c7b0",
+   "colour": "#4b6b43",
+   "preview": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQAgCdASoQAAsAAsBMJagCdADp8pkSdDRAAP1P7bx8nfMyqEGQKoqNgC5odjOwTeLnhTHMzDISu4bFPLZXCz0Vyo5o4KcjsiZpcDdgPWKrlcgAAAA=",
+   "alt": "Two walkers on a path through green woodland"
+  },
+  {
    "id": "dscf3943",
    "src": "photos/img/dscf3943-1280.webp",
    "files": {
@@ -817,6 +1071,25 @@
    "colour": "#352a1f",
    "preview": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAwAgCdASoQAAsAAsBMJQBYkqAAzoKqMy3yAAD+999wh4UZ78KpCfjU331Vi2JxF/RqDkOP9pgXl0N9nbCTXWpW5ez3KkjFbbDeQRFS7QFHgqGKIS63clC4OvoTngupAAA=",
    "alt": "Fresh pasta drying on a rack in a dim kitchen"
+  },
+  {
+   "id": "dscf4850",
+   "src": "photos/img/dscf4850-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf4850-2560.webp",
+    "1280": "photos/img/dscf4850-1280.webp",
+    "640": "photos/img/dscf4850-640.webp"
+   },
+   "w": 6240,
+   "h": 4160,
+   "tags": [
+    "home",
+    "gallery"
+   ],
+   "stamp": "3118b4318c",
+   "colour": "#92978f",
+   "preview": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACwAQCdASoQAAsAAsBMJQBOgCHAJOugAP7nkRSF6aB1imPJ8hImUyVsJWULWDf1n6uhOLh+mjNEiLxIEWeHIaDlUcAAAA==",
+   "alt": "A walker crossing a rocky shore below a green headland"
   },
   {
    "id": "dscf5378",
@@ -988,6 +1261,158 @@
    "colour": "#2d2d2d",
    "preview": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAADQAQCdASoQAAsAAsBMJaQAAsf5NKWYAAD+9t3tchAxJA/mjTdrZa34P3QslGKBFnWLS4M4MbsobU4adbvp3Hf6K6IAAA==",
    "alt": "The roots of an old tree, in black and white"
+  },
+  {
+   "id": "dscf7642-2",
+   "src": "photos/img/dscf7642-2-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf7642-2-2560.webp",
+    "1280": "photos/img/dscf7642-2-1280.webp",
+    "640": "photos/img/dscf7642-2-640.webp"
+   },
+   "w": 6240,
+   "h": 4160,
+   "tags": [
+    "home",
+    "gallery"
+   ],
+   "stamp": "8712295183",
+   "colour": "#ce8354",
+   "preview": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAAAwAgCdASoQAAsAAsBMJbACdLoAAxzu+goAAAD83eCLDW+7a00pc1uexBiBn2n+PJ3YaUsA0ZDEJ8/7jwyLmKaK7fOP1S5SppcaYF/RUmRvCKmS+3N7GHVdieBAaAAA",
+   "alt": "Mosaic fish on a terracotta wall"
+  },
+  {
+   "id": "dscf7708-2",
+   "src": "photos/img/dscf7708-2-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf7708-2-2560.webp",
+    "1280": "photos/img/dscf7708-2-1280.webp",
+    "640": "photos/img/dscf7708-2-640.webp"
+   },
+   "w": 6240,
+   "h": 4160,
+   "tags": [
+    "home",
+    "gallery"
+   ],
+   "stamp": "0491b2e36d",
+   "colour": "#656565",
+   "preview": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADwAQCdASoQAAsAAsBMJaQAAwAbuKG97gAA/sKiSS22aF9t+bhjXCW8arjzNfFFimTbu6lkP+/FXHl022bP7vmRzeH2ctnn6p+g3WNJiJ4codBOekm59AAA",
+   "alt": "Walkers on an avenue of tall cypress trees, in black and white"
+  },
+  {
+   "id": "dscf7777-2",
+   "src": "photos/img/dscf7777-2-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf7777-2-2560.webp",
+    "1280": "photos/img/dscf7777-2-1280.webp",
+    "640": "photos/img/dscf7777-2-640.webp"
+   },
+   "w": 4820,
+   "h": 3213,
+   "tags": [
+    "home",
+    "gallery"
+   ],
+   "stamp": "bdb8eee1e6",
+   "colour": "#996f59",
+   "preview": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADQAQCdASoQAAsAAsBMJbACdAClXanQgADdXuHwnRTVUM7aBec1NV9Y9H/klaQHS6NOHTMim2osyQ/X05Hitez4wlK2pyVNViAAAA==",
+   "alt": "The stone arch of Chateau les Crostes"
+  },
+  {
+   "id": "dscf7863-2",
+   "src": "photos/img/dscf7863-2-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf7863-2-2560.webp",
+    "1280": "photos/img/dscf7863-2-1280.webp",
+    "640": "photos/img/dscf7863-2-640.webp"
+   },
+   "w": 5873,
+   "h": 3915,
+   "tags": [
+    "home",
+    "gallery"
+   ],
+   "stamp": "9e73b14b35",
+   "colour": "#8c7754",
+   "preview": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAADwAQCdASoQAAsAAsBMJbACdAD0XTiL2QAA/uqYvtUN4u0Sp3/ezLr0FfdMHWfele0LgN5x1bc/wXHpKCZiZdMSeLIuA1BmkHtEVVXDUp+CLT7kb36xDZqxtVXErbFP5KLIquZsXJLL9xt4sAA=",
+   "alt": "Friends browsing a busy market under awnings"
+  },
+  {
+   "id": "dscf8294-1",
+   "src": "photos/img/dscf8294-1-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf8294-1-2560.webp",
+    "1280": "photos/img/dscf8294-1-1280.webp",
+    "640": "photos/img/dscf8294-1-640.webp"
+   },
+   "w": 6240,
+   "h": 4160,
+   "tags": [
+    "home",
+    "gallery"
+   ],
+   "stamp": "43a3c2acf1",
+   "colour": "#9f8564",
+   "preview": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADwAQCdASoQAAsAAsBMJaACdAC7Glbw6AAA3NCqLEkgAnGFiA0Ju0ivt0jDaBlw+Se6IiQ6PDuaRsamMfXqlrl0cGW2zyAA",
+   "alt": "A stranded moon jelly among pebbles"
+  },
+  {
+   "id": "dscf8477",
+   "src": "photos/img/dscf8477-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf8477-2560.webp",
+    "1280": "photos/img/dscf8477-1280.webp",
+    "640": "photos/img/dscf8477-640.webp"
+   },
+   "w": 6240,
+   "h": 4160,
+   "tags": [
+    "home",
+    "gallery"
+   ],
+   "stamp": "fe185dd27d",
+   "colour": "#af9f86",
+   "preview": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAACwAQCdASoQAAsAAsBMJbACdABWUQyAAP6xtOr8N3AuxEDTHNQwXwy96lfYUjpK/FsNB2heYg88qBzR2qdsN4lpzsjm6fS29NkZ8AAA",
+   "alt": "A bee among lavender"
+  },
+  {
+   "id": "dscf9811-1",
+   "src": "photos/img/dscf9811-1-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf9811-1-2560.webp",
+    "1280": "photos/img/dscf9811-1-1280.webp",
+    "640": "photos/img/dscf9811-1-640.webp"
+   },
+   "w": 6240,
+   "h": 4160,
+   "tags": [
+    "home",
+    "gallery"
+   ],
+   "stamp": "610dc76b61",
+   "colour": "#a4a093",
+   "preview": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAAAQAgCdASoQAAsAAsBMJbACdAEPfoQ1sFRgAP7x8aP5BTgHeKoXSP9ZGWPDyKyEVxvSqoLZHwGYM4/C4RuCaZ5b76KIA80vs7K2egx9o8j6T2iLwP4AAA==",
+   "alt": "Friends resting on the cliffs above Worm's Head"
+  },
+  {
+   "id": "dscf9916-1",
+   "src": "photos/img/dscf9916-1-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf9916-1-2560.webp",
+    "1280": "photos/img/dscf9916-1-1280.webp",
+    "640": "photos/img/dscf9916-1-640.webp"
+   },
+   "w": 6240,
+   "h": 4160,
+   "tags": [
+    "home",
+    "gallery"
+   ],
+   "stamp": "728aa4beae",
+   "colour": "#257387",
+   "preview": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAADwAQCdASoQAAsAAsBMJbACdAENxwHWDNAA/m92RpI0Y5XNcFaVQjxv7FvIZP3Bor45+rfDwP9zVU3llUmJz4AR/x4WvMgqTf4//8YYONaWm97lm8uTW1w3I3RotwAA",
+   "alt": "A branch against a bright blue sky"
   },
   {
    "id": "dscf3890",
@@ -1206,22 +1631,40 @@
    "alt": "Painting: a bearded man holding a small black cat, against a dark green ground"
   },
   {
-   "id": "dscf7228",
-   "src": "photos/img/dscf7228-1280.webp",
+   "id": "dscf7241",
+   "src": "photos/img/dscf7241-1280.webp",
    "files": {
-    "2560": "photos/img/dscf7228-2560.webp",
-    "1280": "photos/img/dscf7228-1280.webp",
-    "640": "photos/img/dscf7228-640.webp"
+    "2560": "photos/img/dscf7241-2560.webp",
+    "1280": "photos/img/dscf7241-1280.webp",
+    "640": "photos/img/dscf7241-640.webp"
    },
-   "w": 3107,
-   "h": 3983,
+   "w": 1825,
+   "h": 2298,
    "tags": [
     "painting"
    ],
-   "stamp": "eeb6f62232",
-   "colour": "#743a27",
-   "preview": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAABQBACdASoQABUAPtFUo0uoJKMhsAgBABoJbACdMoR4GCnIdwxaVCtU0MQAAP6djzaCEGuSV2cNjO1rT/72ZgFYmTdxVBVYX8m6mNEO+E5GDcZ053nA5Cey/0nlzDcg1CzHY5AA",
+   "stamp": "64c1a659cf",
+   "colour": "#7f2d17",
+   "preview": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAwBACdASoQABQAPtFUo0uoJKMhsAgBABoJbACdMoRwACndzBJ+CLsRepAA/rmuS4T9BoTS2SxKTUttEVhGlDGup/8xFu/MDtaPSVWGi9m+2ARaOIAH6x7TJFh69vg0cpH26AAA",
    "alt": "Painting: lavender in a pale vase with pears and an orange, against a red wall"
+  },
+  {
+   "id": "dscf9869",
+   "src": "photos/img/dscf9869-1280.webp",
+   "files": {
+    "2560": "photos/img/dscf9869-2560.webp",
+    "1280": "photos/img/dscf9869-1280.webp",
+    "640": "photos/img/dscf9869-640.webp"
+   },
+   "w": 5447,
+   "h": 3644,
+   "tags": [
+    "painting"
+   ],
+   "stamp": "fb0dc68f81",
+   "colour": "#373f3b",
+   "preview": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAACwAQCdASoQAAsAAsBMJQBOgBhCkWggAP7yynfH+sYlCKYFxbWrItuWsHoAGz2B7/+d7nGKmf7a8XD3/uKZefvrcq65q/yDZFGufGwiRnXRkCjr7cz70OQ3AfycAAAA",
+   "alt": "Painting: a couple on a sofa holding a fluffy cat, against blue and green walls"
   }
  ]
 }

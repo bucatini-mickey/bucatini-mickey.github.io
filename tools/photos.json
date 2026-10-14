@@ -1,7 +1,7 @@
 {
  "_note": "skip: photos left out by name. crop: [left, top, right, bottom] in pixels of the upright original.",
  "skip": [
-  "DSCF7241.JPG"
+  "DSCF7228.JPG"
  ],
  "crop": {
   "DSCF3912.JPG": [
@@ -10,11 +10,11 @@
    4063,
    5676
   ],
-  "DSCF7228.JPG": [
-   1686,
-   72,
-   4793,
-   4055
+  "DSCF7241.JPG": [
+   2800,
+   1190,
+   4625,
+   3488
   ]
  }
 }
