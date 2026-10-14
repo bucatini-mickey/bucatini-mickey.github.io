@@ -44,3 +44,12 @@
 .page>footer:last-child{border-radius:0 0 4px 4px}
 @media (max-width:1040px){.page{margin:28px 24px}}
 @media (max-width:620px){.page{margin:14px 10px;--glass:82%}}
+/* on a phone the margins are too narrow to show a page's backdrop, so a page can open a window onto it: with
+   class="windowed" on .page and class="window" on one block (usually the title), that block is see-through and
+   tall, and the rest of the page keeps its panel */
+@media (max-width:620px){
+  .page.windowed{background:transparent!important;box-shadow:none}
+  .page.windowed>:not(.window){background:color-mix(in srgb,var(--bg) var(--glass),transparent)}
+  .page.windowed>.bar{background:var(--bg)}
+  .page.windowed>.window{background:transparent!important;min-height:var(--window,52vh)}
+}

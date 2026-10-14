@@ -1,5 +1,6 @@
 /* The hub's backdrop: a slow cut-up of patterns and photographs, datamoshed (assets/mosh.js).
    Scenes, each a small shader:
+   - the whole Mandelbrot set, symmetrical about its axis, breathing slowly in and out (the page opens on it);
    - stepped diamonds, as woven in Andean textiles: concentric stepped rings in cochineal, indigo, jade, ochre
      and maize, the diamonds alternating colourways like a checker; the corners between them hold the same
      pattern three times smaller, and so on down, so the view can sink into it forever (a loop of exactly one
@@ -54,6 +55,17 @@ void main(){
   col=mix(col,vec3(.95,.92,.96),.28);
   o=vec4(vig(col),1.);
 }`;
+  const MANDEL=HEAD+`
+void main(){
+  vec2 p=(gl_FragCoord.xy-.5*res)/res.y;
+  float s=2.5*(1.+.07*sin(t*.06));
+  vec2 c=vec2(-.62,0.)+p*s, z=vec2(0.); float n=0.;
+  for(int i=0;i<160;i++){ z=vec2(z.x*z.x-z.y*z.y,2.*z.x*z.y)+c; if(dot(z,z)>64.) break; n+=1.; }
+  vec3 col;
+  if(n>=159.) col=vec3(.13,.11,.17);
+  else { float l=log(n+1.-log2(log2(dot(z,z)))*.5+1.); col=pastel(pal(l*1.1-t*.005)); col*=.8+.2*smoothstep(.0,.6,fract(l*6.)); }
+  o=vec4(vig(col),1.);
+}`;
   const JULIA=HEAD+`
 uniform vec2 c; uniform float rot;
 void main(){
@@ -96,7 +108,7 @@ void main(){
     const par=gl.getExtension('KHR_parallel_shader_compile');
     const sh=(type,src)=>{const s=gl.createShader(type);gl.shaderSource(s,lowp(src));gl.compileShader(s);return s};
     const prog=fs=>{const p=gl.createProgram();gl.attachShader(p,sh(gl.VERTEX_SHADER,VS));gl.attachShader(p,sh(gl.FRAGMENT_SHADER,fs));gl.bindAttribLocation(p,0,'a');gl.linkProgram(p);return p};
-    const P={fret:prog(FRET),julia:prog(JULIA),ink:prog(INK),photo:prog(PHOTO)};   // all compile in parallel where the browser can
+    const P={mandel:prog(MANDEL),fret:prog(FRET),julia:prog(JULIA),ink:prog(INK),photo:prog(PHOTO)};   // all compile in parallel where the browser can
     const ok=p=>gl.getProgramParameter(p,gl.LINK_STATUS), done=p=>!par||gl.getProgramParameter(p,par.COMPLETION_STATUS_KHR);
     gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer()); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
     gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
@@ -121,9 +133,9 @@ void main(){
       im.src=new URL(ph.files[innerWidth<700?640:1280],document.baseURI).href;
     }
     // the running order: the stepped diamonds first, then a generated scene and a photograph in turn
-    const GEN=['julia','ink','fret','julia','ink'];
+    const GEN=['fret','julia','ink','mandel','julia','ink'];
     const JPATH=[t=>[.7885*Math.cos(t*.045),.7885*Math.sin(t*.045)], t=>[-.8+.12*Math.sin(t*.05),.156+.04*Math.cos(t*.07)], t=>[-.745+.02*Math.sin(t*.06),.113+.03*Math.cos(t*.05)], t=>[.285+.02*Math.sin(t*.05),.01+.02*Math.cos(t*.04)]];
-    let cur={kind:'fret'}, cutAt=14, gi=0, n=0, old=null;
+    let cur={kind:'mandel'}, cutAt=14, gi=0, n=0, old=null;
     function pick(t){
       n++;
       if(n%2===0&&next){ const s=next; next=null; setTimeout(load,4000); return s }
@@ -134,7 +146,7 @@ void main(){
       if(t>cutAt){ const s=pick(t); if(s){ if(old&&old.tx&&old!==s) gl.deleteTexture(old.tx); old=cur; cur=s; cur.t0=t }
         cutAt=t+12+Math.random()*4;
         if(mosh){ const a=Math.random()*6.28, m=1.2+Math.random()*1.6; mosh.cut(t,[Math.cos(a)*m,Math.sin(a)*m],Math.random()<.5?(Math.random()-.5)*4:0) } }
-      const p=P[cur.kind]; if(!done(p)||!ok(p)) { if(cur.kind!=='fret'&&done(P.fret)&&ok(P.fret)) cur={kind:'fret'}; else return false }
+      const p=P[cur.kind]; if(!done(p)||!ok(p)) { if(cur.kind!=='mandel'&&done(P.mandel)&&ok(P.mandel)) cur={kind:'mandel'}; else return false }
       if(mosh) mosh.target(); else { gl.bindFramebuffer(gl.FRAMEBUFFER,null); gl.viewport(0,0,cv.width,cv.height) }
       gl.useProgram(p); gl.uniform2f(U(p,'res'),cv.width,cv.height);
       if(cur.kind==='photo'){ gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D,cur.tx); gl.uniform1i(U(p,'img'),0);

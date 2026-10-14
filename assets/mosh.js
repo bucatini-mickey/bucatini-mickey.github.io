@@ -9,7 +9,8 @@
    shared direction, or freeze, or snap back to the true picture. Some epochs are calm and nothing happens.
    The previous output is kept in a texture and fed back in each frame (two textures, taking turns), so drags
    accumulate into smears and heal slowly when the patch moves on.
-   A cut (from scenes.js) is bled the way a datamosh bleeds one: for a few seconds the old picture is pushed
+   The new picture's outlines lead: a small edge finder marks them, glitches gather along them, and at a cut
+   they come through first, traced over the smear. A cut (from hub.js) is bled the way a datamosh bleeds one: for a few seconds the old picture is pushed
    along the new scene's motion and the new picture shows through block by block.
    Usage: const m=Mosh(gl); m.resize(w,h); each frame draw the clean picture into m.target(), then m.step(t). */
 (function(){
@@ -38,12 +39,15 @@ float noise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f);
 void main(){
   vec2 px=gl_FragCoord.xy, uv=px/res;
   vec4 s=texture(src,uv);
+  // the outlines of the true picture: a cheap edge finder (luminance gradient from four neighbours)
+  vec2 dx=vec2(1.5/res.x,0.), dy=vec2(0.,1.5/res.y); const vec3 Y=vec3(.299,.587,.114);
+  float edge=smoothstep(.04,.18,length(vec2(dot(texture(src,uv+dx).rgb-texture(src,uv-dx).rgb,Y),dot(texture(src,uv+dy).rgb-texture(src,uv-dy).rgb,Y))));
   if(first>.5){ o=s; return; }
   vec2 blk=cell(px);
   float e=epoch, r=hash(blk+e*13.1), r2=hash(blk*1.7+e*7.3);
   // where the trouble is this epoch: a few soft patches, drifting
   float zone=smoothstep(.58,.8,noise(px/res.y*6.+vec2(e*3.1,e*1.7)+t*.02));
-  float g=zone*(1.-calm);
+  float g=zone*(1.-calm)*(.6+.8*edge);                                     // trouble gathers along the picture's outlines
   vec2 dir=normalize(vec2(hash(vec2(e,1.))-.5,hash(vec2(e,2.))-.5)+1e-4);   // the epoch's shared direction
   vec2 mv=vec2(0.); float fresh=.07;                                       // ordinary blocks: follow the picture
   if(r<g*.55){ mv=normalize(dir+(vec2(r2,hash(blk+3.))-.5)*.5)*(.6+2.2*r2); fresh=0.; }   // drag
@@ -53,12 +57,13 @@ void main(){
   // by block as the bleed runs out
   if(bleed>0.){
     vec2 c=(px-.5*res)/res.y;
-    if(hash(blk*3.1+e*.7)>bleed){ mv=vec2(0.); fresh=1.; }
+    if(hash(blk*3.1+e*.7)>bleed-edge*.5){ mv=vec2(0.); fresh=1.; }   // blocks on the new picture's outlines come through first
     else { mv=flow*(.6+r2)+vec2(-c.y,c.x)*swirl+(vec2(r,r2)-.5)*.8; fresh=0.; }
   }
   vec4 p=texture(prev,(px-mv)/res);
   if(fresh==0.&&dot(mv,mv)>0.) p.r=texture(prev,(px-mv*1.35)/res).r;      // a little colour slips in a drag
   o=mix(p,s,fresh);
+  if(bleed>0.) o=mix(o,s,edge*smoothstep(0.,.35,bleed)*.85);               // and its outlines are traced over the smear, then the rest builds round them
 }`;
   const BLIT=`#version 300 es
 precision mediump float;
