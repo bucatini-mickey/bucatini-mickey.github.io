@@ -9,7 +9,10 @@
    graphics card it draws one small still frame. Everything else about the page is untouched.
    Kept calm: the default point is a branch tip, which twists only about 46 degrees per loop (the Seahorse Valley
    point, a spiral, turns more than a full circle per loop, which reads as spinning); a loop takes about two
-   minutes; scrolling only nudges it, eased so it never jumps; the colours are pastel. */
+   minutes; scrolling only nudges it, eased so it never jumps; the colours are pastel.
+   The finished picture then goes through assets/mosh.js, which datamoshes it: patches of it drag, smear and
+   freeze for a moment, as a video does when its frames are glued together wrongly. Not on slow machines or
+   with reduced motion, and ?mosh=0 turns it off. */
 (function(){
   const cv=document.getElementById('fractal'); if(!cv) return;
   const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -76,7 +79,7 @@ void main(){
     const par=gl.getExtension('KHR_parallel_shader_compile'), pr=gl.createProgram();
     const vs=gl.createShader(gl.VERTEX_SHADER), fs=gl.createShader(gl.FRAGMENT_SHADER);
     gl.shaderSource(vs,VS); gl.shaderSource(fs,FS); gl.compileShader(vs); gl.compileShader(fs);
-    gl.attachShader(pr,vs); gl.attachShader(pr,fs); gl.linkProgram(pr);
+    gl.attachShader(pr,vs); gl.attachShader(pr,fs); gl.bindAttribLocation(pr,0,'a'); gl.linkProgram(pr);
     (function wait(){ if(par&&!gl.getProgramParameter(pr,par.COMPLETION_STATUS_KHR)) return requestAnimationFrame(wait);
       if(!gl.getProgramParameter(pr,gl.LINK_STATUS)){ console.warn('fractal shader:',gl.getShaderInfoLog(fs)||gl.getProgramInfoLog(pr)); fallback(); return }
       go() })();
@@ -88,22 +91,26 @@ void main(){
       gl.uniform2fv(U('ref'),new Float32Array(orbit.slice(0,K+P).flat()));
       gl.uniform1f(U('logr'),LOGR); gl.uniform1f(U('arg'),ARG); gl.uniform1f(U('r0'),pick.r0); gl.uniform1f(U('steps'),STEPS);
       let quality=soft&&!location.search.includes('fq')?.2:1;
+      let mosh=!still&&quality===1&&window.Mosh&&!/mosh=0/.test(location.search)?Mosh(gl):null;
       function size(){
         const k=Math.min(1,(innerWidth<700?.45:.55)*Math.min(2,devicePixelRatio||1))*quality;
         cv.width=Math.round(cv.clientWidth*k); cv.height=Math.round(cv.clientHeight*k);
-        gl.viewport(0,0,cv.width,cv.height); gl.uniform2f(U('res'),cv.width,cv.height);
+        gl.viewport(0,0,cv.width,cv.height); gl.useProgram(pr); gl.uniform2f(U('res'),cv.width,cv.height);
+        if(mosh) mosh.resize(cv.width,cv.height);
       }
       const t0=performance.now();
       let sc=scrollY/innerHeight*.12;                                  // the scroll part of the position, eased towards its target
       function frame(ts){
         const goal=scrollY/innerHeight*.12; sc=still?goal:sc+(goal-sc)*.06;
         const t=(ts-t0)/1000, u=(((sc+(still?0:t*.008))%1+1)%1)*STEPS;   // a loop is STEPS whole steps of rho, so it joins up seamlessly
-        gl.uniform1f(U('u'),u); gl.uniform1f(U('t'),t); gl.drawArrays(gl.TRIANGLES,0,3);
+        if(mosh) mosh.target(); else { gl.bindFramebuffer(gl.FRAMEBUFFER,null); gl.viewport(0,0,cv.width,cv.height) }
+        gl.useProgram(pr); gl.uniform1f(U('u'),u); gl.uniform1f(U('t'),t); gl.drawArrays(gl.TRIANGLES,0,3);
+        if(mosh) mosh.step(t);
       }
       let last=0, slow=0, run=true;
       function loop(ts){
         if(!document.hidden&&ts-last>33){ const gap=ts-last; last=ts; frame(ts);
-          if(gap>80&&gap<1000){ if(++slow>20){ slow=0; if(quality>.3){quality/=2; size()} else run=false } } else slow=Math.max(0,slow-1) }
+          if(gap>80&&gap<1000){ if(++slow>20){ slow=0; if(mosh){mosh=null; size()} else if(quality>.3){quality/=2; size()} else run=false } } else slow=Math.max(0,slow-1) }
         if(run) requestAnimationFrame(loop)
       }
       addEventListener('resize',()=>{size();frame(performance.now())});

@@ -5,13 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Games · Bucatini Mickey</title>
 <meta name="description" content="Game dev by Mickey: the Tachyon engine, games built on it, and offshoots like Grimoire.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Cormorant+Garamond:wght@500&amp;family=Mulish:wght@500;600&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Cormorant+Garamond:wght@500&amp;family=Mulish:wght@500;600&amp;display=swap"></noscript>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
 <style>
 /* A terminal. The banner is a Tachyon world map: the editor's island recipe and biome palette,
-   folded to 7-bit ASCII, glyphs on black with colour behind water only: the engine's natural colours in dark mode,
-   its "paper" scheme in light mode. */
+   folded to 7-bit ASCII and shown close: by night in dark mode, by day in light mode. */
 :root{
   --bg:#050505; --ink:#cfcfc7; --dim:#7d7d76; --line:#2a2a26; --acc:#7fc46a;
   --grimoire:#d0473c; --tachyon:#6fa0e0; --broadside:#d6a14a;
@@ -58,6 +55,9 @@ footer{border-top:1px solid var(--line);margin-top:48px;padding-block:18px 24px;
 footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 footer a{text-decoration:none}
 footer a:hover{color:var(--ink)}
+/* the map is busy behind words, so this panel keeps more of its colour than the others */
+body .page{--glass:95%}
+@media (max-width:620px){body .page{--glass:90%}}
 </style>
 <link rel="stylesheet" href="../assets/bar.css">
 </head>
@@ -103,12 +103,13 @@ footer a:hover{color:var(--ink)}
 <script>
 /* The world map. world.json comes from Tachyon (noise, biomes, rivers) as glyph + fg + bg per cell. The whole map
    is drawn once at a fixed scale; the window is a view onto it that starts in the mountains and pans slowly south
-   to the sea as you scroll, more slowly than the page. Dark mode keeps the engine's own colours; light mode is its
-   paper scheme, which maps luma onto a ramp as tachyon::display does (glyphs lifted, backgrounds kept low).
-   Land on black, colour behind water only. */
+   to the sea as you scroll, more slowly than the page. Dark mode is night: the engine's colours under moonlight,
+   dimmed and turned blue, land on black with colour behind water only. Light mode is day: every cell lit in a pale
+   wash of its own colour, glyphs inked darker, the water bright. Only the columns in view are drawn, at a scale
+   close enough to read the trees and rivers. */
 (function(){
   const cv=document.getElementById('map'), ctx=cv.getContext('2d'), root=document.documentElement;
-  const RAMP={paper:[[240,232,212],[30,24,20]]};
+  const PAPER=[244,238,222];
   const NAMES={'~':'water','-':'shallows','=':'ice','.':'beach','"':'grassland','&':'forest','Y':'marsh',',':'moor','*':'snow','^':'rock','`':'ashland'};
   const B64='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
   const hex=h=>[0,2,4].map(i=>parseInt(h.slice(i,i+2),16));
@@ -116,7 +117,7 @@ footer a:hover{color:var(--ink)}
   const lerp=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t));
   const css=c=>`rgb(${c.map(v=>Math.round(Math.max(0,Math.min(255,v)))).join(',')})`;
   const CALM={'"':.72,',':.72,'.':.8,'Y':.8};          // plains recede so rivers, hills and peaks lead
-  let W=0,H=0,cells=[],scheme='natural',cw=9.5,ch=17,world=null,sx=0,sy=0,seedTxt='',season='summer';
+  let W=0,H=0,cells=[],scheme='night',cw=14,ch=25,cx0=0,world=null,sx=0,sy=0,seedTxt='',season='summer';
   /* The seasons. The map is the engine's summer; each other season is worked out cell by cell from it, so the
      same coast, hills and rivers change rather than being repainted. Each cell gets a stable random number, so a
      tree that turns red in autumn is the same tree every visit.
@@ -152,23 +153,28 @@ footer a:hover{color:var(--ink)}
     if(g==='^') return {g,fg:shade([200,206,214]),bg:q.bg};
     return {g:r<.75?'.':g,fg:shade([236,240,244]).map(v=>Math.min(255,v)),bg:q.bg};
   }
-  function ink(c,bg,g){
-    if(scheme==='natural') return c;
-    const [d,b]=RAMP[scheme], l=luma(c);
-    return lerp(d,b,bg?l*.35:.18+.82*Math.pow(l,.6));
+  /* colours of one cell by day or by night: [background or null, glyph] */
+  const moon=c=>c.map((v,i)=>v*[.64,.74,.98][i]+[2,5,16][i]);
+  const NIGHT_GROUND=[4,6,12];
+  function look(q,lift=1){
+    const wet=q.g==='~'||q.g==='-'||q.g==='=', f=q.fg.map(v=>v*(CALM[q.g]||1)*lift);
+    if(scheme==='night') return [wet?moon(q.bg.map(v=>v*.55*lift)):null, moon(f)];
+    return wet?[lerp(q.bg.map(v=>v*lift),[236,246,252],.22),lerp(f,[255,255,255],.5)]:[lerp(q.fg,PAPER,.8),f.map(v=>v*.58)];
   }
+  const tint=c=>scheme==='night'?moon(c):c.map(v=>v*.55);                 // weather in the light of the hour
   function paint(){
     if(!W) return;
     const dpr=Math.min(2,devicePixelRatio||1);
-    cw=innerWidth<700?8:9.5; ch=Math.round(cw*1.8);
-    world=document.createElement('canvas'); world.width=Math.round(W*cw*dpr); world.height=Math.round(H*ch*dpr);
+    cw=innerWidth<700?11:14; ch=Math.round(cw*1.8);
+    const cols=Math.min(W,Math.ceil(innerWidth/cw)+2); cx0=Math.floor((W-cols)/2);      // only the columns in view
+    world=document.createElement('canvas'); world.width=Math.round(cols*cw*dpr); world.height=Math.round(H*ch*dpr);
     const c=world.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
-    c.fillStyle=css(scheme==='natural'?[5,5,5]:ink([0,0,0],true)); c.fillRect(0,0,W*cw,H*ch);
+    c.fillStyle=css(scheme==='night'?NIGHT_GROUND:PAPER); c.fillRect(0,0,cols*cw,H*ch);
     c.font=`500 ${Math.round(ch*.78)}px 'IBM Plex Mono',ui-monospace,monospace`; c.textAlign='center'; c.textBaseline='middle';
-    for(let y=0;y<H;y++) for(let x=0;x<W;x++){
-      const q=inSeason(cells[y*W+x],y*W+x), wet=q.g==='~'||q.g==='-'||q.g==='=', px=x*cw, py=y*ch;
-      if(wet){c.fillStyle=css(ink(q.bg.map(v=>v*.55),true,q.g)); c.fillRect(px,py,cw+.5,ch+.5)}
-      c.fillStyle=css(ink(q.fg.map(v=>v*(CALM[q.g]||1)),false,q.g)); c.fillText(q.g,px+cw/2,py+ch*.54);
+    for(let y=0;y<H;y++) for(let x=cx0;x<cx0+cols;x++){
+      const q=inSeason(cells[y*W+x],y*W+x), [bg,fg]=look(q), px=(x-cx0)*cw, py=y*ch;
+      if(bg){c.fillStyle=css(bg); c.fillRect(px,py,cw+.5,ch+.5)}
+      c.fillStyle=css(fg); c.fillText(q.g,px+cw/2,py+ch*.54);
     }
     show();
   }
@@ -176,9 +182,9 @@ footer a:hover{color:var(--ink)}
     if(!world) return;
     const dpr=Math.min(2,devicePixelRatio||1), vw=innerWidth, vh=innerHeight;
     if(cv.width!==Math.round(vw*dpr)||cv.height!==Math.round(vh*dpr)){cv.width=Math.round(vw*dpr); cv.height=Math.round(vh*dpr)}
-    const mw=W*cw, mh=H*ch, room=Math.max(0,mh-vh), scroll=Math.max(1,document.documentElement.scrollHeight-innerHeight);
+    const mw=world.width/dpr, mh=H*ch, room=Math.max(0,mh-vh), scroll=Math.max(1,document.documentElement.scrollHeight-innerHeight);
     sx=Math.max(0,(mw-vw)/2); sy=Math.min(room,scrollY*Math.min(.5,room/scroll));
-    ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle='#000'; ctx.fillRect(0,0,cv.width,cv.height);
+    ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle=css(scheme==='night'?NIGHT_GROUND:PAPER); ctx.fillRect(0,0,cv.width,cv.height);
     ctx.drawImage(world,sx*dpr,sy*dpr,Math.min(mw,vw)*dpr,Math.min(mh,vh)*dpr,Math.max(0,(vw-mw)/2)*dpr,0,Math.min(mw,vw)*dpr,Math.min(mh,vh)*dpr);
     live(performance.now()/1000);
   }
@@ -201,21 +207,22 @@ footer a:hover{color:var(--ink)}
   function live(t){
     if(!world||!W) return;
     const dpr=Math.min(2,devicePixelRatio||1), c=ctx; c.setTransform(dpr,0,0,dpr,0,0);
-    const ox=Math.max(0,(innerWidth-W*cw)/2), x0=Math.floor(sx/cw), y0=Math.floor(sy/ch), x1=x0+Math.ceil(innerWidth/cw)+1, y1=y0+Math.ceil(innerHeight/ch)+1;
+    const ox=Math.max(0,(innerWidth-world.width/dpr)/2)-cx0*cw, x0=cx0+Math.floor(sx/cw), y0=Math.floor(sy/ch), x1=x0+Math.ceil(innerWidth/cw)+1, y1=y0+Math.ceil(innerHeight/ch)+1;
     c.font=`500 ${Math.round(ch*.78)}px 'IBM Plex Mono',ui-monospace,monospace`; c.textAlign='center'; c.textBaseline='middle';
     for(const i of wet){
       const x=i%W, y=(i/W)|0; if(x<x0||x>x1||y<y0||y>y1) continue;
       const q=inSeason(cells[i],i); if(q.g==='=') continue;
-      const ph=Math.sin(x*.55+y*.35-t*2.4)+.5*Math.sin(x*.21-y*.6-t*1.3), lift=.88+.18*ph;
+      const ph=Math.sin(x*.55+y*.35-t*2.4)+.5*Math.sin(x*.21-y*.6-t*1.3), lift=.88+.18*ph, [bg,fg]=look(q,lift);
       const py=y*ch-sy;
-      c.fillStyle=css(ink(q.bg.map(v=>v*.55*lift),true,q.g)); c.fillRect(ox+x*cw-sx,py,cw+.5,ch+.5);
-      c.fillStyle=css(ink(q.fg.map(v=>v*lift),false,q.g)); c.fillText(ph>.6?'~':ph<-.6?'-':q.g,ox+x*cw-sx+cw/2,py+ch*.54);
+      c.fillStyle=css(bg); c.fillRect(ox+x*cw-sx,py,cw+.5,ch+.5);
+      c.fillStyle=css(fg); c.fillText(ph>.6?'~':ph<-.6?'-':q.g,ox+x*cw-sx+cw/2,py+ch*.54);
     }
-    const w=WEATHER[season], cols=innerWidth/cw, rows=innerHeight/ch, ground=css(scheme==='natural'?[5,5,5]:ink([0,0,0],true));
+    const w=WEATHER[season], cols=innerWidth/cw, rows=innerHeight/ch;
     for(const d of drops){
       const gx=Math.floor(((d.x%cols)+cols)%cols), gy=Math.floor(((d.y%rows)+rows)%rows);
-      c.fillStyle=ground; c.fillRect(gx*cw,gy*ch,cw,ch);
-      c.fillStyle=css(ink(w.c[Math.floor(d.k*w.c.length)],false,'*')); c.fillText(w.g[Math.floor(d.k*w.g.length*7)%w.g.length],gx*cw+cw/2,gy*ch+ch*.54);
+      const mx=Math.floor((gx*cw-ox+sx)/cw), my=Math.floor((gy*ch+sy)/ch), under=cells[my*W+mx];   // the cell the flake falls past
+      c.fillStyle=css(under&&mx>=0&&mx<W?(look(inSeason(under,my*W+mx))[0]||NIGHT_GROUND):scheme==='night'?NIGHT_GROUND:PAPER); c.fillRect(gx*cw,gy*ch,cw,ch);
+      c.fillStyle=css(tint(w.c[Math.floor(d.k*w.c.length)])); c.fillText(w.g[Math.floor(d.k*w.g.length*7)%w.g.length],gx*cw+cw/2,gy*ch+ch*.54);
     }
   }
   let lastT=0;
@@ -253,13 +260,13 @@ footer a:hover{color:var(--ink)}
   });
   let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(()=>{seed();paint()},150)});
 
-  /* site-wide light/dark switch: dark is the engine's natural colours, light its paper scheme */
+  /* site-wide light/dark switch: dark is night, light is day */
   const btn=document.getElementById('mode');
   function setMode(m){
     if(m==='light') root.dataset.theme='light'; else delete root.dataset.theme;
     btn.textContent=m==='light'?'Dark':'Light';
     try{localStorage.setItem('bm-theme',m)}catch(e){}
-    scheme=m==='light'?'paper':'natural'; paint();
+    scheme=m==='light'?'day':'night'; seed(); paint();
   }
   let m='dark';try{m=localStorage.getItem('bm-theme')||'dark'}catch(e){}
   btn.onclick=()=>setMode(root.dataset.theme==='light'?'dark':'light');

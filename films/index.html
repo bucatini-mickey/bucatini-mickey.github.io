@@ -4,11 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Film Index · Bucatini Mickey</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500&amp;family=Mulish:wght@300;400;500;700&amp;family=IBM+Plex+Mono:wght@500&amp;family=Cormorant+Garamond:wght@500&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500&amp;family=Mulish:wght@300;400;500;700&amp;family=IBM+Plex+Mono:wght@500&amp;family=Cormorant+Garamond:wght@500&amp;display=swap"></noscript>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
 <meta name="description" content="Every public Letterboxd list by bucatini_mickey, nested and searchable.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <style>
 /* Bucatini Mickey — shared theme. Night-forest dark by default, autumn + psychedelic accents, washi paper light mode on request. */
 :root{
@@ -293,8 +290,11 @@ function fill(d){
   if(old) old.replaceWith(ul); else body.querySelector('.stage').appendChild(ul);
   body.querySelectorAll('.films,.more').forEach(e=>e.remove());
 }
-document.addEventListener('toggle',e=>{if(e.target.matches&&e.target.matches('details.lst')&&e.target.open) fill(e.target)},true);
-fetch('posters.json').then(r=>r.ok?r.json():null).then(j=>{if(!j) return; PJ=j; document.querySelectorAll('details.lst[open]').forEach(fill)}).catch(()=>{});
+/* posters.json is fetched the first time any list is opened, or when the browser is otherwise idle, whichever is first */
+let PJload=null;
+function getPJ(){ return PJload||(PJload=fetch('posters.json').then(r=>r.ok?r.json():null).then(j=>{if(j){PJ=j; document.querySelectorAll('details.lst[open]').forEach(fill)}}).catch(()=>{})) }
+document.addEventListener('toggle',e=>{if(e.target.matches&&e.target.matches('details.lst')&&e.target.open){ if(PJ) fill(e.target); else getPJ() }},true);
+addEventListener('load',()=>(window.requestIdleCallback||setTimeout)(getPJ,{timeout:6000}));
 const fold_=(t,count,inner,open)=>`<details class="grp"${open?' open':''}><summary><span class="tw"></span><span class="nm">${esc(t)}</span><span class="ct">${count}</span></summary><div class="inner">${inner}</div></details>`;
 
 // resolve a node into {html,n}; 'used' stops a list showing twice in one section
