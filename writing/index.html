@@ -7,8 +7,7 @@
 <meta name="description" content="Screenplays by Mickey.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Mulish:wght@500;600&display=swap">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&amp;family=IM+Fell+English:ital@0;1&amp;family=EB+Garamond:ital,wght@0,400;0,500;1,400&amp;family=Cormorant+Garamond:wght@500&amp;family=Mulish:wght@500&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&amp;family=IM+Fell+English:ital@0;1&amp;family=EB+Garamond:ital,wght@0,400;0,500;1,400&amp;family=Cormorant+Garamond:wght@500&amp;family=Mulish:wght@500&amp;display=swap"></noscript>
 <style>
 /* Gothic, in black and white. Outside the page (drifting up more slowly than the page as you scroll): a winter field after Marketa Lazarova, snow falling, two wolf
    trails crossing to a monastery on the horizon. On the page: the monastery's cloister, pointed arches open to the
@@ -55,7 +54,7 @@ footer a{text-decoration:none}
 <canvas class="backdrop tall" id="field" data-parallax=".25" aria-hidden="true"></canvas>
 <div class="page">
 <header class="bar"><div class="bar-in">
-  <nav class="sites" aria-label="Sites"><a class="here" href="../" aria-current="true">Bucatini Mickey</a><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a></nav>
+  <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="../" aria-current="true" title="Bucatini Mickey: films, games, photos and other hobbies"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
   <nav class="pages" aria-label="Pages"><a href="../films/">Film</a><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="./" aria-current="page">Writing</a><a href="../art/">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 
@@ -183,5 +182,6 @@ footer a{text-decoration:none}
 })();
 </script>
 <script src="../assets/parallax.js"></script>
+<script src="../assets/bar.js" defer></script>
 </body>
 </html>

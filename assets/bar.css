@@ -1,8 +1,10 @@
 /* The top bar and the floating page, shared by jsonsummers.github.io and bucatini-mickey.github.io.
-   Keep both copies identical.
+   Keep both copies identical (and assets/bar.js with them).
 
-   Bar: the site you are on comes first, its name in the display face; a hairline divides it from the other site,
-   written quietly as its initials, so the two sites read as one bar.
+   Bar: both sites are always named in the same order, Jason Summers on the left and Bucatini Mickey on the right,
+   divided by a hairline. The site you are on is written in full; the other is written quietly as its initials.
+   Following the other site plays the change: this name folds down to its initials and the other unfolds to full.
+   Each name is its initials plus folding spans (.x), so the change is just those spans opening or closing.
    On the right, this site's pages. One typeface on both sites, so the bar measures the same everywhere;
    each page colours it through --bg --ink --dim --line --acc.
 
@@ -11,11 +13,16 @@
 .bar{position:relative;z-index:5;background:var(--bar-bg,var(--bg));border-bottom:1px solid var(--line);
   --f-bar:'Cormorant Garamond',Garamond,Georgia,serif;--f-barsans:'Mulish',system-ui,sans-serif}
 .bar-in{max-width:var(--bar-w,1040px);margin:0 auto;padding:0 clamp(16px,5vw,48px);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:8px 24px;flex-wrap:wrap}
-.sites{display:flex;align-items:center;margin:0;padding:0}
-.sites a{display:flex;align-items:center;gap:10px;text-decoration:none;white-space:nowrap}
+.sites{display:flex;align-items:center;margin:0;padding:0;--ease:cubic-bezier(.65,0,.35,1)}
+.sites a{display:flex;align-items:center;text-decoration:none;white-space:nowrap;color:var(--ink);font:500 1.12rem/1 var(--f-bar);letter-spacing:.02em;
+  transition:color .55s var(--ease),font-size .55s var(--ease),letter-spacing .55s var(--ease)}
 .sites>*+*{margin-left:16px;padding-left:16px;border-left:1px solid var(--line)}
-.sites .here{color:var(--ink);font:500 1.12rem/1 var(--f-bar);letter-spacing:.02em}
-.sites .away{color:var(--dim);font:500 .7rem/1 var(--f-barsans);letter-spacing:.22em}
+.sites .x{display:grid;grid-template-columns:1fr;transition:grid-template-columns .55s var(--ease),opacity .4s var(--ease)}
+.sites .x>span{overflow:hidden;white-space:pre}
+.sites .away,.sites.swap .here{color:var(--dim);font-size:.84rem;letter-spacing:.18em}
+.sites .away .x,.sites.swap .here .x{grid-template-columns:0fr;opacity:0}
+.sites.swap .away{color:var(--ink);font-size:1.12rem;letter-spacing:.02em}
+.sites.swap .away .x{grid-template-columns:1fr;opacity:1}
 .sites .away:hover{color:var(--ink)}
 .pages{display:flex;align-items:center;gap:clamp(14px,2.6vw,28px);font:500 .7rem/1 var(--f-barsans);letter-spacing:.2em;text-transform:uppercase}
 .pages a,.pages button{position:relative;color:var(--dim);text-decoration:none;padding:8px 0;border:0;background:none;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer}

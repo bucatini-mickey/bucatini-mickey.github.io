@@ -6,7 +6,10 @@
    It runs on the GPU in single precision by perturbation: the orbit of c0 itself is known exactly (a few values,
    then a repeating cycle) and each pixel only tracks its small difference from it, so the zoom can go far
    deeper than single precision would otherwise allow. Drawn at reduced resolution; on machines without a
-   graphics card it draws one small still frame. Everything else about the page is untouched. */
+   graphics card it draws one small still frame. Everything else about the page is untouched.
+   Kept calm: the default point is a branch tip, which twists only about 46 degrees per loop (the Seahorse Valley
+   point, a spiral, turns more than a full circle per loop, which reads as spinning); a loop takes about two
+   minutes; scrolling only nudges it, eased so it never jumps; the colours are pastel. */
 (function(){
   const cv=document.getElementById('fractal'); if(!cv) return;
   const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -18,7 +21,7 @@
     seahorse:{c:[-0.775683768009054,0.136467368294690],k:24,p:2,r0:1.2e-3},// Seahorse Valley: spirals of spirals
     tip:{c:[-0.228155493653962,1.115142508039937],k:3,p:2,r0:2.5e-3},     // the end of a branch
   };
-  const pick=PTS[new URLSearchParams(location.search).get('pt')]||PTS.seahorse;
+  const pick=PTS[new URLSearchParams(location.search).get('pt')]||PTS.tip;
   const C0=pick.c, K=pick.k, P=pick.p;
   const orbit=[[0,0]]; for(let n=0;n<K+P;n++){const [x,y]=orbit[n]; orbit.push([x*x-y*y+C0[0],2*x*y+C0[1]])}
   let rho=[1,0]; for(let n=K;n<K+P;n++){const [x,y]=orbit[n]; rho=[rho[0]*2*x-rho[1]*2*y, rho[0]*2*y+rho[1]*2*x]}
@@ -50,13 +53,13 @@ float shade(vec2 pix, float u){
   return -1.;
 }
 vec3 paint(float n){
-  if(n<0.) return vec3(.012,.008,.02);                               // inside: near black
+  if(n<0.) return vec3(.10,.085,.13);                                // inside: a soft dusk violet
   float l=log(n+1.);
-  vec3 col=pal(l*.9 - t*.012);
-  col=mix(col,col*col*1.2,.45);                                      // deeper, jewel colours
-  float band=fract(l*5.);                                            // fine contour bands, like grain in agate
-  col*=.62+.38*smoothstep(.0,.6,band)*smoothstep(1.,.75,band);
-  return col*(.35+.65*smoothstep(1.2,3.6,l));                        // the far exterior falls away to dark
+  vec3 col=pal(l*1.5 - t*.003);
+  col=mix(col,vec3(.95,.92,.96),.5);                                 // pastel: the hues washed towards a warm white
+  float band=fract(l*6.);                                            // soft contour bands, like grain in agate
+  col*=.8+.2*smoothstep(.0,.6,band)*smoothstep(1.,.75,band);
+  return col*(.8+.2*smoothstep(1.,3.6,l));                           // the far exterior dims a little
 }
 void main(){
   vec2 pix=(gl_FragCoord.xy-.5*res)/res.y;
@@ -91,10 +94,11 @@ void main(){
         gl.viewport(0,0,cv.width,cv.height); gl.uniform2f(U('res'),cv.width,cv.height);
       }
       const t0=performance.now();
-      let lastU=-1;
+      let sc=scrollY/innerHeight*.12;                                  // the scroll part of the position, eased towards its target
       function frame(ts){
-        const t=(ts-t0)/1000, u=(((scrollY/innerHeight*.9+(still?0:t*.025))%1+1)%1)*STEPS;   // a loop is STEPS whole steps of rho, so it joins up seamlessly
-        gl.uniform1f(U('u'),u); gl.uniform1f(U('t'),t); gl.drawArrays(gl.TRIANGLES,0,3); lastU=u;
+        const goal=scrollY/innerHeight*.12; sc=still?goal:sc+(goal-sc)*.06;
+        const t=(ts-t0)/1000, u=(((sc+(still?0:t*.008))%1+1)%1)*STEPS;   // a loop is STEPS whole steps of rho, so it joins up seamlessly
+        gl.uniform1f(U('u'),u); gl.uniform1f(U('t'),t); gl.drawArrays(gl.TRIANGLES,0,3);
       }
       let last=0, slow=0, run=true;
       function loop(ts){

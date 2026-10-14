@@ -6,7 +6,7 @@
 <title>Film Index · Bucatini Mickey</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500&amp;family=Mulish:wght@300;400;700&amp;family=IBM+Plex+Mono:wght@500&amp;family=Cormorant+Garamond:wght@500&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500&amp;family=Mulish:wght@300;400;700&amp;family=IBM+Plex+Mono:wght@500&amp;family=Cormorant+Garamond:wght@500&amp;display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500&amp;family=Mulish:wght@300;400;500;700&amp;family=IBM+Plex+Mono:wght@500&amp;family=Cormorant+Garamond:wght@500&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500&amp;family=Mulish:wght@300;400;500;700&amp;family=IBM+Plex+Mono:wght@500&amp;family=Cormorant+Garamond:wght@500&amp;display=swap"></noscript>
 <meta name="description" content="Every public Letterboxd list by bucatini_mickey, nested and searchable.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <style>
@@ -14,7 +14,7 @@
 :root{
   /* Czech marionette theatre: the house is dark, the stage is lit from above and from the footlights.
      Velvet red, gilded frame, painted wood; Fraunces for the hand-carved look. */
-  --bg:#18110d; --bg2:#22180f; --ink:#f1e4c8; --dim:#b29d7c; --line:#3a2a1c;
+  --bg:#0e0a09; --bg2:#16100d; --ink:#e8dcc4; --dim:#9a8a70; --line:#2a1f17;
   --kaki:#d9773a; --kuchiba:#d6a14a; --koke:#86a35a; --ai:#5b77bd; --fuji:#a07ccb; --beni:#d0473c;
   --velvet:#7c1820; --velvet-hi:#b0333a; --velvet-lo:#3e0a0f; --gilt:#c99a3c; --gilt-hi:#f0d38a; --wood:#6b4527;
   --string:rgba(241,228,200,.45);
@@ -165,9 +165,10 @@ span.th{background:none}
 h1,.sec h2,.grp>summary .nm{font-variation-settings:"SOFT" 100,"WONK" 1,"opsz" 96}
 h1{font-weight:500;letter-spacing:0}
 .sec h2{font-weight:500}
-body{background:#3c070c}
+body{background:#120204}
 /* the stage: a gilded frame round the page */
-.page{box-shadow:0 0 0 2px var(--gilt-hi),0 0 0 8px var(--gilt),0 0 0 10px #4a3412,0 40px 90px -30px #000}
+.page{box-shadow:0 0 0 2px #a8884a,0 0 0 8px #6e5226,0 0 0 10px #2a1c0a,0 40px 90px -30px #000}
+:root:not([data-theme="light"]) .mast img.still{filter:saturate(.55) brightness(.62) contrast(1.12)}
 .mast{position:relative;padding-top:clamp(150px,26vh,230px);overflow:hidden}
 .mast>*{position:relative;z-index:1}
 .mast img.still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 28%;z-index:0;display:block}
@@ -201,7 +202,7 @@ body{background:#3c070c}
 <canvas class="backdrop" id="stage" aria-hidden="true"></canvas>
 <div class="page">
 <header class="bar"><div class="bar-in">
-  <nav class="sites" aria-label="Sites"><a class="here" href="../" aria-current="true">Bucatini Mickey</a><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a></nav>
+  <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="../" aria-current="true" title="Bucatini Mickey: films, games, photos and other hobbies"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
   <nav class="pages" aria-label="Pages"><a href="../films/" aria-current="page">Film</a><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="../writing/">Writing</a><a href="../art/">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 <header class="wrap mast">
@@ -475,7 +476,7 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
   function paintSet(){
     const r=rng(1994); set=document.createElement('canvas'); set.width=cv.width; set.height=cv.height;
     const c=set.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
-    const sky=c.createLinearGradient(0,0,0,H*.7); sky.addColorStop(0,'#34484f'); sky.addColorStop(1,'#cbbd8f');
+    const sky=c.createLinearGradient(0,0,0,H*.7); sky.addColorStop(0,'#10181c'); sky.addColorStop(1,'#5a5a48');
     c.fillStyle=sky; c.fillRect(0,0,W,H);
     overlay(c,brush,'overlay',.8); overlay(c,velvet,'soft-light',.25);          // a painted canvas cloth
     for(const [y,s] of [[H*.12,54],[H*.3,70]]) for(let x=-s*r();x<W+s;x+=s*(2.1+r()*.8)) cloud(c,r,x,y+(r()-.5)*s*.4,s*(.85+r()*.3));
@@ -488,6 +489,19 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
     }
     const fl=c.createLinearGradient(0,top,0,H); fl.addColorStop(0,'rgba(20,12,6,.55)'); fl.addColorStop(1,'rgba(255,190,110,.18)');
     c.fillStyle=fl; c.fillRect(0,top,W,H-top);
+    c.fillStyle='rgba(6,9,12,.42)'; c.fillRect(0,0,W,H);                           // the whole set sits in a cold gloom
+    paintMist();
+  }
+  /* ---- mist: a band of soft, uneven haze, painted once (at low resolution, it is all blur) and slid slowly
+     across the boards in two layers; it wraps round, so its ends are painted to meet ---- */
+  let mist=null;
+  function paintMist(){
+    const r=rng(7), w=Math.ceil(W), h=Math.ceil(H*.34);
+    mist=document.createElement('canvas'); mist.width=w; mist.height=h;
+    const c=mist.getContext('2d');
+    for(let i=0;i<70;i++){ const x=r()*w, y=h*(.35+r()*.5), rx=60+r()*180;
+      for(const dx of [-w,0,w]){ const g=c.createRadialGradient(x+dx,y,0,x+dx,y,rx); g.addColorStop(0,'rgba(170,186,180,.07)'); g.addColorStop(1,'rgba(170,186,180,0)');
+        c.save(); c.translate(x+dx,y); c.scale(1,.32); c.translate(-x-dx,-y); c.fillStyle=g; c.fillRect(x+dx-rx,y-rx,rx*2,rx*2); c.restore() } }
   }
   /* ---- one row of wave flats: a painted plywood board cut into curling crests, joined in planks.
      Each row is painted once into its own image; every frame only slides and bobs it. ---- */
@@ -496,7 +510,7 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
     const P=150-row*22, y0=H*(.52+row*.06), floor=H*.83, top=y0-P*.6, w=W+P*4, h=floor-top+8;
     const img=document.createElement('canvas'); img.width=Math.round(w*dpr); img.height=Math.round(h*dpr);
     const c=img.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); c.translate(P*2,-top);
-    const body=['#3f6670','#355a63','#2b4c55','#213f47'][row], crest=['#cfd8c4','#c5cfb8','#bcc6ae','#b2bca4'][row];
+    const body=['#24393f','#1e3237','#182a2f','#122227'][row], crest=['#8e9a8c','#859083','#7c877a','#737e71'][row];
     const edge=new Path2D(); edge.moveTo(-P*2,floor);
     for(let x=-P*2;x<W+P*2;x+=P){edge.lineTo(x,y0); edge.quadraticCurveTo(x+P*.35,y0-P*.42,x+P*.62,y0-P*.3); edge.quadraticCurveTo(x+P*.8,y0-P*.06,x+P,y0)}
     edge.lineTo(W+P*2,floor); edge.closePath();
@@ -525,13 +539,14 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
     const pw=w/pleats;
     for(let k=0;k<pleats+1;k++){
       const x=k*pw, g=c.createLinearGradient(x,0,x+pw,0);
-      g.addColorStop(0,'#33060a'); g.addColorStop(.28,'#7e151c'); g.addColorStop(.52,'#b0303a'); g.addColorStop(.78,'#70121a'); g.addColorStop(1,'#33060a');
+      g.addColorStop(0,'#1c0306'); g.addColorStop(.28,'#540c12'); g.addColorStop(.52,'#7a1c24'); g.addColorStop(.78,'#4a0a10'); g.addColorStop(1,'#1c0306');
       c.fillStyle=g; c.fillRect(x,0,pw+1,H);
     }
     overlay(c,velvet,'overlay',.9);
     c.save(); c.globalCompositeOperation='soft-light'; c.globalAlpha=.8; c.drawImage(sheen,0,0,w,H); c.restore();
     const v=c.createLinearGradient(0,0,0,H); v.addColorStop(0,'rgba(0,0,0,.55)'); v.addColorStop(.3,'rgba(0,0,0,0)'); v.addColorStop(.85,'rgba(0,0,0,0)'); v.addColorStop(1,'rgba(255,140,60,.14)');
     c.fillStyle=v; c.fillRect(0,0,w,H);
+    c.fillStyle='rgba(4,1,2,.38)'; c.fillRect(0,0,w,H);                          // the house lights are down
     c.fillStyle='#8a6a22'; c.fillRect(0,H-9,w,9); c.fillStyle='#d9b45a'; for(let x=0;x<w;x+=5) c.fillRect(x,H-6,2.5,3);   // the gold hem
   }
   function curtain(c,p,t){
@@ -553,30 +568,33 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
     const path=new Path2D(); path.moveTo(0,0); path.lineTo(W,0); path.lineTo(W,sh);
     for(let x=W;x>-2*R;x-=2*R){ path.arc(x-R,sh,R,0,Math.PI,false) }
     path.lineTo(0,sh); path.closePath();
-    c.fillStyle='#5e0e15'; c.fill(path);
+    c.fillStyle='#3a080d'; c.fill(path);
     c.save(); c.clip(path); overlay(c,velvet,'overlay',.9);
     for(let x=0;x<W;x+=2*R){ const g=c.createLinearGradient(x,0,x+2*R,0); g.addColorStop(0,'rgba(0,0,0,.28)'); g.addColorStop(.5,'rgba(255,190,190,.08)'); g.addColorStop(1,'rgba(0,0,0,.28)'); c.fillStyle=g; c.fillRect(x,0,2*R,h) }
     const v=c.createLinearGradient(0,0,0,h); v.addColorStop(0,'rgba(0,0,0,.4)'); v.addColorStop(1,'rgba(0,0,0,0)'); c.fillStyle=v; c.fillRect(0,0,W,h);
     c.restore();
-    c.strokeStyle='#8a6a22'; c.lineWidth=5; c.stroke(path);
-    c.strokeStyle='#e0bd62'; c.lineWidth=1.6; c.stroke(path);
-    c.fillStyle='#c99a3c'; c.fillRect(0,sh*.18,W,3);                               // a gold cord along the pelmet
+    c.strokeStyle='#5e4618'; c.lineWidth=5; c.stroke(path);
+    c.strokeStyle='#a8894a'; c.lineWidth=1.6; c.stroke(path);
+    c.fillStyle='#8a6a2c'; c.fillRect(0,sh*.18,W,3);                               // a gold cord along the pelmet
   }
-  /* ---- the lighting: the house is dark; two follow-spots from the flies drift slowly over the set, and the
-     footlights warm the boards ---- */
+  /* ---- the lighting: the house is dark. One cold follow-spot from the flies searches slowly over the set; the
+     footlights burn low and unsteadily, like gas; mist creeps across the boards ---- */
   function light(c,t,open){
-    c.fillStyle=`rgba(4,3,6,${.55-open*.12})`; c.fillRect(0,0,W,H);
+    const fl=.86+.09*Math.sin(t*7.3)*Math.sin(t*2.3+1)+.05*Math.sin(t*23.1);      // the unsteadiness of a gas flame
+    c.fillStyle=`rgba(3,3,6,${.74-open*.1})`; c.fillRect(0,0,W,H);
     c.save(); c.globalCompositeOperation='lighter';
-    for(const [x0,ph,col] of [[.34,0,'255,224,170'],[.68,2.1,'200,215,255']]){
-      const x=W*(x0+.06*Math.sin(t*.13+ph)), y=H*.62, rx=W*.2, g=c.createRadialGradient(x,y,0,x,y,rx);
-      g.addColorStop(0,`rgba(${col},${.22*open})`); g.addColorStop(.6,`rgba(${col},${.08*open})`); g.addColorStop(1,`rgba(${col},0)`);
-      c.save(); c.translate(x,y); c.scale(1,.55); c.translate(-x,-y); c.fillStyle=g; c.fillRect(x-rx,y-rx,rx*2,rx*2); c.restore();
-      const beam=c.createLinearGradient(0,0,0,y); beam.addColorStop(0,`rgba(${col},0)`); beam.addColorStop(1,`rgba(${col},${.05*open})`);
-      c.fillStyle=beam; c.beginPath(); c.moveTo(x-20,0); c.lineTo(x+20,0); c.lineTo(x+rx*.8,y); c.lineTo(x-rx*.8,y); c.closePath(); c.fill();
-    }
-    const f=c.createLinearGradient(0,H*.78,0,H); f.addColorStop(0,'rgba(255,170,90,0)'); f.addColorStop(1,`rgba(255,170,90,${.16+.1*open})`);
-    c.fillStyle=f; c.fillRect(0,H*.78,W,H*.22);
+    const x=W*(.5+.24*Math.sin(t*.06)+.07*Math.sin(t*.17+1)), y=H*.64, rx=W*.16, col='190,212,200', k=open*fl;
+    const g=c.createRadialGradient(x,y,0,x,y,rx); g.addColorStop(0,`rgba(${col},${.2*k})`); g.addColorStop(.55,`rgba(${col},${.07*k})`); g.addColorStop(1,`rgba(${col},0)`);
+    c.save(); c.translate(x,y); c.scale(1,.5); c.translate(-x,-y); c.fillStyle=g; c.fillRect(x-rx,y-rx,rx*2,rx*2); c.restore();
+    const beam=c.createLinearGradient(0,0,0,y); beam.addColorStop(0,`rgba(${col},0)`); beam.addColorStop(1,`rgba(${col},${.045*k})`);
+    c.fillStyle=beam; c.beginPath(); c.moveTo(x-14,0); c.lineTo(x+14,0); c.lineTo(x+rx*.75,y); c.lineTo(x-rx*.75,y); c.closePath(); c.fill();
+    const f=c.createLinearGradient(0,H*.8,0,H); f.addColorStop(0,'rgba(255,150,70,0)'); f.addColorStop(1,`rgba(255,150,70,${(.08+.08*open)*fl})`);
+    c.fillStyle=f; c.fillRect(0,H*.8,W,H*.2);
     c.restore();
+    if(mist){ const mh=mist.height, mw=mist.width;
+      for(const [sp,y,a] of [[7,H*.6,.9],[-4.5,H*.68,.7]]){ const off=((t*sp)%mw+mw)%mw; c.globalAlpha=a*(.55+.45*open);
+        c.drawImage(mist,-off,y,mw,mh); c.drawImage(mist,mw-off,y,mw,mh) }
+      c.globalAlpha=1 }
   }
   function size(){dpr=Math.min(2,devicePixelRatio||1); W=innerWidth; H=innerHeight; cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); paintSet(); rows=[0,1,2,3].map(paintRow); paintDrape(); paintBand()}
   function draw(t){
@@ -594,5 +612,6 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
   textures(); size(); draw(0); if(!still) requestAnimationFrame(loop);
 })();
 </script>
+<script src="../assets/bar.js" defer></script>
 </body>
 </html>

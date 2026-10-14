@@ -6,7 +6,7 @@
 <title>Bucatini Mickey</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;family=Mulish:wght@400;700&amp;family=IBM+Plex+Mono:wght@500&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;family=Mulish:wght@400;700&amp;family=IBM+Plex+Mono:wght@500&amp;display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;family=Mulish:wght@400;500;700&amp;family=IBM+Plex+Mono:wght@500&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;family=Mulish:wght@400;500;700&amp;family=IBM+Plex+Mono:wght@500&amp;display=swap"></noscript>
 <meta name="description" content="Hobby projects by Mickey: film, game dev and whatever grows next.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <style>
@@ -69,6 +69,9 @@ span.js{cursor:default;opacity:.85}
 .lb:hover{background-size:100% 100%;color:#14181c}
 </style>
 <style>
+/* the panel lets a little of the fractal through; the bar stays solid */
+body .page{background:color-mix(in srgb,var(--bg) 84%,transparent)}
+body .page>.bar{background:var(--bg)}
 .rooms{display:flex;flex-direction:column;padding-block:8px 64px}
 .room{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:start;padding:40px 0;border-top:1px solid var(--line);text-decoration:none}
 .room:last-child{border-bottom:1px solid var(--line)}
@@ -91,7 +94,7 @@ a.room:hover .go{text-decoration:underline;text-underline-offset:4px}
 <canvas class="backdrop" id="fractal" aria-hidden="true"></canvas>
 <div class="page">
 <header class="bar"><div class="bar-in">
-  <nav class="sites" aria-label="Sites"><a class="here" href="./" aria-current="true">Bucatini Mickey</a><a class="away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links">JS</a></nav>
+  <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="./" aria-current="true" title="Bucatini Mickey: films, games, photos and other hobbies"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
   <nav class="pages" aria-label="Pages"><a href="films/">Film</a><a href="game-dev/">Games</a><a href="photos/">Photos</a><a href="writing/">Writing</a><a href="art/">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 <header class="wrap mast">
@@ -157,5 +160,6 @@ a.room:hover .go{text-decoration:underline;text-underline-offset:4px}
   set(m); if(btn)btn.onclick=()=>{m=m==='dark'?'light':'dark';try{localStorage.setItem('bm-theme',m)}catch(e){}set(m)};
 })();
 </script>
+<script src="assets/bar.js" defer></script>
 </body>
 </html>
