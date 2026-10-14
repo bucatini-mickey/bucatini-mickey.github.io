@@ -74,7 +74,7 @@ body .page{--glass:95%}
 
 <header class="wrap mast">
   <h1>Games</h1>
-  <p class="lede">An engine for Dwarf-Fortress-style ASCII games, the games growing on it, and the odd offshoot. The world around this page is drawn by the engine's world editor, and it pans south to the sea as you scroll; choose a season, or press <b>s</b>.</p>
+  <p class="lede">An engine for Dwarf-Fortress-style ASCII games, the games growing on it, and the odd offshoot. The world around this page is made fresh each time you visit, the way the engine's world editor makes them, and it pans south to the sea as you scroll; choose a season, or press <b>s</b>.</p>
 </header>
 
 <main class="wrap">
@@ -100,8 +100,9 @@ body .page{--glass:95%}
 <footer><div class="wrap"><span>Bucatini Mickey · Games</span><span><a href="../">Portfolio</a> · <a href="https://github.com/bucatini-mickey">GitHub</a></span></div></footer>
 </div>
 
+<script src="worldgen.js"></script>
 <script>
-/* The world map. world.json comes from Tachyon (noise, biomes, rivers) as glyph + fg + bg per cell. The whole map
+/* The world map. worldgen.js makes it fresh each visit, after Tachyon's world editor (height, rivers, biomes), as glyph + fg + bg per cell. The whole map
    is drawn once at a fixed scale; the window is a view onto it that starts in the mountains and pans slowly south
    to the sea as you scroll, more slowly than the page. Dark mode is night: the engine's colours under moonlight,
    dimmed and turned blue, land on black with colour behind water only. Light mode is day: every cell lit in a pale
@@ -110,7 +111,7 @@ body .page{--glass:95%}
 (function(){
   const cv=document.getElementById('map'), ctx=cv.getContext('2d'), root=document.documentElement;
   const PAPER=[244,238,222];
-  const NAMES={'~':'water','-':'shallows','=':'ice','.':'beach','"':'grassland','&':'forest','Y':'marsh',',':'moor','*':'snow','^':'rock','`':'ashland'};
+  const NAMES={'%':'flowers','~':'water','-':'shallows','=':'ice','.':'beach','"':'grassland','&':'forest','Y':'marsh',',':'moor','*':'snow','^':'rock','`':'ashland'};
   const B64='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
   const hex=h=>[0,2,4].map(i=>parseInt(h.slice(i,i+2),16));
   const luma=c=>(.299*c[0]+.587*c[1]+.114*c[2])/255;
@@ -143,6 +144,7 @@ body .page{--glass:95%}
       if(g==='"') return {g:r<.06?'.':g,fg:shade([200,176,98]),bg:q.bg};
       if(g===',') return {g,fg:shade([150,80,140]),bg:q.bg};
       if(g==='Y') return {g,fg:shade([140,110,60]),bg:q.bg};
+      if(g==='%') return {g:'"',fg:shade([206,170,92]),bg:q.bg};
       return q;
     }
     // winter
@@ -183,7 +185,7 @@ body .page{--glass:95%}
     const dpr=Math.min(2,devicePixelRatio||1), vw=innerWidth, vh=innerHeight;
     if(cv.width!==Math.round(vw*dpr)||cv.height!==Math.round(vh*dpr)){cv.width=Math.round(vw*dpr); cv.height=Math.round(vh*dpr)}
     const mw=world.width/dpr, mh=H*ch, room=Math.max(0,mh-vh), scroll=Math.max(1,document.documentElement.scrollHeight-innerHeight);
-    sx=Math.max(0,(mw-vw)/2); sy=Math.min(room,scrollY*Math.min(.5,room/scroll));
+    sx=Math.max(0,(mw-vw)/2); sy=Math.min(room,scrollY*Math.min(.6,room/scroll));
     ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle=css(scheme==='night'?NIGHT_GROUND:PAPER); ctx.fillRect(0,0,cv.width,cv.height);
     ctx.drawImage(world,sx*dpr,sy*dpr,Math.min(mw,vw)*dpr,Math.min(mh,vh)*dpr,Math.max(0,(vw-mw)/2)*dpr,0,Math.min(mw,vw)*dpr,Math.min(mh,vh)*dpr);
     live(performance.now()/1000);
@@ -251,13 +253,15 @@ body .page{--glass:95%}
     document.getElementById('where').innerHTML=`TACHYON  (<b>${x}</b>, <b>${y}</b>)  <b>${NAMES[c.g]||'?'}</b>`;
   });
   cv.addEventListener('mouseleave',()=>{document.getElementById('where').innerHTML=`TACHYON  world <b>${W}x${H}</b>  seed <b>${seedTxt}</b>`});
-  fetch('world.json').then(r=>r.json()).then(m=>{
-    W=m.w;H=m.h;seedTxt=m.seed; const pal=m.pal.map(hex), ix=s=>B64.indexOf(s[0])*64+B64.indexOf(s[1]);
-    for(let i=0;i<W*H;i++){const k=i*5;cells.push({g:m.cells[k],fg:pal[ix(m.cells.slice(k+1,k+3))],bg:pal[ix(m.cells.slice(k+3,k+5))]})}
+  /* a new world every visit (worldgen.js); ?seed=N brings one back */
+  (function(){
+    const scroll=Math.max(0,document.documentElement.scrollHeight-innerHeight), rows=Math.max(40,Math.min(110,Math.ceil((innerHeight+scroll*.55)/(innerWidth<700?20:25))+2));   // tall enough to reach the sea
+    const q=+new URLSearchParams(location.search).get('seed'), m=WorldGen(q||Math.floor(Math.random()*1e6),200,rows);
+    W=m.w;H=m.h;seedTxt=m.seed; cells=m.cells;
     document.getElementById('dims').textContent=W+'x'+H; document.getElementById('seed').textContent=m.seed;
     seed(); document.fonts?.ready.then(paint); paint();
     if(!matchMedia('(prefers-reduced-motion: reduce)').matches) requestAnimationFrame(tick);
-  });
+  })();
   let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(()=>{seed();paint()},150)});
 
   /* site-wide light/dark switch: dark is night, light is day */

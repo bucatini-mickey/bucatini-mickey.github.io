@@ -8,13 +8,15 @@
    shared direction, or freeze, or snap back to the true picture. Some epochs are calm and nothing happens.
    The previous output is kept in a texture and fed back in each frame (two textures, taking turns), so drags
    accumulate into smears and heal slowly when the patch moves on.
+   A cut (from scenes.js) is bled the way a datamosh bleeds one: for a few seconds the old picture is pushed
+   along the new scene's motion and the new picture shows through block by block.
    Usage: const m=Mosh(gl); m.resize(w,h); each frame draw the clean picture into m.target(), then m.step(t). */
 (function(){
   const VS=`#version 300 es
 in vec2 a; void main(){ gl_Position=vec4(a,0.,1.); }`;
   const FS=`#version 300 es
 precision highp float;
-uniform sampler2D prev, src; uniform vec2 res; uniform float t, epoch, calm, first;
+uniform sampler2D prev, src; uniform vec2 res; uniform float t, epoch, calm, first, bleed, swirl; uniform vec2 flow;
 out vec4 o;
 float hash(vec2 p){ p=fract(p*vec2(123.34,456.21)); p+=dot(p,p+45.32); return fract(p.x*p.y); }
 float noise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f);
@@ -34,6 +36,13 @@ void main(){
   if(r<g*.55){ mv=normalize(dir+(vec2(r2,hash(blk+3.))-.5)*.5)*(.6+2.2*r2); fresh=0.; }   // drag
   else if(r<g*.85){ fresh=0.; }                                            // frozen
   else if(r<g*.9){ fresh=1.; }                                             // snapped back to the true picture
+  // a cut being bled: the old picture is pushed along the new scene's motion, and the new one shows through block
+  // by block as the bleed runs out
+  if(bleed>0.){
+    vec2 c=(px-.5*res)/res.y;
+    if(hash(blk*3.1+e*.7)>bleed){ mv=vec2(0.); fresh=1.; }
+    else { mv=flow*(.6+r2)+vec2(-c.y,c.x)*swirl+(vec2(r,r2)-.5)*.8; fresh=0.; }
+  }
   vec4 p=texture(prev,(px-mv)/res);
   if(fresh==0.&&dot(mv,mv)>0.) p.r=texture(prev,(px-mv*1.35)/res).r;      // a little colour slips in a drag
   o=mix(p,s,fresh);
@@ -47,13 +56,15 @@ void main(){ o=texture(tex,gl_FragCoord.xy/res); }`;
     const prog=fs=>{const p=gl.createProgram();gl.attachShader(p,sh(gl.VERTEX_SHADER,VS));gl.attachShader(p,sh(gl.FRAGMENT_SHADER,fs));gl.bindAttribLocation(p,0,'a');gl.linkProgram(p);return gl.getProgramParameter(p,gl.LINK_STATUS)?p:null};
     const pm=prog(FS), pb=prog(BLIT); if(!pm||!pb) return null;
     const U=(p,n)=>gl.getUniformLocation(p,n);
-    let W=0,H=0,src=null,buf=[],cur=0,first=true,ep=0,epT=0,calm=0;
+    let W=0,H=0,src=null,buf=[],cur=0,first=true,ep=0,epT=0,calm=0,cutT=-99,flow=[0,0],swirl=0;
     function tex(){const t=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,t);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA8,W,H,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
       for(const [k,v] of [[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR],[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D,k,v);
       const f=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,f);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,t,0);return {t,f}}
     function free(x){if(x){gl.deleteTexture(x.t);gl.deleteFramebuffer(x.f)}}
     return {
       resize(w,h){ if(w===W&&h===H) return; W=w;H=h; free(src); buf.forEach(free); src=tex(); buf=[tex(),tex()]; first=true; gl.bindFramebuffer(gl.FRAMEBUFFER,null) },
+      size(){ return [W,H] },
+      cut(t,f,s){ cutT=t; flow=f; swirl=s; ep++ },
       target(){ gl.bindFramebuffer(gl.FRAMEBUFFER,src.f); gl.viewport(0,0,W,H); return src.f },
       step(t){
         if(t>epT){ ep++; epT=t+.9+Math.random()*1.8; calm=Math.random()<.4?1:Math.random()*.4 }   // a new epoch: calm, or a little trouble
@@ -62,6 +73,7 @@ void main(){ o=texture(tex,gl_FragCoord.xy/res); }`;
         gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D,a.t); gl.uniform1i(U(pm,'prev'),0);
         gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D,src.t); gl.uniform1i(U(pm,'src'),1);
         gl.uniform2f(U(pm,'res'),W,H); gl.uniform1f(U(pm,'t'),t); gl.uniform1f(U(pm,'epoch'),ep%997); gl.uniform1f(U(pm,'calm'),calm); gl.uniform1f(U(pm,'first'),first?1:0);
+        gl.uniform1f(U(pm,'bleed'),Math.max(0,1-(t-cutT)/2.6)); gl.uniform2f(U(pm,'flow'),flow[0],flow[1]); gl.uniform1f(U(pm,'swirl'),swirl);
         gl.drawArrays(gl.TRIANGLES,0,3); first=false;
         gl.useProgram(pb); gl.bindFramebuffer(gl.FRAMEBUFFER,null); gl.viewport(0,0,W,H);
         gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D,b.t); gl.uniform1i(U(pb,'tex'),0); gl.uniform2f(U(pb,'res'),W,H);
