@@ -32,11 +32,20 @@ a{color:inherit}
 .swatches{display:flex;gap:6px;margin:14px 0 0;padding-inline:clamp(16px,5vw,48px)}
 .swatches i{width:18px;height:18px;border-radius:50%;border:1px solid var(--line)}
 .wrap{padding-inline:clamp(16px,5vw,48px)}
-.soon{margin:48px 0 0;font:italic 400 1.35rem var(--f-disp);color:var(--dim)}
-.grid{list-style:none;margin:48px 0 0;padding:0;columns:3 280px;column-gap:16px}
-.grid li{break-inside:avoid;margin-bottom:16px}
-.grid .ph{aspect-ratio:3/2;background:color-mix(in srgb,var(--ink) 6%,var(--bg));border:1px dashed var(--line)}
-.grid li:nth-child(3n+2) .ph{aspect-ratio:2/3}
+.hero img{background:center/cover no-repeat}
+.grid{list-style:none;margin:40px 0 0;padding:0;columns:3 260px;column-gap:14px}
+.grid li{break-inside:avoid;margin-bottom:14px}
+.grid button{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in;border-radius:2px;overflow:hidden}
+.grid img{display:block;width:100%;height:auto;background:center/cover no-repeat;transition:transform .5s ease,filter .5s ease}
+.grid button:hover img{transform:scale(1.025);filter:brightness(1.06)}
+/* the light box: one photograph at a time, as large as the window allows */
+.lb{position:fixed;inset:0;z-index:20;margin:0;width:100%;height:100%;max-width:none;max-height:none;border:0;padding:0;background:rgba(8,8,8,.94);color:#eee}
+.lb::backdrop{background:transparent}
+.lb img{position:absolute;inset:0;margin:auto;max-width:94vw;max-height:88vh;object-fit:contain;background:center/contain no-repeat}
+.lb p{position:absolute;left:0;right:0;bottom:12px;margin:0;text-align:center;font:italic 400 1.05rem var(--f-disp);color:#bbb;padding-inline:16px}
+.lb button{position:absolute;top:50%;transform:translateY(-50%);background:none;border:0;color:#ddd;font:300 2.4rem/1 var(--f-body);padding:16px;cursor:pointer;opacity:.6}
+.lb button:hover{opacity:1}
+.lb .prev{left:4px}.lb .next{right:4px}.lb .close{top:28px;right:8px;transform:none;font-size:1.6rem}
 footer{margin-top:96px;border-top:1px solid var(--line);padding-block:20px 24px;color:var(--dim);font-size:.85rem}
 footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 footer a{text-decoration:none}
@@ -52,14 +61,15 @@ footer a{text-decoration:none}
 </div></header>
 
 <div class="hero">
-  <!-- <img id="hero" src="img/hero-2560.jpg" srcset="img/hero-1280.jpg 1280w, img/hero-2560.jpg 2560w" sizes="100vw" alt="..."> -->
   <h1>Photos</h1>
 </div>
 <div class="swatches" id="sw" aria-hidden="true"></div>
 
 <main class="wrap">
-  <p class="soon">Photographs are on their way.</p>
+  <ul class="grid" id="grid" aria-label="Photographs"></ul>
 </main>
+<dialog class="lb" id="lb" aria-label="Photograph"><img id="lbimg" alt=""><p id="lbcap"></p>
+  <button class="prev" id="lbprev" type="button" aria-label="Previous photograph">‹</button><button class="next" id="lbnext" type="button" aria-label="Next photograph">›</button><button class="close" id="lbclose" type="button" aria-label="Close">✕</button></dialog>
 
 <footer><div class="wrap"><span>Bucatini Mickey · Photos</span><span><a href="https://www.instagram.com/bucatini_mickey/">Instagram ↗</a> · <a href="../">Portfolio</a></span></div></footer>
 </div>
@@ -87,9 +97,31 @@ footer a{text-decoration:none}
     document.getElementById('bg').style.background=`linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.25)),url(${img.currentSrc||img.src}) center/cover`;
     document.getElementById('sw').innerHTML=byCount.slice(0,8).map(c=>`<i style="background:${css(c)}"></i>`).join('');
   }
-  const img=document.getElementById('hero');
+  /* the photographs, from assets/library.json (made by tools/photos.py): a different one heads the page each visit
+     and gives it its colours; the rest are laid out below, each shown first as its tiny blurred preview */
+  let img=null;
   const apply=()=>{if(img&&img.complete&&img.naturalWidth)theme(img)};
-  if(img) img.addEventListener('load',apply);
+  const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const set_=(ph,k)=>`../${ph.files[k]}`;
+  fetch('../assets/library.json').then(r=>r.ok?r.json():{photos:[]}).then(d=>{
+    const P=(d.photos||[]); if(!P.length) return;
+    const wide=P.filter(p=>p.w>=p.h), h=(wide.length?wide:P)[Math.floor(Math.random()*(wide.length||P.length))];
+    img=new Image(); img.id='hero'; img.alt=h.alt||''; img.decoding='async'; img.fetchPriority='high';
+    img.style.backgroundImage=`url(${h.preview})`;
+    img.sizes='100vw'; img.srcset=`${set_(h,1280)} 1280w, ${set_(h,2560)} 2560w`; img.src=set_(h,1280);
+    img.addEventListener('load',apply); document.querySelector('.hero').prepend(img);
+    const grid=document.getElementById('grid');
+    grid.innerHTML=P.map((p,i)=>`<li><button type="button" data-i="${i}" aria-label="Open: ${esc(p.alt||'photograph '+(i+1))}"><img loading="lazy" decoding="async" width="${p.w}" height="${p.h}" alt="${esc(p.alt)}" style="background-image:url(${p.preview})" sizes="(max-width:700px) 92vw, 320px" srcset="${set_(p,640)} 640w, ${set_(p,1280)} 1280w" src="${set_(p,640)}"></button></li>`).join('');
+    // the light box
+    const lb=document.getElementById('lb'), li=document.getElementById('lbimg'), cap=document.getElementById('lbcap'); let at=0;
+    const show=i=>{ at=(i+P.length)%P.length; const p=P[at]; li.style.backgroundImage=`url(${set_(p,1280)})`; li.alt=p.alt||''; li.src=set_(p,2560); cap.textContent=p.alt||'' };
+    grid.addEventListener('click',e=>{const b=e.target.closest('button[data-i]'); if(!b) return; show(+b.dataset.i); lb.showModal()});
+    document.getElementById('lbprev').onclick=()=>show(at-1); document.getElementById('lbnext').onclick=()=>show(at+1); document.getElementById('lbclose').onclick=()=>lb.close();
+    lb.addEventListener('click',e=>{if(e.target===lb) lb.close()});
+    lb.addEventListener('keydown',e=>{if(e.key==='ArrowLeft') show(at-1); if(e.key==='ArrowRight') show(at+1)});
+    let x0=null; lb.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
+    lb.addEventListener('touchend',e=>{if(x0===null) return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>50) show(at+(dx<0?1:-1)); x0=null});
+  }).catch(()=>{});
   const set=m=>{if(m==='light')root.dataset.theme='light';else delete root.dataset.theme;btn.textContent=m==='light'?'Dark':'Light';root.style.cssText='';apply()};
   let m='dark';try{m=localStorage.getItem('bm-theme')||'dark'}catch(e){}
   set(m); btn.onclick=()=>{m=m==='dark'?'light':'dark';try{localStorage.setItem('bm-theme',m)}catch(e){}set(m)};

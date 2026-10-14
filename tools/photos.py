@@ -7,7 +7,8 @@
 #     on the long side (never enlarged), to photos/img/<name>-<size>.webp;
 #   - writes no metadata at all into the copies, so location (GPS), camera and date never leave the PC;
 #   - records each photo in assets/library.json: its files, size, a dominant colour, and a tiny blurred preview
-#     (a 16 px wide data URI) for pages to show while the real image loads.
+#     (a 16 px wide data URI) for pages to show while the real image loads, and an 'alt' description (written by
+#     hand into library.json; kept when the photo is remade).
 # Originals are never copied or changed. Photos already converted are skipped unless the original is newer.
 # A photo can be left out by putting a '_' at the start of its file name.
 # The hub's datamosh (assets/scenes.js) and the Photos page read assets/library.json.
@@ -54,7 +55,8 @@ def main(src):
         buf = io.BytesIO(); tiny.save(buf, 'WEBP', quality=50)
         r, g, b = im.resize((1, 1), Image.LANCZOS).getpixel((0, 0))
         photos.append({'id': pid, 'src': files[1280], 'files': files, 'w': W, 'h': H,
-                       'colour': f'#{r:02x}{g:02x}{b:02x}', 'preview': 'data:image/webp;base64,' + base64.b64encode(buf.getvalue()).decode()})
+                       'colour': f'#{r:02x}{g:02x}{b:02x}', 'preview': 'data:image/webp;base64,' + base64.b64encode(buf.getvalue()).decode(),
+                       'alt': old.get(pid, {}).get('alt', '')})
         print('made', pid, f'{W}x{H}')
     keep = {p['id'] for p in photos}
     for f in os.listdir(out_dir):                                  # remove copies of photos no longer in the folder
