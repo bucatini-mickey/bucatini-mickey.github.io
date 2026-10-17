@@ -104,7 +104,7 @@ a.room:hover .go{text-decoration:underline;text-underline-offset:4px}
 <div class="page">
 <header class="bar"><div class="bar-in">
   <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="./" aria-current="true" title="Bucatini Mickey: films, games, photos and other hobbies"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
-  <nav class="pages" aria-label="Pages"><a href="game-dev/">Games</a><a href="photos/">Photos</a><a href="art/">Art</a><a href="films/">Film</a><a href="writing/">Writing</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
+  <nav class="pages" aria-label="Pages"><a href="game-dev/">Games</a><a href="films/">Film</a><a href="writing/">Writing</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 <header class="wrap mast">
     <div class="title"><h1>Bucatini Mickey</h1></div>
@@ -119,24 +119,6 @@ a.room:hover .go{text-decoration:underline;text-underline-offset:4px}
       <span class="go">Enter →</span>
     </div>
     <span class="soon">Play</span>
-  </a>
-  <a class="room" href="photos/">
-    <span class="enso" aria-hidden="true"></span>
-    <div>
-      <h2>Photos</h2>
-      <p>Photographs, shown large.</p>
-      <span class="go">Enter →</span>
-    </div>
-    <dl class="stats"><div><dt>Photographs</dt><dd data-count="gallery">&nbsp;</dd></div></dl>
-  </a>
-  <a class="room" href="art/">
-    <span class="enso" aria-hidden="true"></span>
-    <div>
-      <h2>Art</h2>
-      <p>Paintings, mostly watercolour and acrylic.</p>
-      <span class="go">Enter →</span>
-    </div>
-    <dl class="stats"><div><dt>Paintings</dt><dd data-count="painting">&nbsp;</dd></div></dl>
   </a>
   <a class="room" href="films/">
     <span class="enso" aria-hidden="true"></span>
@@ -159,8 +141,6 @@ a.room:hover .go{text-decoration:underline;text-underline-offset:4px}
 </main>
 <footer class="wrap"><span>Bucatini Mickey</span><span><a href="https://letterboxd.com/bucatini_mickey/">Letterboxd ↗</a> · <a href="https://www.instagram.com/bucatini_mickey/">Instagram ↗</a> · <a href="https://github.com/bucatini-mickey">GitHub ↗</a></span></footer>
 </div>
-<script>/* room counts from the photo library */
-fetch('assets/library.json').then(r=>r.ok?r.json():{}).then(d=>{const P=d.photos||[];document.querySelectorAll('[data-count]').forEach(e=>{e.textContent=P.filter(p=>(p.tags||[]).includes(e.dataset.count)).length})}).catch(()=>{});</script>
 <script src="assets/mosh.js"></script>
 <script src="assets/hub.js"></script>
 <script>
