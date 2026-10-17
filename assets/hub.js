@@ -148,7 +148,7 @@ void main(){
         const im=new Image(); im.onload=()=>{ waitLast=false; if(cur.kind!=='ink'||performance.now()-t0>4000) return;
         const tx=gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D,tx); gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,im);
         for(const [a,b] of [[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR],[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D,a,b);
-        cur={kind:'photo',tx,w:im.naturalWidth,h:im.naturalHeight,pan:[0,0],still:true,t0:0}; cutAt=(performance.now()-t0)/1000+1.5+Math.random()*1.5 }; im.src=last.src } }catch(e){}
+        cur={kind:'photo',tx,w:im.naturalWidth,h:im.naturalHeight,pan:[0,0],still:true,t0:0,alt:'The page you just left'}; dispatchEvent(new CustomEvent('hubscene',{detail:cur.alt})); cutAt=(performance.now()-t0)/1000+1.5+Math.random()*1.5 }; im.src=last.src } }catch(e){}
     function pick(t){
       if(next&&(cur.kind!=='photo'||Math.random()<.82)){ const s=next; next=null; setTimeout(load,1500); return s }   // photo after photo, with the odd ink between
       if(cur.kind==='ink') return null;
@@ -156,7 +156,7 @@ void main(){
       return k==='julia'?{kind:k,path:JPATH[Math.floor(Math.random()*JPATH.length)],rot:Math.random()*6.28}:k==='ink'?{kind:k,hue:Math.random()}:{kind:k};
     }
     function draw(t){
-      if(t>cutAt){ const s=pick(t); if(s){ if(old&&old.tx&&old!==s) gl.deleteTexture(old.tx); old=cur; cur=s; cur.t0=t; dispatchEvent(new CustomEvent('hubscene',{detail:cur.kind==='photo'?(cur.alt||''):'Ink, folding over itself'})) }
+      if(t>cutAt){ const s=pick(t); if(s){ if(old&&old.tx&&old!==s) gl.deleteTexture(old.tx); old=cur; cur=s; cur.t0=t; dispatchEvent(new CustomEvent('hubscene',{detail:cur.kind==='photo'?(cur.alt||'A photograph'):'Ink, folding over itself'})) }
         else { cutAt=t+1; return draw.call(this,t) }
         cutAt=t+8+Math.random()*14;                                            // irregular: 8 to 22 seconds
         if(mosh) mosh.cut(t) }

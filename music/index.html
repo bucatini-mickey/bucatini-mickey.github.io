@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Music · Bucatini Mickey</title>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<link rel="preload" href="../assets/fonts/mulish-500-latin.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="description" content="Playlists I've made on Spotify, and the artists I've been playing.">
+<style>
+/* ---- Spotify ----
+   Music is laid out like my Spotify profile, in its colours: near-black, raised greys, the green play button that
+   rises into a card when it's pointed at. One player sits under the header: it opens on Off The Sea, and choosing
+   any playlist or artist loads that into it. Names and covers come from music/playlists.json, which
+   tools/spotify.py fills from music/showcase.json (edited by hand) through Spotify's public oEmbed. */
+:root{
+  --bg:#121212; --bg2:#1f1f1f; --bg3:#2a2a2a; --ink:#fff; --dim:#b3b3b3; --line:#2a2a2a; --acc:#1ed760; --sea:#1d4e5c;
+  --f-disp:'Mulish',system-ui,sans-serif; --f-body:'Mulish',system-ui,sans-serif; --f-mono:'IBM Plex Mono',ui-monospace,monospace;
+  --here-size:1.05rem; color-scheme:dark}
+:root[data-theme="light"]{--bg:#f6f6f6; --bg2:#ececec; --bg3:#e0e0e0; --ink:#121212; --dim:#5e5e5e; --line:#dcdcdc; --acc:#1a9e4b; --sea:#8fc3cf; color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--f-body)}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.wrap{padding-inline:clamp(18px,4vw,36px)}
+body .page{box-shadow:0 30px 80px -40px #000,0 0 0 1px var(--line);overflow:hidden}
+.mode{background:none;border:0;padding:4px 0;cursor:pointer;color:var(--dim)}
+
+/* header: the profile's gradient, here the colour of the sea */
+.sphead{display:flex;align-items:flex-end;gap:clamp(16px,3vw,28px);padding-block:56px 26px;
+  background:linear-gradient(to bottom,var(--sea),color-mix(in srgb,var(--sea) 40%,var(--bg)))}
+.av{width:clamp(108px,18vw,196px);aspect-ratio:1;border-radius:50%;flex:none;display:grid;place-items:center;
+  font:800 clamp(2.2rem,5vw,4rem)/1 var(--f-body);color:var(--dim);background:var(--bg3);box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.kind{margin:0;font-size:.8rem;font-weight:700}
+.sphead h1{margin:2px 0 10px;font:900 clamp(2.4rem,8vw,5.6rem)/1 var(--f-body);letter-spacing:-.04em}
+.sphead .sub{margin:0;font-size:.88rem;color:color-mix(in srgb,var(--ink) 80%,transparent)}
+.sphead .sub a{font-weight:700;text-decoration:none}.sphead .sub a:hover{text-decoration:underline}
+@media (max-width:620px){.sphead{flex-direction:column;align-items:flex-start;padding-top:36px}}
+
+.body{padding-block:24px 56px;background:linear-gradient(to bottom,color-mix(in srgb,var(--sea) 22%,var(--bg)),var(--bg) 240px)}
+.sph{display:flex;justify-content:space-between;align-items:baseline;margin:34px 0 12px;font:800 1.45rem/1.2 var(--f-body);letter-spacing:-.01em}
+.sph:first-child{margin-top:0}
+.sph small{font:700 .82rem var(--f-body);color:var(--dim)}
+
+/* the player and what's in it */
+.now{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:clamp(16px,3vw,32px);align-items:start}
+.now .lab{margin:0;font-size:.8rem;font-weight:700;color:var(--dim)}
+.now h2{margin:2px 0 10px;font:900 clamp(1.8rem,4.5vw,3rem)/1.05 var(--f-body);letter-spacing:-.03em}
+.now p{margin:0 0 12px;color:var(--dim);max-width:46ch;font-size:.95rem}
+.now .open{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;font-weight:700;text-decoration:none;color:var(--ink);
+  border:1px solid color-mix(in srgb,var(--ink) 40%,transparent);border-radius:99px;padding:6px 16px}
+.now .open:hover{border-color:var(--ink);transform:scale(1.03)}
+.player{border-radius:12px;overflow:hidden;background:var(--bg2);min-height:352px}
+.player iframe{display:block;width:100%;height:352px;border:0}
+@media (max-width:760px){.now{grid-template-columns:1fr}}
+
+/* cards: square covers (round for artists); the green play button rises in when pointed at */
+.cards{list-style:none;margin:0 -10px;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:4px}
+.card{display:block;width:100%;padding:10px;border:0;border-radius:8px;background:none;text-align:left;cursor:pointer;transition:background .2s}
+.card:hover,.card:focus-visible,.card[aria-current="true"]{background:var(--bg2)}
+.cv{position:relative;display:block;aspect-ratio:1;border-radius:6px;overflow:hidden;background:var(--bg3);box-shadow:0 8px 24px rgba(0,0,0,.4);margin-bottom:10px}
+.cv img{display:block;width:100%;height:100%;object-fit:cover}
+.round .cv{border-radius:50%;overflow:visible}.round .cv img{border-radius:50%}
+.play{position:absolute;right:8px;bottom:8px;width:46px;height:46px;border-radius:50%;background:var(--acc);display:grid;place-items:center;
+  box-shadow:0 8px 16px rgba(0,0,0,.35);opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s}
+.play::before{content:"";margin-left:4px;border-left:13px solid #000;border-block:8px solid transparent}
+.card:hover .play,.card:focus-visible .play,.card[aria-current="true"] .play{opacity:1;transform:none}
+.card b{display:block;font-weight:700;font-size:.95rem;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card span.k{display:block;font-size:.85rem;color:var(--dim)}
+@media (max-width:520px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.play{width:38px;height:38px}}
+
+footer{border-top:1px solid var(--line);padding-block:22px 40px;color:var(--dim);font-size:.85rem;display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
+footer a{text-decoration:none}footer a:hover{color:var(--acc)}
+</style>
+<link rel="stylesheet" href="../assets/bar.css">
+</head>
+<body>
+<div class="page">
+<header class="bar"><div class="bar-in">
+  <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="../" aria-current="true" title="Bucatini Mickey: films, games, music and other hobbies"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
+  <nav class="pages" aria-label="Pages"><a href="../game-dev/">Games</a><a href="../films/">Film</a><a href="./" aria-current="page">Music</a><a href="../writing/">Writing</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
+</div></header>
+<header class="wrap sphead">
+  <span class="av" aria-hidden="true">JS</span>
+  <div><p class="kind">Profile</p><h1>Jason Summers</h1><p class="sub"><a href="https://open.spotify.com/user/jmsummers98">Public playlists on Spotify ↗</a></p></div>
+</header>
+<main class="wrap body">
+  <section class="now" aria-live="polite">
+    <div><p class="lab" id="lab">Playlist</p><h2 id="nt">Off The Sea</h2><p id="nd">The playlist for Off the Sea, a channel I'm building: music to put on and drift out to.</p>
+      <a class="open" id="open" href="https://open.spotify.com/playlist/5aH5ru8QSI6rbxSOQ2ug6X">Open in Spotify ↗</a></div>
+    <div class="player"><iframe id="player" title="Spotify player: Off The Sea" src="https://open.spotify.com/embed/playlist/5aH5ru8QSI6rbxSOQ2ug6X?theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>
+  </section>
+  <div id="lists"></div>
+</main>
+<footer class="wrap"><span>Bucatini Mickey</span><span><a href="https://open.spotify.com/user/jmsummers98">Spotify ↗</a> · <a href="https://letterboxd.com/bucatini_mickey/">Letterboxd ↗</a> · <a href="https://github.com/bucatini-mickey">GitHub ↗</a></span></footer>
+</div>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const esc=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const notes={'5aH5ru8QSI6rbxSOQ2ug6X':"The playlist for Off the Sea, a channel I'm building: music to put on and drift out to."};
+  const card=(x,kind)=>`<li><button type="button" class="card${kind==='artist'?' round':''}" data-k="${kind}" data-id="${esc(x.id)}" data-t="${esc(x.t)}"><span class="cv"><img src="${esc(x.img)}" alt="" loading="lazy" width="300" height="300"><span class="play" aria-hidden="true"></span></span><b>${esc(x.t)}</b><span class="k">${kind==='artist'?'Artist':'Playlist'}</span></button></li>`;
+  const row=(h,xs,kind,more)=>xs.length?`<h2 class="sph">${h}${more?` <small><a href="${more}">Show all ↗</a></small>`:''}</h2><ul class="cards">${xs.map(x=>card(x,kind)).join('')}</ul>`:'';
+  // load a playlist or an artist into the player
+  function play(kind,id,t){
+    $('player').src=`https://open.spotify.com/embed/${kind}/${id}?theme=0`; $('player').title='Spotify player: '+t;
+    $('lab').textContent=kind==='artist'?'Artist':'Playlist'; $('nt').textContent=t;
+    $('nd').textContent=notes[id]||(kind==='artist'?'Someone I’ve been playing lately.':'One of my public playlists.');
+    $('open').href=`https://open.spotify.com/${kind}/${id}`;
+    document.querySelectorAll('.card').forEach(c=>c.setAttribute('aria-current',String(c.dataset.id===id)));
+  }
+  fetch('playlists.json').then(r=>r.ok?r.json():null).then(d=>{ if(!d) return;
+    const f=d.featured&&d.featured.id, show=(d.showcase||[]).filter(x=>x.id!==f);
+    const prof=`https://open.spotify.com/user/${d.user}`;
+    $('lists').innerHTML=row('Showcase',show,'playlist')+row('Public playlists',d.profile||[],'playlist',prof+'/playlists')+row('Recently played artists',d.artists||[],'artist');
+    $('lists').querySelectorAll('.card').forEach(c=>c.onclick=()=>{ play(c.dataset.k,c.dataset.id,c.dataset.t); document.querySelector('.now').scrollIntoView({behavior:'smooth',block:'start'}) });
+    document.querySelectorAll('.card').forEach(c=>c.setAttribute('aria-current',String(c.dataset.id===f)));
+  }).catch(()=>{});
+})();
+/* dark by default; light only when the visitor picks it (remembered in this browser) */
+(function(){
+  const root=document.documentElement, btn=document.getElementById('mode');
+  const set=m=>{if(m==='light')root.dataset.theme='light';else delete root.dataset.theme;if(btn)btn.textContent=m==='light'?'Dark':'Light'};
+  let m='dark';try{m=localStorage.getItem('bm-theme')||'dark'}catch(e){}
+  set(m); if(btn)btn.onclick=()=>{m=m==='dark'?'light':'dark';try{localStorage.setItem('bm-theme',m)}catch(e){}set(m)};
+})();
+</script>
+<script src="../assets/bar.js" defer></script>
+</body>
+</html>
