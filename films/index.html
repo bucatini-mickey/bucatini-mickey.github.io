@@ -177,7 +177,9 @@ h1,.sec h2,.four h2{text-shadow:-1.2px 0 rgba(255,50,70,.38),1.2px 0 rgba(40,210
 .mast h1{text-shadow:-2px 0 rgba(255,50,70,.45),2px 0 rgba(40,210,255,.38),0 2px 18px rgba(0,0,0,.55)}
 .grain{position:fixed;inset:-50%;z-index:30;pointer-events:none;opacity:.075;mix-blend-mode:overlay;background-size:160px 160px}
 :root[data-theme="light"] .grain{opacity:.05;mix-blend-mode:multiply}
-@media (prefers-reduced-motion:no-preference){.grain{animation:grain .5s steps(5) infinite}}
+/* on phones the grain stays still and is not blended (blending the whole page every step is costly there) */
+/* the grain stays still: moving it re-blends the whole page several times a second, which costs more than it gives */
+@media (max-width:899px),(pointer:coarse){.grain{mix-blend-mode:normal;opacity:.045}}
 @keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-7%,3%)}40%{transform:translate(4%,-6%)}60%{transform:translate(-3%,8%)}80%{transform:translate(8%,-2%)}100%{transform:translate(0,0)}}
 .mast{position:relative;padding-top:clamp(150px,26vh,230px);overflow:hidden}
 .mast>*{position:relative;z-index:1}
@@ -226,7 +228,7 @@ document.getElementById('grain').style.backgroundImage=`url(${c.toDataURL()})`})
 <div class="page windowed">
 <header class="bar"><div class="bar-in">
   <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="../" aria-current="true" title="Bucatini Mickey: films, games, photos and other hobbies"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
-  <nav class="pages" aria-label="Pages"><a href="../films/" aria-current="page">Film</a><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="../writing/">Writing</a><a href="../art/">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
+  <nav class="pages" aria-label="Pages"><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="../art/">Art</a><a href="../films/" aria-current="page">Film</a><a href="../writing/">Writing</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 <header class="wrap mast window">
   <img class="still" src="https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1200-1200-675-675-crop-000000.jpg?v=1e6d6ff5ca" srcset="https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-960-960-540-540-crop-000000.jpg?v=1e6d6ff5ca 960w, https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1200-1200-675-675-crop-000000.jpg?v=1e6d6ff5ca 1200w, https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1920-1920-1080-1080-crop-000000.jpg?v=1e6d6ff5ca 1920w" sizes="(max-width:1040px) 100vw, 960px" alt="Mephistopheles and his devils, marionettes in Švankmajer's Faust (1994): my Letterboxd backdrop">
@@ -622,18 +624,24 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
         c.drawImage(mist,-off,y,mw,mh); c.drawImage(mist,mw-off,y,mw,mh) }
       c.globalAlpha=1 }
   }
-  function size(){dpr=Math.min(2,devicePixelRatio||1); W=innerWidth; H=innerHeight; cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); paintSet(); rows=[0,1,2,3].map(paintRow); paintDrape(); paintBand()}
+  function size(){dpr=Math.min(innerWidth<700?1:2,devicePixelRatio||1); W=innerWidth;   // a soft painted set: full resolution is wasted on a phone
+    H=innerHeight; cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); paintSet(); rows=[0,1,2,3].map(paintRow); paintDrape(); paintBand()}
+  let lastP=-1;
   function draw(t){
-    const c=cv.getContext('2d'); c.setTransform(1,0,0,1,0,0); c.drawImage(set,0,0); c.setTransform(dpr,0,0,dpr,0,0);
-    for(let i=0;i<4;i++){ const R=rows[i], sway=(i%2?1:-1)*Math.sin(t*.7+i*1.3)*R.P*.32, bob=Math.sin(t*.9+i)*4; c.drawImage(R.img,R.x+sway,R.y+bob,R.w,R.h) }
     const room=document.documentElement.scrollHeight-innerHeight, p=Math.max(0,Math.min(1,scrollY/Math.max(120,Math.min(innerHeight*.6,room*.6))));   // opens within the first stretch of scrolling, however short the page
-    light(c,t,p);
+    if(p===0&&lastP===0) return;                                                // the curtain is shut and nothing behind it shows
+    lastP=p;
+    const c=cv.getContext('2d'); c.setTransform(1,0,0,1,0,0);
+    if(p>0){ c.drawImage(set,0,0); c.setTransform(dpr,0,0,dpr,0,0);
+      for(let i=0;i<4;i++){ const R=rows[i], sway=(i%2?1:-1)*Math.sin(t*.7+i*1.3)*R.P*.32, bob=Math.sin(t*.9+i)*4; c.drawImage(R.img,R.x+sway,R.y+bob,R.w,R.h) }
+      light(c,t,p) } else c.setTransform(dpr,0,0,dpr,0,0);
     curtain(c,p,t);
     c.drawImage(band,0,0,W,band.height/dpr);
   }
   let last=0,t0=performance.now();
-  function loop(ts){ if(!document.hidden&&ts-last>33){last=ts;draw((ts-t0)/1000)} requestAnimationFrame(loop) }
-  addEventListener('resize',()=>{size();draw((performance.now()-t0)/1000)});
+  const step=matchMedia('(pointer:coarse)').matches||innerWidth<700?66:41;   // 24 frames a second, like film; 15 on a phone
+  function loop(ts){ if(!document.hidden&&ts-last>step){last=ts;draw((ts-t0)/1000)} requestAnimationFrame(loop) }
+  addEventListener('resize',()=>{size();lastP=-1;draw((performance.now()-t0)/1000)});
   if(still) addEventListener('scroll',()=>requestAnimationFrame(()=>draw(0)),{passive:true});
   textures(); size(); draw(0); if(!still) requestAnimationFrame(loop);
 })();

@@ -72,7 +72,7 @@ body .page{--glass:95%}
 <div class="page windowed">
 <header class="bar"><div class="bar-in">
   <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="../" aria-current="true" title="Bucatini Mickey: films, games, photos and other hobbies"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
-  <nav class="pages" aria-label="Pages"><a href="../films/">Film</a><a href="./" aria-current="page">Games</a><a href="../photos/">Photos</a><a href="../writing/">Writing</a><a href="../art/">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
+  <nav class="pages" aria-label="Pages"><a href="./" aria-current="page">Games</a><a href="../photos/">Photos</a><a href="../art/">Art</a><a href="../films/">Film</a><a href="../writing/">Writing</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 
 <div class="status"><span id="where">TACHYON  world <b id="dims">--</b>  seed <b id="seed">--</b></span>
@@ -265,7 +265,8 @@ body .page{--glass:95%}
     const q=+new URLSearchParams(location.search).get('seed'), m=WorldGen(q||Math.floor(Math.random()*1e6),200,rows);
     W=m.w;H=m.h;seedTxt=m.seed; cells=m.cells;
     document.getElementById('dims').textContent=W+'x'+H; document.getElementById('seed').textContent=m.seed;
-    seed(); document.fonts?.ready.then(paint); paint();
+    seed(); let painted=false; const once=()=>{ if(!painted){ painted=true; paint() } };   // drawn once, when the font is in (or after 400 ms)
+    document.fonts?.ready.then(once); setTimeout(once,400);
     if(!matchMedia('(prefers-reduced-motion: reduce)').matches) requestAnimationFrame(tick);
   })();
   let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(()=>{seed();paint()},150)});

@@ -55,7 +55,7 @@ footer a{text-decoration:none}
 <div class="page">
 <header class="bar"><div class="bar-in">
   <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="../" aria-current="true" title="Bucatini Mickey: films, games, photos and other hobbies"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
-  <nav class="pages" aria-label="Pages"><a href="../films/">Film</a><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="./" aria-current="page">Writing</a><a href="../art/">Art</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
+  <nav class="pages" aria-label="Pages"><a href="../game-dev/">Games</a><a href="../photos/">Photos</a><a href="../art/">Art</a><a href="../films/">Film</a><a href="./" aria-current="page">Writing</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 
 <div class="shot">
@@ -119,14 +119,15 @@ footer a{text-decoration:none}
       }
     }
     trail(W*.04,mx-16*s,3); trail(W*.96,mx+14*s,9);
-    ground=c.getImageData(0,0,fc.width,fc.height);
+    ground=document.createElement('canvas'); ground.width=fc.width; ground.height=fc.height; ground.getContext('2d').drawImage(fc,0,0);   // kept as a picture: redrawn each frame on the GPU
     flakes=Array.from({length:Math.round(W*H/9000)},()=>({x:r()*W,y:r()*H,z:.3+r()*.7,s:r()}));
   }
-  let falling=false;
-  function fall(){
+  let falling=false, lastFall=0;
+  function fall(ts){
     if(!ground) return;
+    if(!still&&ts&&ts-lastFall<40){ requestAnimationFrame(fall); return } lastFall=ts||0;   // 25 frames a second is plenty for snow
     const c=fc.getContext('2d'), dpr=Math.min(2,devicePixelRatio||1), W=fc.clientWidth, H=fc.clientHeight, night=root.dataset.theme!=='light';
-    c.setTransform(1,0,0,1,0,0); c.putImageData(ground,0,0); c.setTransform(dpr,0,0,dpr,0,0);
+    c.setTransform(1,0,0,1,0,0); c.drawImage(ground,0,0); c.setTransform(dpr,0,0,dpr,0,0);
     c.fillStyle=night?'rgba(235,235,232,.75)':'rgba(255,255,255,.95)';
     for(const f of flakes){
       if(!still){f.y+=.25+f.z*.6; f.x+=Math.sin((f.y+f.s*300)/90)*.25*f.z; if(f.y>H+4){f.y=-4;f.x=Math.random()*W}}
