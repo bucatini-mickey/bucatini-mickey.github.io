@@ -157,88 +157,148 @@ span.th{background:none}
 .empty{color:var(--dim);margin:0}
 @media (max-width:620px){.grp>.inner,.body,.tree,#tagres{padding-left:10px}}
 
-/* ---- the theatre ---- */
-/* Around the page: a red curtain that parts as you scroll, on a Czech puppet-theatre set of painted flats
-   (sky cloth, cloud flats, rocking wave flats, the boards). On the page: my Letterboxd backdrop (Faust) hung as
-   the stage picture behind the title, and my top four in gilt frames. */
-h1,.sec h2,.grp>summary .nm{font-variation-settings:"SOFT" 100,"WONK" 1,"opsz" 96}
-h1{font-weight:500;letter-spacing:0}
-.sec h2{font-weight:500}
-body{background:#120204}
-/* the stage: a gilded frame round the page */
-.page{box-shadow:0 0 0 2px #a8884a,0 0 0 8px #6e5226,0 0 0 10px #2a1c0a,0 40px 90px -30px #000}
-/* old film: the lens splits colour a little at every edge (chromatic aberration, drawn once by the SVG filter
-   #ca, so it costs nothing per frame), the titles are fringed red and cyan, and a fine grain flickers over all */
-.mast img.still{filter:url(#ca)}
-:root:not([data-theme="light"]) .mast img.still{filter:url(#ca) saturate(.55) brightness(.62) contrast(1.12)}
-.four img{filter:url(#ca)}
-.posters img:hover{filter:url(#ca2)}
-h1,.sec h2,.four h2{text-shadow:-1.2px 0 rgba(255,50,70,.38),1.2px 0 rgba(40,210,255,.32)}
-.mast h1{text-shadow:-2px 0 rgba(255,50,70,.45),2px 0 rgba(40,210,255,.38),0 2px 18px rgba(0,0,0,.55)}
-.grain{position:fixed;inset:-50%;z-index:30;pointer-events:none;opacity:.075;mix-blend-mode:overlay;background-size:160px 160px}
-:root[data-theme="light"] .grain{opacity:.05;mix-blend-mode:multiply}
-/* on phones the grain stays still and is not blended (blending the whole page every step is costly there) */
-/* the grain stays still: moving it re-blends the whole page several times a second, which costs more than it gives */
-@media (max-width:899px),(pointer:coarse){.grain{mix-blend-mode:normal;opacity:.045}}
-@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-7%,3%)}40%{transform:translate(4%,-6%)}60%{transform:translate(-3%,8%)}80%{transform:translate(8%,-2%)}100%{transform:translate(0,0)}}
-.mast{position:relative;padding-top:clamp(150px,26vh,230px);overflow:hidden}
-.mast>*{position:relative;z-index:1}
-.mast img.still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 28%;z-index:0;display:block}
-/* the still is hung like a painted back-cloth: a faint canvas weave and a darkened edge */
-.mast::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.35;mix-blend-mode:overlay;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"),
-  repeating-linear-gradient(90deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px),repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0 1px,transparent 1px 3px)}
-/* my top four, in gilt frames */
-.four{padding-block:8px 36px}
-.four h2{font:500 .72rem/1 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin:0 0 16px}
-.four ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,2.4vw,26px)}
-.four a{display:flex;flex-direction:column;gap:4px;text-decoration:none}
-.four .frame{display:block;padding:5px;background:linear-gradient(135deg,#f0d38a,#a67a28 45%,#e8c56e 60%,#7a5518);box-shadow:0 0 0 1px #4a3412,0 14px 30px -14px #000;transition:transform .25s}
-.four img{display:block;width:100%;height:auto;aspect-ratio:2/3;object-fit:cover;box-shadow:inset 0 0 0 1px rgba(0,0,0,.4)}
-.four b{margin-top:7px;font:500 .78rem/1.2 var(--f-body);color:var(--dim)}
-.four small{display:none}
-.four a:hover .frame{transform:translateY(-4px)}
-.four a:hover b{color:var(--acc)}
-@media (max-width:560px){.four ol{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.mast::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(to bottom,transparent 30%,color-mix(in srgb,var(--bg) 70%,transparent) 62%,color-mix(in srgb,var(--bg) var(--glass),transparent) 96%);pointer-events:none}
-.mast h1{color:#f6ead0;text-shadow:0 2px 18px rgba(0,0,0,.55)}
-:root[data-theme="light"] .mast h1{color:#2a1a12;text-shadow:0 1px 14px rgba(255,245,225,.8)}
-.sec h2{margin-top:40px}
-/* on a phone the title is a window onto the stage: the still steps aside and the set and curtain show through */
-@media (max-width:620px){.mast img.still,.mast::before,.mast::after{display:none}.mast{display:flex;flex-direction:column;justify-content:flex-end}
-  .mast h1,.mast .lede,.mast .crumb{text-shadow:0 2px 16px rgba(0,0,0,.85),0 0 3px rgba(0,0,0,.6)}}
-.enso{border-color:var(--gilt);border-right-color:transparent}
-.tabs{background:var(--bg)}
-.tabs button[aria-selected="true"]{border-bottom-color:var(--acc)}
+/* ---- Letterboxd ----
+   The page is laid out like my Letterboxd profile, in its colours: slate blue-grey, the three dots' orange,
+   green and blue, posters with a thin pale edge that lights green when pointed at. A backdrop still (Faust)
+   fades into the page at the top, as on a Letterboxd profile. Views: Profile (favourites, recent activity,
+   reviews, ratings, lists), Diary, Reviews and Lists (the full index of my lists). Recent films come from
+   films/recent.json, which tools/letterboxd.py refreshes daily from my public RSS feed. */
+:root{--bg:#14181c;--bg2:#1c2228;--ink:#e3e8ec;--dim:#9ab;--line:#2c3440;--acc:#00e054;--lbo:#ff8000;--lbg:#00e054;--lbb:#40bcf4;
+  --f-disp:'Mulish',system-ui,sans-serif;--hair:#2c3440;color-scheme:dark}
+:root[data-theme="light"]{--bg:#f4f6f8;--bg2:#e6eaee;--ink:#14181c;--dim:#56636f;--line:#cfd6dd;--acc:#00a83a;--hair:#cfd6dd;color-scheme:light}
+body{background:#14181c}
+:root[data-theme="light"] body{background:#e9edf1}
+.lbback{background:#14181c center 22%/cover no-repeat}
+.lbback::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,24,28,.15),rgba(20,24,28,.6) 40%,#14181c 78%)}
+:root[data-theme="light"] .lbback::after{background:linear-gradient(to bottom,rgba(233,237,241,.1),rgba(233,237,241,.7) 40%,#e9edf1 78%)}
+body .page{box-shadow:0 30px 80px -40px #000,0 0 0 1px var(--line)}
+h1,h2,h3{font-family:var(--f-body)}
+.lbhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px 32px;padding-block:44px 24px}
+.who{display:flex;align-items:center;gap:18px}
+.av{width:72px;height:72px;border-radius:50%;flex:none;display:grid;place-items:center;font:700 1.4rem/1 var(--f-body);color:#14181c;
+  background:conic-gradient(var(--lbo) 0 33.3%,var(--lbg) 0 66.6%,var(--lbb) 0);box-shadow:0 0 0 3px var(--bg),0 0 0 4px var(--line)}
+.who h1{margin:0;font:700 clamp(1.5rem,4vw,2rem)/1.1 var(--f-body);letter-spacing:0;color:var(--ink)}
+.handle{display:inline-block;margin-top:6px;font-size:.85rem;color:var(--dim);text-decoration:none}
+.handle:hover{color:var(--lbb)}
+.lbstats{display:flex;margin:0;gap:0}
+.lbstats div{padding:0 18px;border-left:1px solid var(--line);text-align:center}
+.lbstats div:first-child{border-left:0}
+.lbstats dd{margin:0;font:700 1.5rem/1.1 var(--f-body);color:var(--ink);font-variant-numeric:tabular-nums}
+.lbstats dt{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.lbnav{position:sticky;top:0;z-index:4;background:color-mix(in srgb,var(--bg) 94%,transparent);border-block:1px solid var(--line);display:flex;align-items:center;gap:4px 24px;flex-wrap:wrap;padding-block:0}
+.lbnav button{background:none;border:0;padding:13px 0 11px;cursor:pointer;color:var(--dim);font:600 .78rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;border-bottom:2px solid transparent}
+.lbnav button:hover{color:var(--ink)}
+.lbnav button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--lbg)}
+.lbnav .search{margin-left:auto;flex:0 1 240px}
+.lbnav .search input{width:100%;max-width:none;background:var(--bg2);border:1px solid var(--line);border-radius:3px;padding:6px 10px;font-size:.85rem;color:var(--ink)}
+.lbnav .search input:focus{border-color:var(--lbb);outline:none}
+@media (max-width:620px){.lbnav .search{flex:1 1 100%;margin:0 0 10px}}
+.view{padding-block:28px 64px}
+.lbh{display:flex;justify-content:space-between;align-items:baseline;margin:36px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line);font:600 .78rem/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.lbh:first-child{margin-top:0}
+.lbh a,.lbh button{font:inherit;letter-spacing:inherit;color:var(--dim);text-decoration:none;background:none;border:0;cursor:pointer;padding:0}
+.lbh a:hover,.lbh button:hover{color:var(--ink)}
+/* posters */
+.pgrid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:clamp(6px,1.4vw,12px)}
+.pgrid a{display:block;text-decoration:none;color:inherit}
+.pst{display:block;position:relative;border-radius:4px;overflow:hidden;aspect-ratio:2/3;background:var(--bg2);box-shadow:inset 0 0 0 1px rgba(221,238,255,.25)}
+.pst img{display:block;width:100%;height:100%;object-fit:cover}
+.pst::after{content:"";position:absolute;inset:0;border-radius:4px;box-shadow:inset 0 0 0 1px rgba(221,238,255,.25);transition:box-shadow .15s}
+a:hover .pst::after,a:focus-visible .pst::after{box-shadow:inset 0 0 0 3px var(--lbg)}
+.meta{display:flex;align-items:center;gap:5px;margin-top:6px;font-size:.78rem;color:var(--dim);min-height:1.1em}
+.stars{color:var(--lbg);letter-spacing:.04em;font-size:.8rem}
+.lk{color:var(--lbo)}
+.rw{color:var(--lbb);font-size:.75rem}
+#recent{--n:8}
+@media (max-width:760px){#recent{--n:4}}
+.favs{--n:4}
+.favs .cap{display:block;margin-top:6px;font-size:.78rem;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* reviews */
+.rev{display:grid;grid-template-columns:70px minmax(0,1fr);gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.rev:last-child{border-bottom:0}
+.rev h3{margin:0;font:700 1.05rem/1.25 var(--f-body)}
+.rev h3 a{color:var(--ink);text-decoration:none}.rev h3 a:hover{color:var(--lbb)}
+.rev h3 small{font-weight:400;color:var(--dim);margin-left:6px}
+.rev .meta{margin:4px 0 8px}
+.rev p{margin:0 0 8px;font-size:.92rem;line-height:1.6;color:var(--ink);white-space:pre-line}
+/* ratings */
+.hist{display:grid;grid-template-columns:auto 1fr auto;align-items:end;gap:10px}
+.hist .bars{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;align-items:end;height:64px}
+.hist .bars i{display:block;background:#456;border-radius:1px 1px 0 0;min-height:2px}
+.hist .bars i:hover{background:var(--lbb)}
+.hist .ends{color:var(--lbg);font-size:.8rem}
+/* list cards */
+.lcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px 18px}
+.lcard{display:block;text-decoration:none;color:inherit;cursor:pointer;background:none;border:0;padding:0;text-align:left;font:inherit}
+.stack{display:flex;margin-bottom:8px}
+.stack .pst{width:22%;flex:none;margin-right:-6%;box-shadow:2px 0 6px rgba(0,0,0,.5)}
+.stack .pst:nth-child(1){z-index:5}.stack .pst:nth-child(2){z-index:4}.stack .pst:nth-child(3){z-index:3}.stack .pst:nth-child(4){z-index:2}.stack .pst:nth-child(5){z-index:1}
+.lcard:hover .pst::after{box-shadow:inset 0 0 0 2px var(--lbg)}
+.lcard b{display:block;font:700 .95rem/1.25 var(--f-body);color:var(--ink)}
+.lcard:hover b{color:var(--lbb)}
+.lcard span{font-size:.78rem;color:var(--dim)}
+/* diary */
+.diary{width:100%;border-collapse:collapse;font-size:.9rem}
+.diary th{text-align:left;font:600 .68rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding:6px 8px;border-bottom:1px solid var(--line)}
+.diary td{padding:8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.diary .mo{font:700 .7rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);background:var(--bg2);text-align:center;border-radius:3px;width:52px}
+.diary .mo span{display:block;font-size:1.1rem;letter-spacing:0}
+.diary .day{font:700 1.15rem var(--f-body);color:var(--dim);width:36px;text-align:center}
+.diary .pt{width:36px}.diary .pt .pst{width:34px}
+.diary a.ft{color:var(--ink);font-weight:700;text-decoration:none}.diary a.ft:hover{color:var(--lbb)}
+.diary .yr{color:var(--dim)}
+@media (max-width:620px){.diary .hide-s{display:none}}
+/* the lists index, restyled */
+.tabs{position:static;background:none;border-bottom:1px solid var(--line)}
+.tabs button{font:600 .74rem var(--f-body);letter-spacing:.1em}
+.tabs button[aria-selected="true"]{border-bottom-color:var(--lbb)}
+.sec h2{font:700 1.4rem/1.2 var(--f-body)}
+.grp>summary .nm{font:700 1rem var(--f-body)}
+summary:hover .nm{color:var(--lbb)}
+details[open]>summary .tw::before{color:var(--lbg)}
+.lst .out{color:var(--lbb)}
+.posters img{border-radius:4px;box-shadow:inset 0 0 0 1px rgba(221,238,255,.25)}
+.posters a:hover img{outline:3px solid var(--lbg);outline-offset:-3px;transform:none}
+.enso{display:none}
+.lb{background:none;padding:0;color:var(--lbb)}
 </style>
 <link rel="stylesheet" href="../assets/bar.css">
 </head>
 <body>
-<canvas class="backdrop" id="stage" aria-hidden="true"></canvas>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
-<filter id="ca" color-interpolation-filters="sRGB" x="-2%" width="104%"><feColorMatrix in="SourceGraphic" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" result="r"/><feOffset in="r" dx="-1.6" result="r1"/><feColorMatrix in="SourceGraphic" values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0" result="g"/><feColorMatrix in="SourceGraphic" values="0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0" result="b"/><feOffset in="b" dx="1.6" result="b1"/><feBlend in="r1" in2="g" mode="screen" result="rg"/><feBlend in="rg" in2="b1" mode="screen"/></filter>
-<filter id="ca2" color-interpolation-filters="sRGB" x="-4%" width="108%"><feColorMatrix in="SourceGraphic" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" result="r"/><feOffset in="r" dx="-3" dy="1" result="r1"/><feColorMatrix in="SourceGraphic" values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0" result="g"/><feColorMatrix in="SourceGraphic" values="0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0" result="b"/><feOffset in="b" dx="3" dy="-1" result="b1"/><feBlend in="r1" in2="g" mode="screen" result="rg"/><feBlend in="rg" in2="b1" mode="screen"/></filter>
-</defs></svg>
-<div class="grain" id="grain" aria-hidden="true"></div>
-<script>/* the grain: one tile of noise, made here, slid about by CSS */
-(function(){const c=document.createElement('canvas');c.width=c.height=160;const x=c.getContext('2d'),im=x.createImageData(160,160);
-for(let i=0;i<im.data.length;i+=4){const v=Math.random()*255;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=255}x.putImageData(im,0,0);
-document.getElementById('grain').style.backgroundImage=`url(${c.toDataURL()})`})();</script>
+<div class="backdrop lbback" aria-hidden="true" style="background-image:url(https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1200-1200-675-675-crop-000000.jpg?v=1e6d6ff5ca)"></div>
 
-<div class="page windowed">
+<div class="page">
 <header class="bar"><div class="bar-in">
   <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="../" aria-current="true" title="Bucatini Mickey: films, games, photos and other hobbies"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
   <nav class="pages" aria-label="Pages"><a href="../game-dev/">Games</a><a href="../films/" aria-current="page">Film</a><a href="../writing/">Writing</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
-<header class="wrap mast window">
-  <img class="still" src="https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1200-1200-675-675-crop-000000.jpg?v=1e6d6ff5ca" srcset="https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-960-960-540-540-crop-000000.jpg?v=1e6d6ff5ca 960w, https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1200-1200-675-675-crop-000000.jpg?v=1e6d6ff5ca 1200w, https://a.ltrbxd.com/resized/alternative-backdrop/3/9/9/9/8/tmdb/utM9QM6cjLlp0IqtMw0biDoqdQR-1920-1920-1080-1080-crop-000000.jpg?v=1e6d6ff5ca 1920w" sizes="(max-width:1040px) 100vw, 960px" alt="Mephistopheles and his devils, marionettes in Švankmajer's Faust (1994): my Letterboxd backdrop">
-  <div class="title"><h1>Film Index</h1></div>
-  <p class="lede">Everything I keep on <a class="lb" href="https://letterboxd.com/bucatini_mickey/">Letterboxd</a>.</p>
-  <div class="search"><input id="q" type="search" placeholder="Search lists or films" autocomplete="off" aria-label="Search lists and films"></div>
+<header class="wrap lbhead">
+  <div class="who"><span class="av" aria-hidden="true">JS</span><div><h1>Jason Summers</h1><a class="handle" href="https://letterboxd.com/bucatini_mickey/">@bucatini_mickey on Letterboxd ↗</a></div></div>
+  <dl class="lbstats"><div><dd>815</dd><dt>Films</dt></div><div><dd id="st-year">&nbsp;</dd><dt>This year</dt></div><div><dd id="st-lists">&nbsp;</dd><dt>Lists</dt></div></dl>
 </header>
-<section class="wrap four" aria-label="My top four"><h2>Top four</h2><ol><li><a href="https://letterboxd.com/film/faust/"><span class="frame"><img src="https://a.ltrbxd.com/resized/alternative-poster/3/9/9/9/8/p/fF1RaI7nmLVGhf0IQVYXtmE7QBs-0-300-0-450-crop.jpg?v=bc90199363" alt="Faust (1994) poster" loading="lazy" width="300" height="450"></span><b>Faust</b><small>1994</small></a></li><li><a href="https://letterboxd.com/film/hour-of-the-wolf/"><span class="frame"><img src="https://a.ltrbxd.com/resized/alternative-poster/4/0/4/2/2/p/uHdXOS8AbfbM5fDJ6ro5LWkgmLE-0-300-0-450-crop.jpg?v=aa74304bc2" alt="Hour of the Wolf (1968) poster" loading="lazy" width="300" height="450"></span><b>Hour of the Wolf</b><small>1968</small></a></li><li><a href="https://letterboxd.com/film/portrait-of-a-lady-on-fire/"><span class="frame"><img src="https://a.ltrbxd.com/resized/alternative-poster/4/6/0/8/3/0/p/m9i7nj78zhxTSozmqaZk3MIH4oo-0-300-0-450-crop.jpg?v=a245fdc7a1" alt="Portrait of a Lady on Fire (2019) poster" loading="lazy" width="300" height="450"></span><b>Portrait of a Lady on Fire</b><small>2019</small></a></li><li><a href="https://letterboxd.com/film/the-boxers-omen/"><span class="frame"><img src="https://a.ltrbxd.com/resized/alternative-poster/1/6/3/5/0/p/3qYpfxp1ejJQcWi7heW2Ke4kW68-0-300-0-450-crop.jpg?v=e39625d325" alt="The Boxer's Omen (1983) poster" loading="lazy" width="300" height="450"></span><b>The Boxer's Omen</b><small>1983</small></a></li></ol></section>
+<nav class="lbnav wrap" role="tablist" aria-label="Film views">
+  <button role="tab" data-v="profile" aria-selected="true">Profile</button><button role="tab" data-v="diary" aria-selected="false">Diary</button><button role="tab" data-v="reviews" aria-selected="false">Reviews</button><button role="tab" data-v="lists" aria-selected="false">Lists</button>
+  <div class="search"><input id="q" type="search" placeholder="Search lists and films" autocomplete="off" aria-label="Search lists and films"></div>
+</nav>
+<section class="wrap view" id="v-profile">
+  <h2 class="lbh">Favourite films</h2>
+  <ol class="pgrid favs"><li><a href="https://letterboxd.com/film/faust/"><span class="pst"><img src="https://a.ltrbxd.com/resized/alternative-poster/3/9/9/9/8/p/fF1RaI7nmLVGhf0IQVYXtmE7QBs-0-300-0-450-crop.jpg?v=bc90199363" alt="Faust (1994) poster" loading="lazy" width="300" height="450"></span><span class="cap">Faust</span></a></li><li><a href="https://letterboxd.com/film/hour-of-the-wolf/"><span class="pst"><img src="https://a.ltrbxd.com/resized/alternative-poster/4/0/4/2/2/p/uHdXOS8AbfbM5fDJ6ro5LWkgmLE-0-300-0-450-crop.jpg?v=aa74304bc2" alt="Hour of the Wolf (1968) poster" loading="lazy" width="300" height="450"></span><span class="cap">Hour of the Wolf</span></a></li><li><a href="https://letterboxd.com/film/portrait-of-a-lady-on-fire/"><span class="pst"><img src="https://a.ltrbxd.com/resized/alternative-poster/4/6/0/8/3/0/p/m9i7nj78zhxTSozmqaZk3MIH4oo-0-300-0-450-crop.jpg?v=a245fdc7a1" alt="Portrait of a Lady on Fire (2019) poster" loading="lazy" width="300" height="450"></span><span class="cap">Portrait of a Lady on Fire</span></a></li><li><a href="https://letterboxd.com/film/the-boxers-omen/"><span class="pst"><img src="https://a.ltrbxd.com/resized/alternative-poster/1/6/3/5/0/p/3qYpfxp1ejJQcWi7heW2Ke4kW68-0-300-0-450-crop.jpg?v=e39625d325" alt="The Boxer's Omen (1983) poster" loading="lazy" width="300" height="450"></span><span class="cap">The Boxer's Omen</span></a></li></ol>
+  <h2 class="lbh">Recent activity <button type="button" data-go="diary">Diary →</button></h2>
+  <ol class="pgrid" id="recent"></ol>
+  <h2 class="lbh">Recent reviews <button type="button" data-go="reviews">More →</button></h2>
+  <div id="revs"></div>
+  <h2 class="lbh">Ratings <span id="hist-n"></span></h2>
+  <div class="hist" id="hist"></div>
+  <h2 class="lbh">Lists <button type="button" data-go="lists">All lists →</button></h2>
+  <div class="lcards" id="plists"></div>
+</section>
+<section class="wrap view" id="v-diary" hidden><h2 class="lbh">Diary</h2><table class="diary" id="diary"></table></section>
+<section class="wrap view" id="v-reviews" hidden><h2 class="lbh">Reviews</h2><div id="allrevs"></div></section>
+<div id="v-lists" hidden>
+
 <div class="tabs"><div class="wrap" id="tabs" role="tablist" aria-label="Film Index sections"></div></div>
 <main class="wrap" id="main"></main>
+</div>
 <footer class="wrap" id="foot"></footer>
 </div>
 
@@ -365,10 +425,10 @@ function render(){
 }
 function show(id){
   if($('q').value){$('q').value='';$('results').hidden=true}
-  const ok=document.getElementById(id)&&id!=='results'?id:$('tabs').querySelector('button').dataset.id;
+  const ok=id&&id!=='results'&&document.querySelector('main>section#'+CSS.escape(id))?id:$('tabs').querySelector('button').dataset.id;   // only the index's own sections
   document.querySelectorAll('main>section').forEach(s=>s.hidden=s.id!==ok);
   $('tabs').querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',b.dataset.id===ok));
-  const tb=$('tab-'+ok);$('tabs').scrollLeft=Math.max(0,tb.offsetLeft-$('tabs').offsetLeft-20);
+  const tb=$('tab-'+ok);if(tb)$('tabs').scrollLeft=Math.max(0,tb.offsetLeft-$('tabs').offsetLeft-20);
 }
 function wire(){document.querySelectorAll('button[data-tag]').forEach(b=>b.onclick=e=>{e.preventDefault();openTag(b.dataset.tag,true)})}
 function openTag(k,scroll){
@@ -437,213 +497,58 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
 })();
 </script>
 <script>
-/* The theatre around the page. At the top of the page the red curtain is closed; scrolling draws it back to the
-   sides, gathering its pleats, and shows the set behind it, built as a Czech puppet theatre builds one: a painted
-   sky cloth, cloud flats hung from the flies, four rows of wave flats rocking against each other like an old wave
-   machine, and the boards of the stage. Everything has the texture of what it is made of: the curtain is velvet,
-   the cloth is canvas, the flats are painted plywood with pale cut edges, the stage is planks. */
+/* Profile, diary and reviews, from films/recent.json; the views switch like Letterboxd's tabs */
 (function(){
-  const cv=document.getElementById('stage'), still=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function rng(seed){let s=seed>>>0;return()=>{s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-  let W=0,H=0,dpr=1,set=null,velvet=null,sheen=null,grain=null,brush=null;
-  const HI=['#c9cfb4','#d6c592','#aebf9c','#bccbc0'], MID=['#5f7a78','#6d8780','#4f6870','#738a7c'], EDGE='#d8c7a0';
-
-  /* ---- textures, made once ---- */
-  function tile(w,h,fn){const t=document.createElement('canvas');t.width=w;t.height=h;fn(t.getContext('2d'),w,h);return t}
-  function textures(){
-    const r=rng(77);
-    // velvet: fine vertical pile with a little crosswise weave and speckle
-    velvet=tile(96,96,(c,w,h)=>{
-      for(let x=0;x<w;x++){c.fillStyle=`rgba(${r()<.5?'0,0,0':'255,220,220'},${.04+r()*.07})`;c.fillRect(x,0,1,h)}
-      for(let y=0;y<h;y+=3){c.fillStyle='rgba(0,0,0,.05)';c.fillRect(0,y,w,1)}
-      for(let i=0;i<500;i++){c.fillStyle=`rgba(${r()<.5?'0,0,0':'255,200,200'},${r()*.12})`;c.fillRect(r()*w,r()*h,1,1+r()*2)}
-    });
-    // crushed sheen: soft, irregular light and dark patches stretched down the drop
-    sheen=tile(64,64,(c,w,h)=>{
-      for(let i=0;i<40;i++){const x=r()*w,y=r()*h,s=4+r()*12,g=c.createRadialGradient(x,y,0,x,y,s);const l=r()<.5;g.addColorStop(0,l?'rgba(255,170,170,.25)':'rgba(0,0,0,.3)');g.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=g;c.fillRect(0,0,w,h)}
-    });
-    // wood grain: long wavering lines with the odd knot
-    grain=tile(320,80,(c,w,h)=>{
-      for(let y=0;y<h;y+=1.5){c.strokeStyle=`rgba(40,22,8,${.05+r()*.12})`;c.lineWidth=.6+r()*.8;c.beginPath();const ph=r()*6,am=.6+r()*1.4;for(let x=0;x<=w;x+=8){const yy=y+Math.sin(x*.02+ph)*am;x?c.lineTo(x,yy):c.moveTo(x,yy)}c.stroke()}
-      for(let k=0;k<2;k++){const x=r()*w,y=r()*h;c.strokeStyle='rgba(40,22,8,.25)';for(let i=1;i<5;i++){c.beginPath();c.ellipse(x,y,i*3,i*1.2,0,0,6.283);c.stroke()}}
-    });
-    // paint: long, slightly uneven brush strokes laid along the board
-    brush=tile(240,60,(c,w,h)=>{
-      for(let i=0;i<70;i++){const y=r()*h,x=r()*w,l=40+r()*120;c.strokeStyle=`rgba(${r()<.5?'255,255,240':'0,0,0'},${.04+r()*.07})`;c.lineWidth=1+r()*3;c.beginPath();c.moveTo(x,y);c.quadraticCurveTo(x+l/2,y+(r()-.5)*4,x+l,y+(r()-.5)*3);c.stroke()}
-    });
+  const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const views=['profile','diary','reviews','lists'];
+  function view(v,push){ v=views.includes(v)?v:'profile';
+    views.forEach(k=>{ $('v-'+k).hidden=k!==v; document.querySelector(`.lbnav [data-v="${k}"]`).setAttribute('aria-selected',k===v) });
+    if(push) history.replaceState(null,'',v==='profile'?location.pathname:'#'+v) }
+  window.lbView=view;
+  document.querySelectorAll('.lbnav [data-v]').forEach(b=>b.onclick=()=>view(b.dataset.v,true));
+  document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{view(b.dataset.go,true);scrollTo({top:document.querySelector('.lbnav').offsetTop})});
+  $('q').addEventListener('input',()=>{ if($('q').value.trim()) view('lists') });
+  // a hash from the lists index (a section or a tag) opens the Lists view
+  const h=location.hash.slice(1); view(views.includes(h)?h:(h&&h!=='profile'?'lists':'profile'));
+  $('st-lists').textContent=(typeof L!=='undefined'?L.filter(l=>!l.diary).length:'');
+  const stars=r=>r==null?'':'★'.repeat(Math.floor(r))+(r%1?'½':'');
+  const PB='https://a.ltrbxd.com/resized/';
+  let PJ=null;
+  const poster=(f,w)=>{ const c=PJ&&PJ.f[f.slug]; return c&&c[1]?PB+c[1].replace('~',w>150?'-0-230-0-345-crop.jpg':'-0-150-0-225-crop.jpg'):f.p };
+  function draw(R){
+    const F=R.films||[];
+    const yr=String(new Date().getFullYear()), thisYear=F.filter(f=>f.w.startsWith(yr)).length;
+    $('st-year').textContent=F.length&&F[F.length-1].w.startsWith(yr)?thisYear+'+':thisYear;   // the feed only reaches back so far
+    $('recent').innerHTML=F.slice(0,8).map(f=>`<li><a href="${esc(f.link)}" title="${esc(f.t)} (${esc(f.y)})"><span class="pst"><img src="${esc(poster(f,230))}" alt="${esc(f.t)} (${esc(f.y)})" loading="lazy" width="230" height="345"></span><span class="meta"><span class="stars">${stars(f.r)}</span>${f.like?'<span class="lk">♥</span>':''}${f.re?'<span class="rw" title="Rewatch">↻</span>':''}</span></a></li>`).join('');
+    const rev=f=>`<article class="rev"><a href="${esc(f.link)}"><span class="pst"><img src="${esc(poster(f,150))}" alt="" loading="lazy" width="150" height="225"></span></a><div><h3><a href="${esc(f.link)}">${esc(f.t)}</a><small>${esc(f.y)}</small></h3><div class="meta"><span class="stars">${stars(f.r)}</span>${f.like?'<span class="lk">♥</span>':''}<span>Watched ${new Date(f.w+'T12:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</span></div><p>${esc(f.rev)}</p></div></article>`;
+    const R2=F.filter(f=>f.rev);
+    $('revs').innerHTML=R2.slice(0,3).map(rev).join('')||'<p class="empty">No recent reviews.</p>';
+    $('allrevs').innerHTML=R2.map(rev).join('')||'<p class="empty">No recent reviews.</p>';
+    // ratings spread, half a star to five
+    const bins=Array(10).fill(0); F.forEach(f=>{ if(f.r) bins[Math.round(f.r*2)-1]++ }); const mx=Math.max(1,...bins);
+    $('hist').innerHTML=`<span class="ends">★</span><div class="bars">${bins.map((n,i)=>`<i style="height:${Math.max(3,n/mx*100)}%" title="${n} × ${stars((i+1)/2)}"></i>`).join('')}</div><span class="ends">★★★★★</span>`;
+    $('hist-n').textContent=`last ${F.filter(f=>f.r).length} rated`;
+    // diary, by month
+    let last='', rows='<tr><th>Month</th><th>Day</th><th class="hide-s"></th><th>Film</th><th>Rating</th><th class="hide-s"></th></tr>';
+    for(const f of F){ const d=new Date(f.w+'T12:00'), mk=f.w.slice(0,7);
+      rows+=`<tr><td>${mk!==last?`<div class="mo">${d.toLocaleDateString('en-GB',{month:'short'})}<span>${d.getFullYear()}</span></div>`:''}</td><td class="day">${d.getDate()}</td><td class="pt hide-s"><span class="pst"><img src="${esc(poster(f,150))}" alt="" loading="lazy" width="150" height="225"></span></td><td><a class="ft" href="${esc(f.link)}">${esc(f.t)}</a> <span class="yr">${esc(f.y)}</span></td><td class="stars">${stars(f.r)}</td><td class="hide-s">${f.like?'<span class="lk">♥</span> ':''}${f.re?'<span class="rw" title="Rewatch">↻</span>':''}${f.rev?' <span title="Reviewed">≡</span>':''}</td></tr>`;
+      last=mk }
+    $('diary').innerHTML=rows;
   }
-  function overlay(c,pattern,mode,alpha){c.save();c.globalCompositeOperation=mode;c.globalAlpha=alpha;c.fillStyle=c.createPattern(pattern,'repeat');c.fillRect(-W,-H,W*3,H*3);c.restore()}
-
-  /* ---- cloud flats: painted lobes with a pale cut edge on the lit side ---- */
-  function lobe(c,r,x,y,rx,ry,hi,mid,curl){
-    c.save(); c.beginPath(); c.ellipse(x,y,rx,ry,0,0,Math.PI*2); c.fillStyle=mid; c.fill(); c.clip();
-    c.beginPath(); c.ellipse(x-rx*.28,y-ry*.38,rx*.8,ry*.7,0,0,Math.PI*2); c.fillStyle=hi; c.globalAlpha=.85; c.fill(); c.globalAlpha=1;
-    overlay(c,brush,'overlay',.9);
-    if(curl){
-      const dir=r()<.5?1:-1, a0=dir>0?-Math.PI*.95:-Math.PI*.05, turns=1.05+r()*.35;
-      c.lineCap='round';
-      for(const [w,col,al] of [[ry*.2,'#1d2a32',.4],[ry*.13,'#e6dcc0',.9]]){
-        c.strokeStyle=col; c.globalAlpha=al; c.lineWidth=w; c.beginPath();
-        for(let t=0;t<=1.0001;t+=.015){const a=a0+dir*t*turns*Math.PI*2, k=1-t*.78; const px=x+Math.cos(a)*rx*.8*k, py=y+Math.sin(a)*ry*.75*k; t?c.lineTo(px,py):c.moveTo(px,py)}
-        c.stroke();
-      }
-      c.globalAlpha=1;
-    }
-    c.restore();
-    c.strokeStyle=EDGE; c.lineWidth=2.4; c.globalAlpha=.85; c.beginPath(); c.ellipse(x,y,rx,ry,0,Math.PI*.95,Math.PI*1.75); c.stroke();
-    c.strokeStyle='#18232b'; c.globalAlpha=.65; c.lineWidth=Math.max(1.5,ry*.09); c.beginPath(); c.ellipse(x,y,rx,ry,0,-.25,Math.PI*1.05); c.stroke(); c.globalAlpha=1;
+  // list cards: featured lists, each as a fan of its first five posters; clicking opens it in the Lists view
+  function cards(){
+    if(typeof L==='undefined') return;
+    const pick=L.filter(l=>l.g.includes('featured')&&l.img&&l.img.p&&l.img.p.length).slice(0,6);
+    const xs=pick.length>=3?pick:L.filter(l=>l.img&&l.img.p&&l.img.p.length>=5).sort((a,b)=>b.c-a.c).slice(0,6);
+    $('plists').innerHTML=xs.map(l=>`<button type="button" class="lcard" data-s="${esc(l.s)}"><span class="stack">${l.img.p.slice(0,5).map(p=>`<span class="pst"><img src="${esc(p[1])}" alt="" loading="lazy" width="230" height="345"></span>`).join('')}</span><b>${esc(l.n)}</b><span>${l.c} films</span></button>`).join('');
+    $('plists').querySelectorAll('.lcard').forEach(b=>b.onclick=()=>{ view('lists',true);
+      const d=document.querySelector(`details.lst[data-s="${b.dataset.s}"]`); if(!d) return;
+      const sec=d.closest('main>section'); if(sec&&typeof show==='function') show(sec.id);
+      let e=d; while(e){ if(e.tagName==='DETAILS') e.open=true; e=e.parentElement } d.scrollIntoView({block:'center'}) });
   }
-  function cloud(c,r,x,y,s){
-    const hi=HI[Math.floor(r()*HI.length)], mid=MID[Math.floor(r()*MID.length)], n=2+Math.floor(r()*3);
-    c.save(); c.shadowColor='rgba(10,16,20,.45)'; c.shadowBlur=14; c.shadowOffsetY=6;
-    for(let i=0;i<n;i++){const ox=(i-(n-1)/2)*s*.75+(r()-.5)*s*.2, oy=-Math.abs(ox)*.15-r()*s*.15; lobe(c,r,x+ox,y+oy,s*(.62+r()*.25),s*(.42+r()*.15),hi,mid,false)}
-    lobe(c,r,x+(r()-.5)*s*.3,y-s*.18,s*(.85+r()*.2),s*(.58+r()*.12),hi,mid,true);
-    c.restore();
-  }
-  /* ---- the fixed parts of the set, painted once ---- */
-  function paintSet(){
-    const r=rng(1994); set=document.createElement('canvas'); set.width=cv.width; set.height=cv.height;
-    const c=set.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
-    const sky=c.createLinearGradient(0,0,0,H*.7); sky.addColorStop(0,'#10181c'); sky.addColorStop(1,'#5a5a48');
-    c.fillStyle=sky; c.fillRect(0,0,W,H);
-    overlay(c,brush,'overlay',.8); overlay(c,velvet,'soft-light',.25);          // a painted canvas cloth
-    for(const [y,s] of [[H*.12,54],[H*.3,70]]) for(let x=-s*r();x<W+s;x+=s*(2.1+r()*.8)) cloud(c,r,x,y+(r()-.5)*s*.4,s*(.85+r()*.3));
-    const top=H*.82, vx=W/2, n=28;
-    for(let i=0;i<n;i++){
-      const x0=-W*.6+i*(W*2.2/n), x1=x0+W*2.2/n, t0=vx+(x0-vx)*.35, t1=vx+(x1-vx)*.35;
-      c.save(); c.beginPath(); c.moveTo(t0,top); c.lineTo(t1,top); c.lineTo(x1,H); c.lineTo(x0,H); c.closePath();
-      c.fillStyle=i%2?'#6b4a2c':'#7a5636'; c.fill(); c.clip(); overlay(c,grain,'multiply',.7); c.restore();
-      c.strokeStyle='rgba(30,18,10,.6)'; c.lineWidth=1; c.beginPath(); c.moveTo(t0,top); c.lineTo(x0,H); c.stroke();
-    }
-    const fl=c.createLinearGradient(0,top,0,H); fl.addColorStop(0,'rgba(20,12,6,.55)'); fl.addColorStop(1,'rgba(255,190,110,.18)');
-    c.fillStyle=fl; c.fillRect(0,top,W,H-top);
-    c.fillStyle='rgba(6,9,12,.42)'; c.fillRect(0,0,W,H);                           // the whole set sits in a cold gloom
-    paintMist();
-  }
-  /* ---- mist: a band of soft, uneven haze, painted once (at low resolution, it is all blur) and slid slowly
-     across the boards in two layers; it wraps round, so its ends are painted to meet ---- */
-  let mist=null;
-  function paintMist(){
-    const r=rng(7), w=Math.ceil(W), h=Math.ceil(H*.34);
-    mist=document.createElement('canvas'); mist.width=w; mist.height=h;
-    const c=mist.getContext('2d');
-    for(let i=0;i<70;i++){ const x=r()*w, y=h*(.35+r()*.5), rx=60+r()*180;
-      for(const dx of [-w,0,w]){ const g=c.createRadialGradient(x+dx,y,0,x+dx,y,rx); g.addColorStop(0,'rgba(170,186,180,.07)'); g.addColorStop(1,'rgba(170,186,180,0)');
-        c.save(); c.translate(x+dx,y); c.scale(1,.32); c.translate(-x-dx,-y); c.fillStyle=g; c.fillRect(x+dx-rx,y-rx,rx*2,rx*2); c.restore() } }
-  }
-  /* ---- one row of wave flats: a painted plywood board cut into curling crests, joined in planks.
-     Each row is painted once into its own image; every frame only slides and bobs it. ---- */
-  let rows=[];
-  function paintRow(row){
-    const P=150-row*22, y0=H*(.52+row*.06), floor=H*.83, top=y0-P*.6, w=W+P*4, h=floor-top+8;
-    const img=document.createElement('canvas'); img.width=Math.round(w*dpr); img.height=Math.round(h*dpr);
-    const c=img.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); c.translate(P*2,-top);
-    const body=['#24393f','#1e3237','#182a2f','#122227'][row], crest=['#8e9a8c','#859083','#7c877a','#737e71'][row];
-    const edge=new Path2D(); edge.moveTo(-P*2,floor);
-    for(let x=-P*2;x<W+P*2;x+=P){edge.lineTo(x,y0); edge.quadraticCurveTo(x+P*.35,y0-P*.42,x+P*.62,y0-P*.3); edge.quadraticCurveTo(x+P*.8,y0-P*.06,x+P,y0)}
-    edge.lineTo(W+P*2,floor); edge.closePath();
-    c.fillStyle=body; c.fill(edge);
-    c.save(); c.clip(edge); overlay(c,grain,'multiply',.35); overlay(c,brush,'overlay',1);
-    c.strokeStyle='rgba(10,20,24,.45)'; c.lineWidth=1; for(let x=-P*2;x<W+P*2;x+=P*1.7){c.beginPath(); c.moveTo(x,y0-P*.5); c.lineTo(x,floor); c.stroke()}
-    c.lineCap='round';
-    for(let x=-P*2;x<W+P*2;x+=P){
-      const cx=x+P*.6, cy=y0-P*.17, rr=P*.14;
-      c.strokeStyle=crest; c.lineWidth=Math.max(2,P*.05); c.beginPath();
-      for(let k=0;k<=1.0001;k+=.04){const a=-Math.PI*.9+k*Math.PI*2.1, q=rr*(1-k*.75); const px=cx+Math.cos(a)*q, py=cy+Math.sin(a)*q; k?c.lineTo(px,py):c.moveTo(px,py)}
-      c.stroke();
-    }
-    c.restore();
-    c.strokeStyle=EDGE; c.lineWidth=3; c.stroke(edge);
-    c.strokeStyle='#14262c'; c.lineWidth=1.2; c.translate(0,2); c.stroke(edge);
-    return {img,P,x:-P*2,y:top,w,h};
-  }
-  /* ---- the curtain: each half is a fall of red velvet painted once; as it is drawn back the same fabric is
-     squeezed into less width, so its pleats bunch towards the side, and its leading edge swings a little ---- */
-  let drape=null, band=null;
-  function paintDrape(){
-    const w=Math.ceil(W/2+40), pleats=14;
-    drape=document.createElement('canvas'); drape.width=Math.round(w*dpr); drape.height=Math.round(H*dpr);
-    const c=drape.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
-    const pw=w/pleats;
-    for(let k=0;k<pleats+1;k++){
-      const x=k*pw, g=c.createLinearGradient(x,0,x+pw,0);
-      g.addColorStop(0,'#1c0306'); g.addColorStop(.28,'#540c12'); g.addColorStop(.52,'#7a1c24'); g.addColorStop(.78,'#4a0a10'); g.addColorStop(1,'#1c0306');
-      c.fillStyle=g; c.fillRect(x,0,pw+1,H);
-    }
-    overlay(c,velvet,'overlay',.9);
-    c.save(); c.globalCompositeOperation='soft-light'; c.globalAlpha=.8; c.drawImage(sheen,0,0,w,H); c.restore();
-    const v=c.createLinearGradient(0,0,0,H); v.addColorStop(0,'rgba(0,0,0,.55)'); v.addColorStop(.3,'rgba(0,0,0,0)'); v.addColorStop(.85,'rgba(0,0,0,0)'); v.addColorStop(1,'rgba(255,140,60,.14)');
-    c.fillStyle=v; c.fillRect(0,0,w,H);
-    c.fillStyle='rgba(4,1,2,.38)'; c.fillRect(0,0,w,H);                          // the house lights are down
-    c.fillStyle='#8a6a22'; c.fillRect(0,H-9,w,9); c.fillStyle='#d9b45a'; for(let x=0;x<w;x+=5) c.fillRect(x,H-6,2.5,3);   // the gold hem
-  }
-  function curtain(c,p,t){
-    const half=W/2, open=p*p*(3-2*p);
-    for(const side of [-1,1]){
-      const w=half*(1-open*.84)+2, sway=Math.sin(t*.8+side)*open*(1-open)*30;
-      c.save(); c.translate(side<0?0:W,0); c.scale(side<0?1:-1,1);              // the right half is the left, mirrored
-      c.drawImage(drape,0,0,w+sway,H);
-      const sh=c.createLinearGradient(w+sway-30,0,w+sway,0); sh.addColorStop(0,'rgba(0,0,0,0)'); sh.addColorStop(1,'rgba(0,0,0,.45)');
-      c.fillStyle=sh; c.fillRect(w+sway-30,0,30,H);                                // the leading edge turns into shadow
-      c.restore();
-    }
-  }
-  /* ---- the banner across the top: a velvet pelmet with a scalloped, gold-edged hem, painted once ---- */
-  function paintBand(){
-    const h=Math.min(96,H*.11), sh=h*.6, R=22;
-    band=document.createElement('canvas'); band.width=Math.round(W*dpr); band.height=Math.round((h+6)*dpr);
-    const c=band.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
-    const path=new Path2D(); path.moveTo(0,0); path.lineTo(W,0); path.lineTo(W,sh);
-    for(let x=W;x>-2*R;x-=2*R){ path.arc(x-R,sh,R,0,Math.PI,false) }
-    path.lineTo(0,sh); path.closePath();
-    c.fillStyle='#3a080d'; c.fill(path);
-    c.save(); c.clip(path); overlay(c,velvet,'overlay',.9);
-    for(let x=0;x<W;x+=2*R){ const g=c.createLinearGradient(x,0,x+2*R,0); g.addColorStop(0,'rgba(0,0,0,.28)'); g.addColorStop(.5,'rgba(255,190,190,.08)'); g.addColorStop(1,'rgba(0,0,0,.28)'); c.fillStyle=g; c.fillRect(x,0,2*R,h) }
-    const v=c.createLinearGradient(0,0,0,h); v.addColorStop(0,'rgba(0,0,0,.4)'); v.addColorStop(1,'rgba(0,0,0,0)'); c.fillStyle=v; c.fillRect(0,0,W,h);
-    c.restore();
-    c.strokeStyle='#5e4618'; c.lineWidth=5; c.stroke(path);
-    c.strokeStyle='#a8894a'; c.lineWidth=1.6; c.stroke(path);
-    c.fillStyle='#8a6a2c'; c.fillRect(0,sh*.18,W,3);                               // a gold cord along the pelmet
-  }
-  /* ---- the lighting: the house is dark. One cold follow-spot from the flies searches slowly over the set; the
-     footlights burn low and unsteadily, like gas; mist creeps across the boards ---- */
-  function light(c,t,open){
-    const fl=.86+.09*Math.sin(t*7.3)*Math.sin(t*2.3+1)+.05*Math.sin(t*23.1);      // the unsteadiness of a gas flame
-    c.fillStyle=`rgba(3,3,6,${.74-open*.1})`; c.fillRect(0,0,W,H);
-    c.save(); c.globalCompositeOperation='lighter';
-    const x=W*(.5+.24*Math.sin(t*.06)+.07*Math.sin(t*.17+1)), y=H*.64, rx=W*.16, col='190,212,200', k=open*fl;
-    const g=c.createRadialGradient(x,y,0,x,y,rx); g.addColorStop(0,`rgba(${col},${.2*k})`); g.addColorStop(.55,`rgba(${col},${.07*k})`); g.addColorStop(1,`rgba(${col},0)`);
-    c.save(); c.translate(x,y); c.scale(1,.5); c.translate(-x,-y); c.fillStyle=g; c.fillRect(x-rx,y-rx,rx*2,rx*2); c.restore();
-    const beam=c.createLinearGradient(0,0,0,y); beam.addColorStop(0,`rgba(${col},0)`); beam.addColorStop(1,`rgba(${col},${.045*k})`);
-    c.fillStyle=beam; c.beginPath(); c.moveTo(x-14,0); c.lineTo(x+14,0); c.lineTo(x+rx*.75,y); c.lineTo(x-rx*.75,y); c.closePath(); c.fill();
-    const f=c.createLinearGradient(0,H*.8,0,H); f.addColorStop(0,'rgba(255,150,70,0)'); f.addColorStop(1,`rgba(255,150,70,${(.08+.08*open)*fl})`);
-    c.fillStyle=f; c.fillRect(0,H*.8,W,H*.2);
-    c.restore();
-    if(mist){ const mh=mist.height, mw=mist.width;
-      for(const [sp,y,a] of [[7,H*.6,.9],[-4.5,H*.68,.7]]){ const off=((t*sp)%mw+mw)%mw; c.globalAlpha=a*(.55+.45*open);
-        c.drawImage(mist,-off,y,mw,mh); c.drawImage(mist,mw-off,y,mw,mh) }
-      c.globalAlpha=1 }
-  }
-  function size(){dpr=Math.min(innerWidth<700?1:2,devicePixelRatio||1); W=innerWidth;   // a soft painted set: full resolution is wasted on a phone
-    H=innerHeight; cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); paintSet(); rows=[0,1,2,3].map(paintRow); paintDrape(); paintBand()}
-  let lastP=-1;
-  function draw(t){
-    const room=document.documentElement.scrollHeight-innerHeight, p=Math.max(0,Math.min(1,scrollY/Math.max(120,Math.min(innerHeight*.6,room*.6))));   // opens within the first stretch of scrolling, however short the page
-    if(p===0&&lastP===0) return;                                                // the curtain is shut and nothing behind it shows
-    lastP=p;
-    const c=cv.getContext('2d'); c.setTransform(1,0,0,1,0,0);
-    if(p>0){ c.drawImage(set,0,0); c.setTransform(dpr,0,0,dpr,0,0);
-      for(let i=0;i<4;i++){ const R=rows[i], sway=(i%2?1:-1)*Math.sin(t*.7+i*1.3)*R.P*.32, bob=Math.sin(t*.9+i)*4; c.drawImage(R.img,R.x+sway,R.y+bob,R.w,R.h) }
-      light(c,t,p) } else c.setTransform(dpr,0,0,dpr,0,0);
-    curtain(c,p,t);
-    c.drawImage(band,0,0,W,band.height/dpr);
-  }
-  let last=0,t0=performance.now();
-  const step=matchMedia('(pointer:coarse)').matches||innerWidth<700?66:41;   // 24 frames a second, like film; 15 on a phone
-  function loop(ts){ if(!document.hidden&&ts-last>step){last=ts;draw((ts-t0)/1000)} requestAnimationFrame(loop) }
-  addEventListener('resize',()=>{size();lastP=-1;draw((performance.now()-t0)/1000)});
-  if(still) addEventListener('scroll',()=>requestAnimationFrame(()=>draw(0)),{passive:true});
-  textures(); size(); draw(0); if(!still) requestAnimationFrame(loop);
+  cards();
+  Promise.all([fetch('recent.json').then(r=>r.ok?r.json():{films:[]}),fetch('posters.json').then(r=>r.ok?r.json():null).catch(()=>null)])
+    .then(([R,P])=>{ PJ=P; draw(R) }).catch(()=>{});
 })();
 </script>
 <script src="../assets/bar.js" defer></script>

@@ -125,7 +125,7 @@ void main(){
     // photographs live on jsonsummers.github.io (with the Photos and Art pages); fetched one at a time, just before they are needed
     const LIB='https://jsonsummers.github.io/';
     let list=[], jokes=[], next=null, pi=0, ji=0;
-    fetch(LIB+'assets/library.json').then(r=>r.ok?r.json():{}).then(d=>{ const all=(d.photos||[]).filter(x=>x.files), tag=t=>all.filter(x=>(x.tags||['home']).includes(t)).sort(()=>Math.random()-.5); list=tag('home'); jokes=tag('joke'); load() }).catch(()=>{});
+    fetch(LIB+'assets/library.json').then(r=>r.ok?r.json():{}).then(d=>{ const all=(d.photos||[]).filter(x=>x.files), tag=t=>all.filter(x=>(x.tags||['home']).includes(t)).sort(()=>Math.random()-.5); list=[...new Map([...tag('home'),...tag('gallery')].map(p=>[p.id,p])).values()].sort(()=>Math.random()-.5); jokes=tag('joke'); load() }).catch(()=>{});
     function load(){
       if(!list.length||next) return;
       const ph=jokes.length&&Math.random()<.18?jokes[ji++%jokes.length]:list[pi++%list.length], im=new Image(); im.decoding='async'; im.crossOrigin='anonymous';   // from the other site, which allows it   // now and then, a joke
@@ -137,26 +137,30 @@ void main(){
     // the running order is random: a photograph about half the time, otherwise a generated scene, never the same
     // kind twice running; the page opens on the room you came from (bar.js keeps a small picture of it), or on the
     // Mandelbrot set
-    const GEN=['fret','julia','ink','mandel'];
+    // what is shown: photographs, mostly, and now and then the ink. The Mandelbrot, Julia and stepped-diamond
+    // patterns are never shown; mosh.js uses them only to steer the melting between pictures
+    const GEN=['ink'];
     const JPATH=[t=>[.7885*Math.cos(t*.045),.7885*Math.sin(t*.045)], t=>[-.8+.12*Math.sin(t*.05),.156+.04*Math.cos(t*.07)], t=>[-.745+.02*Math.sin(t*.06),.113+.03*Math.cos(t*.05)], t=>[.285+.02*Math.sin(t*.05),.01+.02*Math.cos(t*.04)]];
     const t0=performance.now();
-    let cur={kind:'mandel'}, cutAt=8+Math.random()*8, old=null, waitLast=false;
+    let cur={kind:'ink',hue:Math.random()}, cutAt=2.5,  old=null, waitLast=false;
     try{ const last=JSON.parse(sessionStorage.getItem('bm-last-bg')||'null'); sessionStorage.removeItem('bm-last-bg');
       if(last&&Date.now()-last.at<120000){ waitLast=true; cv.style.background=`center/cover no-repeat url(${last.src})`; setTimeout(()=>{waitLast=false},1500);
-        const im=new Image(); im.onload=()=>{ waitLast=false; if(cur.kind!=='mandel'||performance.now()-t0>4000) return;
+        const im=new Image(); im.onload=()=>{ waitLast=false; if(cur.kind!=='ink'||performance.now()-t0>4000) return;
         const tx=gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D,tx); gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,im);
         for(const [a,b] of [[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR],[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D,a,b);
         cur={kind:'photo',tx,w:im.naturalWidth,h:im.naturalHeight,pan:[0,0],still:true,t0:0}; cutAt=(performance.now()-t0)/1000+1.5+Math.random()*1.5 }; im.src=last.src } }catch(e){}
     function pick(t){
-      if(next&&cur.kind!=='photo'&&Math.random()<.55){ const s=next; next=null; setTimeout(load,3000); return s }
-      let k; do{ k=GEN[Math.floor(Math.random()*GEN.length)] }while(k===cur.kind);
+      if(next&&(cur.kind!=='photo'||Math.random()<.82)){ const s=next; next=null; setTimeout(load,1500); return s }   // photo after photo, with the odd ink between
+      if(cur.kind==='ink') return null;
+      const k='ink';
       return k==='julia'?{kind:k,path:JPATH[Math.floor(Math.random()*JPATH.length)],rot:Math.random()*6.28}:k==='ink'?{kind:k,hue:Math.random()}:{kind:k};
     }
     function draw(t){
       if(t>cutAt){ const s=pick(t); if(s){ if(old&&old.tx&&old!==s) gl.deleteTexture(old.tx); old=cur; cur=s; cur.t0=t }
+        else { cutAt=t+1; return draw.call(this,t) }
         cutAt=t+8+Math.random()*14;                                            // irregular: 8 to 22 seconds
         if(mosh) mosh.cut(t) }
-      const p=P[cur.kind]; if(!done(p)||!ok(p)) { if(cur.kind!=='mandel'&&done(P.mandel)&&ok(P.mandel)) cur={kind:'mandel'}; else return false }
+      const p=P[cur.kind]; if(!done(p)||!ok(p)) { if(cur.kind!=='ink'&&done(P.ink)&&ok(P.ink)) cur={kind:'ink',hue:0}; else return false }
       if(mosh) mosh.target(); else { gl.bindFramebuffer(gl.FRAMEBUFFER,null); gl.viewport(0,0,cv.width,cv.height) }
       gl.useProgram(p); gl.uniform2f(U(p,'res'),cv.width,cv.height);
       if(cur.kind==='photo'){ gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D,cur.tx); gl.uniform1i(U(p,'img'),0);

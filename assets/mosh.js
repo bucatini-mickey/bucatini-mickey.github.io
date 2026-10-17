@@ -5,8 +5,8 @@
    The previous output is kept in a texture and fed back each frame (two textures, taking turns), so every push
    accumulates into a smear that heals slowly once it stops.
    What steers it is a field, not a picture: each "epoch" (one to four seconds) draws at random one of three
-   functions and a random view of it: the Mandelbrot set's smooth escape time, a Julia set's, or the ink's
-   domain-warped noise. Where the picture melts, its pixels flow along the field's contours (the curl of the
+   functions and a random view of it: the Mandelbrot set's smooth escape time, a Julia set's, the stepped
+   diamonds of Andean weaving, or the ink's domain-warped noise. None of these is ever shown; they only steer. Where the picture melts, its pixels flow along the field's contours (the curl of the
    field, so they circle its shapes rather than run off them) or down its slope; which parts melt is decided by
    the field's own bands. So the melting is random, but always shaped by one of these functions. Some epochs are
    calm, and some are the old blocky glitch (squares, bricks, honeycomb, diamonds, triangles or scanlines).
@@ -29,6 +29,10 @@ float fbm(vec2 p){ float s=0., a=.5; for(int i=0;i<4;i++){ s+=a*noise(p); p=mat2
 // the steering field, 0..1, at screen point q (height = 1)
 float field(vec2 q){
   q=mat2(cos(fr),-sin(fr),sin(fr),cos(fr))*q;
+  if(fk>2.5){                                                              // stepped diamonds, as in Andean weaving
+    vec2 c=fract(q*fs+fc)-.5; float d=abs(c.x)+abs(c.y), st=floor(d*12.)/12.;
+    return clamp(mix(st,d,.3)*1.9,0.,1.);
+  }
   if(fk<.5||fk>1.5&&fk<2.5){
     vec2 z=fk<.5?vec2(0.):q*fs, c=fk<.5?fc+q*fs:jc; float n=0.;
     for(int i=0;i<36;i++){ z=vec2(z.x*z.x-z.y*z.y,2.*z.x*z.y)+c; if(dot(z,z)>64.) break; n+=1.; }
@@ -97,9 +101,10 @@ void main(){ o=texture(tex,gl_FragCoord.xy/res); }`;
     const S={mode:0,tile:0,bs:8,fk:0,fs:1,fr:0,melt:1,push:0,band:6,fc:[-.62,0],jc:[-.8,.156]};
     // a new field: one of the three functions, at a random view
     function newField(){
-      S.fk=pick([0,0,1,2,2]); S.fr=Math.random()*6.283;
+      S.fk=pick([0,0,1,2,2,3,3]); S.fr=Math.random()*6.283;
       if(S.fk===0){ const v=pick(MVIEWS); S.fc=[v[0],v[1]]; S.fs=v[2]*(.6+Math.random()*.9) }
       else if(S.fk===2){ S.jc=pick(JULIAS); S.fs=1.2+Math.random()*1.6 }
+      else if(S.fk===3){ S.fc=[Math.random(),Math.random()]; S.fs=1.5+Math.random()*3 }
       else { S.fc=[Math.random()*40,Math.random()*40]; S.fs=.8+Math.random()*2.2 }
       S.melt=(Math.random()<.5?-1:1)*(.5+Math.random()*2.2); S.push=(Math.random()-.5)*1.2; S.band=3+Math.floor(Math.random()*7);
     }
