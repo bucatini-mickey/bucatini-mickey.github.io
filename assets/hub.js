@@ -142,7 +142,7 @@ void main(){
     const GEN=['ink'];
     const JPATH=[t=>[.7885*Math.cos(t*.045),.7885*Math.sin(t*.045)], t=>[-.8+.12*Math.sin(t*.05),.156+.04*Math.cos(t*.07)], t=>[-.745+.02*Math.sin(t*.06),.113+.03*Math.cos(t*.05)], t=>[.285+.02*Math.sin(t*.05),.01+.02*Math.cos(t*.04)]];
     const t0=performance.now();
-    let cur={kind:'ink',hue:Math.random()}, cutAt=2.5,  old=null, waitLast=false;
+    let cur={kind:'ink',hue:Math.random()}, cutAt=5,  old=null, waitLast=false;
     try{ const last=JSON.parse(sessionStorage.getItem('bm-last-bg')||'null'); sessionStorage.removeItem('bm-last-bg');
       if(last&&Date.now()-last.at<120000){ waitLast=true; cv.style.background=`center/cover no-repeat url(${last.src})`; setTimeout(()=>{waitLast=false},1500);
         const im=new Image(); im.onload=()=>{ waitLast=false; if(cur.kind!=='ink'||performance.now()-t0>4000) return;
@@ -158,13 +158,13 @@ void main(){
     function draw(t){
       if(t>cutAt){ const s=pick(t); if(s){ if(old&&old.tx&&old!==s) gl.deleteTexture(old.tx); old=cur; cur=s; cur.t0=t; dispatchEvent(new CustomEvent('hubscene',{detail:cur.kind==='photo'?(cur.alt||'A photograph'):'Ink, folding over itself'})) }
         else { cutAt=t+1; return draw.call(this,t) }
-        cutAt=t+8+Math.random()*14;                                            // irregular: 8 to 22 seconds
+        cutAt=t+30+Math.random()*25;                                           // slow: 30 to 55 seconds a picture
         if(mosh) mosh.cut(t) }
       const p=P[cur.kind]; if(!done(p)||!ok(p)) { if(cur.kind!=='ink'&&done(P.ink)&&ok(P.ink)) cur={kind:'ink',hue:0}; else return false }
       if(mosh) mosh.target(); else { gl.bindFramebuffer(gl.FRAMEBUFFER,null); gl.viewport(0,0,cv.width,cv.height) }
       gl.useProgram(p); gl.uniform2f(U(p,'res'),cv.width,cv.height);
       if(cur.kind==='photo'){ gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D,cur.tx); gl.uniform1i(U(p,'img'),0);
-        gl.uniform2f(U(p,'isz'),cur.w,cur.h); gl.uniform1f(U(p,'k'),cur.still?0:Math.min(1,(t-(cur.t0||t))/16)); gl.uniform2f(U(p,'pan'),cur.pan[0],cur.pan[1]) }
+        gl.uniform2f(U(p,'isz'),cur.w,cur.h); gl.uniform1f(U(p,'k'),cur.still?0:Math.min(1,(t-(cur.t0||t))/50)); gl.uniform2f(U(p,'pan'),cur.pan[0],cur.pan[1]) }
       else gl.uniform1f(U(p,'t'),t);
       if(cur.kind==='julia'){ gl.uniform2f(U(p,'c'),...cur.path(t)); gl.uniform1f(U(p,'rot'),cur.rot+t*.01) }
       if(cur.kind==='ink') gl.uniform1f(U(p,'hue'),cur.hue);
