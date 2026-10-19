@@ -99,7 +99,15 @@ a.room:hover h2{color:var(--acc)}
 .foot .r{display:flex;align-items:center;gap:14px}
 .info{width:26px;height:26px;border-radius:50%;border:1px solid color-mix(in srgb,var(--ink) 35%,transparent);background:none;padding:0;cursor:pointer;
   font:italic 600 .85rem/1 var(--f-disp);color:var(--dim)}
+.info{display:inline-grid;place-items:center}
 .info:hover,.info[aria-expanded="true"]{color:var(--ink);border-color:var(--acc)}
+.foot .r .info+.info{margin-left:-6px}
+/* just the picture: the page fades away, leaving one small button to bring it back */
+body .page{transition:opacity .6s}
+body.min .page{opacity:0;visibility:hidden;transition:opacity .6s,visibility 0s .6s}
+.unmin{position:fixed;right:18px;bottom:18px;z-index:5;padding:8px 16px;border-radius:99px;cursor:pointer;color:var(--ink);font:500 .7rem var(--f-mono);letter-spacing:.12em;text-transform:uppercase;
+  background:color-mix(in srgb,var(--bg) 70%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid color-mix(in srgb,var(--ink) 18%,transparent);opacity:.75;transition:opacity .3s}
+.unmin:hover,.unmin:focus-visible{opacity:1}
 .cap{position:absolute;right:0;bottom:calc(100% + 8px);max-width:min(380px,100%);margin:0;padding:12px 16px;border-radius:6px;
   background:color-mix(in srgb,var(--bg) 86%,transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid color-mix(in srgb,var(--ink) 12%,transparent);
   color:var(--ink);font:italic 400 1.05rem/1.4 var(--f-disp)}
@@ -125,14 +133,18 @@ a.room:hover h2{color:var(--acc)}
     <a class="tile room" href="writing/"><span class="kick">Soon</span><h2>Writing</h2><p>Screenplays, mostly cold and mostly medieval.</p><span class="go" aria-hidden="true">→</span></a>
   </nav>
   <footer class="tile foot"><span>Bucatini Mickey</span><span class="r"><span><a href="https://letterboxd.com/bucatini_mickey/">Letterboxd ↗</a> · <a href="https://open.spotify.com/user/jmsummers98">Spotify ↗</a> · <a href="https://www.instagram.com/bucatini_mickey/">Instagram ↗</a> · <a href="https://github.com/bucatini-mickey">GitHub ↗</a></span>
-    <button class="info" id="info" type="button" aria-expanded="false" aria-controls="cap" title="What's on screen">i</button></span>
+    <button class="info" id="min" type="button" title="Just the picture" aria-label="Hide the page and show just the picture"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/></svg></button><button class="info" id="info" type="button" aria-expanded="false" aria-controls="cap" title="What's on screen">i</button></span>
     <p class="cap" id="cap" hidden><b>On screen</b><span id="now">Ink, folding over itself</span></p></footer>
 </main>
 </div>
+<button class="unmin" id="unmin" type="button" hidden>Show the page</button>
 <script>/* the last four films from the Film page's diary, in the Film tile */
 fetch('films/recent.json').then(r=>r.ok?r.json():{films:[]}).then(d=>{const esc=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   document.getElementById('watched').innerHTML=(d.films||[]).slice(0,4).map(f=>`<li><img src="${esc(f.p.replace('-0-600-0-900-','-0-230-0-345-'))}" alt="${esc(f.t)} (${esc(f.y)})" title="${esc(f.t)}" loading="lazy"></li>`).join('')}).catch(()=>{});
 addEventListener('hubscene',e=>{document.getElementById('now').textContent=e.detail||'Ink, folding over itself'});
+(function(){const m=document.getElementById('min'),u=document.getElementById('unmin');   /* just the picture, and back */
+  const set=on=>{document.body.classList.toggle('min',on);u.hidden=!on;(on?u:m).focus({preventScroll:true})};
+  m.onclick=()=>set(true);u.onclick=()=>set(false);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!u.hidden)set(false)})})();
 (function(){const b=document.getElementById('info'),c=document.getElementById('cap');   /* the (i) button: what the backdrop is showing */
   const set=o=>{b.setAttribute('aria-expanded',String(o));c.hidden=!o};
   b.onclick=e=>{e.stopPropagation();set(c.hidden)};document.addEventListener('click',e=>{if(!c.contains(e.target))set(false)});document.addEventListener('keydown',e=>{if(e.key==='Escape')set(false)})})();</script>
