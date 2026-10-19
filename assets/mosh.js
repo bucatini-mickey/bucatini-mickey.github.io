@@ -17,7 +17,7 @@
    drifting, as when a camera films its own monitor (the look of Adult Swim's Off the Air).
    A cut (from hub.js) is either a melt, the new picture revealed along the field's contours while the old one flows
    away, or a datamosh: the new picture's edges become motion vectors that push the old picture's pixels, so the new
-   image appears drawn in the old one's colours before its own blocks break through.
+   image appears drawn in the old one's colours before it slowly melts through.
    Usage: const m=Mosh(gl); m.resize(w,h); each frame draw the clean picture into m.target(), then m.step(t). */
 (function(){
   const VS=`#version 300 es
@@ -77,7 +77,7 @@ void main(){
   // datamosh works on macroblocks: one motion vector for each square of pixels, read at the square's centre
   vec2 bid=floor(px/blk), bc=(bid+.5)*blk;
   bool mosh=mode>2.5||(bleed>0.&&cmode>.5);
-  vec2 q=((mosh?bc:px)-.5*res)/res.y, e=vec2(1.5/res.y,0.);
+  vec2 q0=(px-.5*res)/res.y, q=((mosh?bc:px)-.5*res)/res.y, e=vec2(1.5/res.y,0.);
   float F=0.; vec2 flow=vec2(0.); float gl2=0.;
   if(mode>.5||bleed>0.){
     F=field(q); vec2 g=vec2(field(q+e.xy)-F,field(q+e.yx)-F)/e.x;
@@ -91,8 +91,7 @@ void main(){
   } else if(mode>2.5){                                                      // datamosh. The keyframes are gone, so each small block
     // of the last picture is carried along its own motion vector, frame after frame, and the vectors come from the
     // shapes in the picture: pixels stream round the outlines of things and pile up against them. Colour travels on
-    // bigger blocks than detail and slips loose of it; a few blocks freeze; now and
-    // then a patch mends a little; a few blocks freeze
+    // bigger blocks than detail and slips loose of it; a few blocks freeze; the picture heals softly as the spell fades
     float gm, gp, dir=sign(melt);
     vec2 v=mix(shapeFlow(prev,bc,blk*1.5,dir,gp),shapeFlow(src,bc,blk*1.5,dir,gm),.6);
     float hb=hash(bid+epoch*.13);
@@ -100,7 +99,6 @@ void main(){
     vec2 bid2=floor(px/(blk*2.)); float hc=hash(bid2+epoch*.7);
     vec2 mvc=mv*1.7+(vec2(hc,hash(bid2+9.1))-.5)*1.6*amt*step(.7,hc);
     p=moshRead(px,mv,mvc,huesh*6.+.012*dir);
-    if(hash(bid+floor(t*.5)+epoch*1.31)<.025*amt) p=mix(p,s,.2);           // patches mend, a little at a time
     fresh=mix(.03,.004,amt);
   } else if(mode>1.5){                                                      // video feedback: the picture falls into itself
     vec2 c=px-.5*res, z=c*(1.-zoom*amt)+vec2(-c.y,c.x)*spin*amt+flow*.5*amt;
@@ -109,15 +107,17 @@ void main(){
   }
   if(bleed>0.&&cmode>.5){                                                  // a datamosh cut: the new picture's shapes become the motion
     // vectors that push the old picture's pixels, so the new image is drawn in the old one's colours, streaming round its
-    // outlines; then its own blocks break through, more and more, until it has taken over
+    // outlines; then, still streaming, the new picture seeps in and melts over the old one along the field's smooth
+    // contours, slowly, until it has taken over
     float pr=1.-bleed, gm, dir=sign(melt);
     vec2 v=shapeFlow(src,bc,blk*1.5,dir,gm);
-    float k=sin(3.1416*min(1.,pr*1.12));
+    float k=sin(3.1416*min(1.,pr*1.05));
     vec2 mv=(v*1.6+flow*.5)*k, bid2=floor(px/(blk*2.));
     vec2 mvc=mv*1.8+(vec2(hash(bid2+epoch),hash(bid2+4.2+epoch))-.5)*2.*k;
     p=moshRead(px,mv,mvc,.03*dir);
-    p=mix(p,s,smoothstep(.5,1.,pr)*.06);
-    if(hash(bid+epoch*1.7)<pr*pr*1.15-.12) p=s;                              // a block once refreshed stays put, as an intra block does
+    float Fp=field(q0), r=smoothstep(.3,1.,pr)*1.35;                        // the melting front, on the smooth field at this pixel
+    float edge=smoothstep(Fp-.3,Fp+.3,r);
+    p=mix(p,s,edge*.03+smoothstep(.92,1.,pr)*.1);
     fresh=0.;
   } else if(bleed>0.){                                                      // a melting cut: reveal the new picture by field value, softly
     float edge=smoothstep(F-.22,F+.22,1.-bleed);
@@ -164,7 +164,7 @@ void main(){ o=texture(tex,gl_FragCoord.xy/res); }`;
     return {
       resize(w,h){ if(w===W&&h===H) return; W=w;H=h; free(src); buf.forEach(free); src=tex(); buf=[tex(),tex()]; first=true; gl.bindFramebuffer(gl.FRAMEBUFFER,null) },
       size(){ return [W,H] },
-      cut(t){ cutT=t; S.cmode=Math.random()<.55?1:0; cutLen=S.cmode?5+Math.random()*4:7+Math.random()*5; newField(); ep++; ep0=t; epT=t+cutLen+1; S.mode=0 },   // the melt into the next picture
+      cut(t){ cutT=t; S.cmode=Math.random()<.55?1:0; cutLen=S.cmode?12+Math.random()*6:7+Math.random()*5; newField(); ep++; ep0=t; epT=t+cutLen+1; S.mode=0 },   // the melt into the next picture
       target(){ gl.bindFramebuffer(gl.FRAMEBUFFER,src.f); gl.viewport(0,0,W,H); return src.f },
       step(t){
         if(t>epT) newEpoch(t);
