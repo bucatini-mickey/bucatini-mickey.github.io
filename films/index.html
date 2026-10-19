@@ -181,7 +181,7 @@ h1,h2,h3{font-family:var(--f-body)}
 .handle{display:inline-block;margin-top:6px;font-size:.85rem;color:var(--dim);text-decoration:none}
 .handle:hover{color:var(--lbb)}
 .lbstats{display:flex;margin:0;gap:0}
-.lbstats div{padding:0 18px;border-left:1px solid var(--line);text-align:center}
+.lbstats div{padding:0 14px;border-left:1px solid var(--line);text-align:center}
 .lbstats div:first-child{border-left:0}
 .lbstats dd{margin:0;font:700 1.5rem/1.1 var(--f-body);color:var(--ink);font-variant-numeric:tabular-nums}
 .lbstats dt{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
@@ -212,6 +212,12 @@ a:hover .pst::after,a:focus-visible .pst::after{box-shadow:inset 0 0 0 3px var(-
 #recent{--n:8}
 @media (max-width:760px){#recent{--n:4}}
 .favs{--n:4}
+/* the four favourites sit small in the header, beside the name, as on Letterboxd's own profile */
+.hfavs{display:flex;flex-direction:column;gap:6px;margin-right:auto;margin-left:clamp(0px,2vw,20px)}
+.hfavs .hl{font:600 .66rem/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.hfavs .favs{width:clamp(180px,18vw,215px);gap:5px}
+.hfavs .favs .cap,.hfavs .favs .meta{display:none}
+@media (max-width:620px){.hfavs{margin-left:0;width:100%}.hfavs .favs{width:100%}}
 .favs .cap{display:block;margin-top:6px;font-size:.78rem;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* reviews */
 .rev{display:grid;grid-template-columns:70px minmax(0,1fr);gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
@@ -229,6 +235,8 @@ a:hover .pst::after,a:focus-visible .pst::after{box-shadow:inset 0 0 0 3px var(-
 .hist .ends{color:var(--lbg);font-size:.8rem}
 /* list cards */
 .lcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px 18px}
+.lcards.big{grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:28px 24px}   /* the lists come first on the profile, and large */
+.lcards.big .lcard b{font-size:1.05rem}
 .lcard{display:block;text-decoration:none;color:inherit;cursor:pointer;background:none;border:0;padding:0;text-align:left;font:inherit}
 .stack{display:flex;margin-bottom:8px}
 .stack .pst{width:22%;flex:none;margin-right:-6%;box-shadow:2px 0 6px rgba(0,0,0,.5)}
@@ -274,6 +282,7 @@ details[open]>summary .tw::before{color:var(--lbg)}
 </div></header>
 <header class="wrap lbhead">
   <div class="who"><span class="av" aria-hidden="true">JS</span><div><h1>Jason Summers</h1><a class="handle" href="https://letterboxd.com/bucatini_mickey/">@bucatini_mickey on Letterboxd ↗</a></div></div>
+  <div class="hfavs"><span class="hl">Favourites</span><ol class="pgrid favs"><li><a href="https://letterboxd.com/film/faust/"><span class="pst"><img src="https://a.ltrbxd.com/resized/alternative-poster/3/9/9/9/8/p/fF1RaI7nmLVGhf0IQVYXtmE7QBs-0-300-0-450-crop.jpg?v=bc90199363" alt="Faust (1994) poster" loading="lazy" width="300" height="450"></span><span class="cap">Faust</span></a></li><li><a href="https://letterboxd.com/film/hour-of-the-wolf/"><span class="pst"><img src="https://a.ltrbxd.com/resized/alternative-poster/4/0/4/2/2/p/uHdXOS8AbfbM5fDJ6ro5LWkgmLE-0-300-0-450-crop.jpg?v=aa74304bc2" alt="Hour of the Wolf (1968) poster" loading="lazy" width="300" height="450"></span><span class="cap">Hour of the Wolf</span></a></li><li><a href="https://letterboxd.com/film/portrait-of-a-lady-on-fire/"><span class="pst"><img src="https://a.ltrbxd.com/resized/alternative-poster/4/6/0/8/3/0/p/m9i7nj78zhxTSozmqaZk3MIH4oo-0-300-0-450-crop.jpg?v=a245fdc7a1" alt="Portrait of a Lady on Fire (2019) poster" loading="lazy" width="300" height="450"></span><span class="cap">Portrait of a Lady on Fire</span></a></li><li><a href="https://letterboxd.com/film/the-boxers-omen/"><span class="pst"><img src="https://a.ltrbxd.com/resized/alternative-poster/1/6/3/5/0/p/3qYpfxp1ejJQcWi7heW2Ke4kW68-0-300-0-450-crop.jpg?v=e39625d325" alt="The Boxer's Omen (1983) poster" loading="lazy" width="300" height="450"></span><span class="cap">The Boxer's Omen</span></a></li></ol></div>
   <dl class="lbstats"><div><dd>815</dd><dt>Films</dt></div><div><dd id="st-year">&nbsp;</dd><dt>This year</dt></div><div><dd id="st-lists">&nbsp;</dd><dt>Lists</dt></div></dl>
 </header>
 <nav class="lbnav wrap" role="tablist" aria-label="Film views">
@@ -281,16 +290,14 @@ details[open]>summary .tw::before{color:var(--lbg)}
   <div class="search"><input id="q" type="search" placeholder="Search lists and films" autocomplete="off" aria-label="Search lists and films"></div>
 </nav>
 <section class="wrap view" id="v-profile">
-  <h2 class="lbh">Favourite films</h2>
-  <ol class="pgrid favs"><li><a href="https://letterboxd.com/film/faust/"><span class="pst"><img src="https://a.ltrbxd.com/resized/alternative-poster/3/9/9/9/8/p/fF1RaI7nmLVGhf0IQVYXtmE7QBs-0-300-0-450-crop.jpg?v=bc90199363" alt="Faust (1994) poster" loading="lazy" width="300" height="450"></span><span class="cap">Faust</span></a></li><li><a href="https://letterboxd.com/film/hour-of-the-wolf/"><span class="pst"><img src="https://a.ltrbxd.com/resized/alternative-poster/4/0/4/2/2/p/uHdXOS8AbfbM5fDJ6ro5LWkgmLE-0-300-0-450-crop.jpg?v=aa74304bc2" alt="Hour of the Wolf (1968) poster" loading="lazy" width="300" height="450"></span><span class="cap">Hour of the Wolf</span></a></li><li><a href="https://letterboxd.com/film/portrait-of-a-lady-on-fire/"><span class="pst"><img src="https://a.ltrbxd.com/resized/alternative-poster/4/6/0/8/3/0/p/m9i7nj78zhxTSozmqaZk3MIH4oo-0-300-0-450-crop.jpg?v=a245fdc7a1" alt="Portrait of a Lady on Fire (2019) poster" loading="lazy" width="300" height="450"></span><span class="cap">Portrait of a Lady on Fire</span></a></li><li><a href="https://letterboxd.com/film/the-boxers-omen/"><span class="pst"><img src="https://a.ltrbxd.com/resized/alternative-poster/1/6/3/5/0/p/3qYpfxp1ejJQcWi7heW2Ke4kW68-0-300-0-450-crop.jpg?v=e39625d325" alt="The Boxer's Omen (1983) poster" loading="lazy" width="300" height="450"></span><span class="cap">The Boxer's Omen</span></a></li></ol>
+  <h2 class="lbh">My lists <button type="button" data-go="lists">All lists →</button></h2>
+  <div class="lcards big" id="plists"></div>
   <h2 class="lbh">Recent activity <button type="button" data-go="diary">Diary →</button></h2>
   <ol class="pgrid" id="recent"></ol>
   <h2 class="lbh">Recent reviews <button type="button" data-go="reviews">More →</button></h2>
   <div id="revs"></div>
   <h2 class="lbh">Ratings <span id="hist-n"></span></h2>
   <div class="hist" id="hist"></div>
-  <h2 class="lbh">Lists <button type="button" data-go="lists">All lists →</button></h2>
-  <div class="lcards" id="plists"></div>
 </section>
 <section class="wrap view" id="v-diary" hidden><h2 class="lbh">Diary</h2><table class="diary" id="diary"></table></section>
 <section class="wrap view" id="v-reviews" hidden><h2 class="lbh">Reviews</h2><div id="allrevs"></div></section>
@@ -538,8 +545,8 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
   // list cards: featured lists, each as a fan of its first five posters; clicking opens it in the Lists view
   function cards(){
     if(typeof L==='undefined') return;
-    const pick=L.filter(l=>l.g.includes('featured')&&l.img&&l.img.p&&l.img.p.length).slice(0,6);
-    const xs=pick.length>=3?pick:L.filter(l=>l.img&&l.img.p&&l.img.p.length>=5).sort((a,b)=>b.c-a.c).slice(0,6);
+    const pick=L.filter(l=>l.g.includes('featured')&&l.img&&l.img.p&&l.img.p.length).slice(0,12);
+    const xs=pick.length>=3?pick:L.filter(l=>l.img&&l.img.p&&l.img.p.length>=5).sort((a,b)=>b.c-a.c).slice(0,12);
     $('plists').innerHTML=xs.map(l=>`<button type="button" class="lcard" data-s="${esc(l.s)}"><span class="stack">${l.img.p.slice(0,5).map(p=>`<span class="pst"><img src="${esc(p[1])}" alt="" loading="lazy" width="230" height="345"></span>`).join('')}</span><b>${esc(l.n)}</b><span>${l.c} films</span></button>`).join('');
     $('plists').querySelectorAll('.lcard').forEach(b=>b.onclick=()=>{ view('lists',true);
       const d=document.querySelector(`details.lst[data-s="${b.dataset.s}"]`); if(!d) return;
