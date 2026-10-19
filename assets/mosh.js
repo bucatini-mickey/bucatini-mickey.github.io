@@ -5,13 +5,14 @@
    The previous output is kept in a texture and fed back each frame (two textures, taking turns), so every push
    accumulates into a smear that heals slowly once it stops.
    What steers it is a field, not a picture: each "epoch" (nine to eighteen seconds, eased in and out) draws at random one of three
-   functions and a random view of it: the Mandelbrot set's smooth escape time, a Julia set's, the stepped
-   diamonds of Andean weaving, or the ink's domain-warped noise. None of these is ever shown; they only steer. Where the picture melts, its pixels flow along the field's contours (the curl of the
+   functions and a random view of it: the Mandelbrot set's smooth escape time, a Julia set's, or the ink's
+   domain-warped noise. None of these is ever shown; they only steer. Where the picture melts, its pixels flow along the field's contours (the curl of the
    field, so they circle its shapes rather than run off them) or down its slope; which parts melt is decided by
    the field's own bands. So the melting is random, but always shaped by one of these functions. The smear takes
    two taps along the motion (a little motion blur keeps it smooth) and pulls the colour channels apart along it.
    Everything is slow and eased: the field turns gently, each epoch swells and fades. Some epochs are calm, some
-   are true datamosh (macroblocks carried along their motion vectors, mended now and then by intra blocks), and
+   are true datamosh (small blocks carried along motion vectors taken from the shapes in the picture, colour slipping
+   loose of detail, mended now and then by refreshed blocks), and
    some are long, slow spells of video feedback: the picture falls into itself, turning, with its hue
    drifting, as when a camera films its own monitor (the look of Adult Swim's Off the Air).
    A cut (from hub.js) is either a melt, the new picture revealed along the field's contours while the old one flows
@@ -34,10 +35,6 @@ float fbm(vec2 p){ float s=0., a=.5; for(int i=0;i<4;i++){ s+=a*noise(p); p=mat2
 // the steering field, 0..1, at screen point q (height = 1)
 float field(vec2 q){
   float a=fr+t*.012; q=mat2(cos(a),-sin(a),sin(a),cos(a))*q;                  // the field turns slowly, so the flow keeps changing
-  if(fk>2.5){                                                              // stepped diamonds, as in Andean weaving
-    vec2 c=fract(q*fs+fc)-.5; float d=abs(c.x)+abs(c.y);                    // the diamonds' rings, smooth (no stair steps)
-    return clamp(fract(d*3.)*.6+d*.8,0.,1.);
-  }
   if(fk<.5||fk>1.5&&fk<2.5){
     vec2 z=fk<.5?vec2(0.):q*fs, c=fk<.5?fc+q*fs:jc; float n=0.;
     for(int i=0;i<36;i++){ z=vec2(z.x*z.x-z.y*z.y,2.*z.x*z.y)+c; if(dot(z,z)>64.) break; n+=1.; }
@@ -47,8 +44,24 @@ float field(vec2 q){
   vec2 p=q*fs+fc, w=vec2(fbm(p+t*.015),fbm(p+vec2(5.2,1.3)-t*.015));
   return clamp((fbm(p+3.*w)-.25)*1.8,0.,1.);
 }
-vec3 hue(vec3 c,float a){ const mat3 toY=mat3(.299,.596,.211,.587,-.274,-.523,.114,-.322,.312); const mat3 toR=mat3(1.,1.,1.,.956,-.272,-1.106,.621,-.647,1.703);
-  vec3 y=toY*c; float h=atan(y.z,y.y)+a, ch=length(y.yz); return toR*vec3(y.x,ch*cos(h),ch*sin(h)); }
+const mat3 toY=mat3(.299,.596,.211,.587,-.274,-.523,.114,-.322,.312), toR=mat3(1.,1.,1.,.956,-.272,-1.106,.621,-.647,1.703);
+vec3 hue(vec3 c,float a){ vec3 y=toY*c; float h=atan(y.z,y.y)+a, ch=length(y.yz); return toR*vec3(y.x,ch*cos(h),ch*sin(h)); }
+float lum(sampler2D tx,vec2 p){ return dot(texture(tx,p/res).rgb,vec3(.3,.59,.11)); }
+// a datamoshed read: brightness and colour are carried separately, as a codec stores them (colour on blocks twice the
+// size), so colour slides further than the detail and comes apart from it; the colour also turns a little with the
+// distance it travels, leaving rainbow trails
+vec4 moshRead(vec2 px,vec2 mv,vec2 mvc,float turn){
+  vec3 a=toY*texture(prev,(px-mv)/res).rgb, b=toY*texture(prev,(px-mvc)/res).rgb;
+  float h=atan(b.z,b.y)+turn*length(mvc), ch=length(b.yz);
+  return vec4(toR*vec3(a.x,ch*cos(h),ch*sin(h)),1.);
+}
+// the motion vector of a block, from the shapes in the picture: along the edges around the block's centre (so pixels
+// stream round the outlines of things) and a little across them; g is the brightness slope there
+vec2 shapeFlow(sampler2D tx,vec2 bc,float d,float dir,out float gm){
+  vec2 g=vec2(lum(tx,bc+vec2(d,0))-lum(tx,bc-vec2(d,0)),lum(tx,bc+vec2(0,d))-lum(tx,bc-vec2(0,d)));
+  gm=length(g); vec2 n=gm>1e-3?g/gm:vec2(0.);
+  return (vec2(-n.y,n.x)*dir*2.6+n*.9)*smoothstep(.015,.12,gm);
+}
 // the previous picture, smeared along a motion: two taps (a little motion blur keeps the melt smooth) and the
 // colour channels pulled apart along it (the chromatic tearing of analogue video)
 vec4 smear(vec2 px,vec2 mv,float split){
@@ -75,31 +88,36 @@ void main(){
   if(mode>.5&&mode<1.5){                                                    // a melt along the field
     float b=fract(F*band+t*.015), m=smoothstep(.0,.35,b)*smoothstep(1.,.55,b)*amt;   // wide, soft bands, eased in and out
     p=smear(px,flow*m,.2+.4*m); fresh=mix(.03,0.,m);
-  } else if(mode>2.5){                                                      // datamosh: the I-frames are gone, so each block of the
-    // last picture is carried along its block's motion vector, frame after frame. Neighbouring blocks share the field's
-    // flow so the picture slides in chunks; some blocks get a vector of their own; a few are stuck repeating a large one
-    // and bloom into streaks. Now and then a block is refreshed (an intra block), so the picture is mended in squares.
-    float hb=hash(bid+epoch*.13), hj=hash(bid+3.1+epoch);
-    vec2 jit=(vec2(hj,hash(bid+7.7+epoch))-.5)*2.4*step(.62,hb);
-    vec2 mv=(flow*1.5+jit)*amt*(hb>.95?3.5:1.);
-    p=texture(prev,(px-mv)/res);
-    if(hash(bid+floor(t*6.)+epoch*1.31)<.006*amt) p=s;
-    fresh=mix(.03,0.,amt);
+  } else if(mode>2.5){                                                      // datamosh. The keyframes are gone, so each small block
+    // of the last picture is carried along its own motion vector, frame after frame, and the vectors come from the
+    // shapes in the picture: pixels stream round the outlines of things and pile up against them. Colour travels on
+    // bigger blocks than detail and slips loose of it; a few blocks freeze; now and
+    // then a patch mends a little; a few blocks freeze
+    float gm, gp, dir=sign(melt);
+    vec2 v=mix(shapeFlow(prev,bc,blk*1.5,dir,gp),shapeFlow(src,bc,blk*1.5,dir,gm),.6);
+    float hb=hash(bid+epoch*.13);
+    vec2 mv=(v+flow*.25)*amt*(hb>.96?0.:1.);                               // a few blocks freeze
+    vec2 bid2=floor(px/(blk*2.)); float hc=hash(bid2+epoch*.7);
+    vec2 mvc=mv*1.7+(vec2(hc,hash(bid2+9.1))-.5)*1.6*amt*step(.7,hc);
+    p=moshRead(px,mv,mvc,huesh*6.+.012*dir);
+    if(hash(bid+floor(t*.5)+epoch*1.31)<.025*amt) p=mix(p,s,.2);           // patches mend, a little at a time
+    fresh=mix(.03,.004,amt);
   } else if(mode>1.5){                                                      // video feedback: the picture falls into itself
     vec2 c=px-.5*res, z=c*(1.-zoom*amt)+vec2(-c.y,c.x)*spin*amt+flow*.5*amt;
     p=smear(px,px-(.5*res+z),.3);
     p.rgb=hue(p.rgb,huesh*amt); fresh=mix(.04,.012,amt);
   }
-  if(bleed>0.&&cmode>.5){                                                  // a datamosh cut: the new picture's shapes push the old
-    // picture's pixels (its edges become the motion vectors, block by block), so the new image is drawn in the old one's
-    // colours; then its own blocks pop in, more and more, until it has taken over
-    float pr=1.-bleed, d=blk*.5;
-    float lr=dot(texture(src,(bc+vec2(d,0))/res).rgb,vec3(.33)), ll=dot(texture(src,(bc-vec2(d,0))/res).rgb,vec3(.33));
-    float lu=dot(texture(src,(bc+vec2(0,d))/res).rgb,vec3(.33)), ld=dot(texture(src,(bc-vec2(0,d))/res).rgb,vec3(.33));
-    vec2 mv=(vec2(lr-ll,lu-ld)*blk*2.6+flow*.9)*sin(3.1416*min(1.,pr*1.15));
-    p=texture(prev,(px-mv)/res);
-    p=mix(p,s,smoothstep(.45,1.,pr)*.07);
-    if(hash(bid+floor(t*8.)+epoch*1.7)<pr*pr*pr*.06) p=s;
+  if(bleed>0.&&cmode>.5){                                                  // a datamosh cut: the new picture's shapes become the motion
+    // vectors that push the old picture's pixels, so the new image is drawn in the old one's colours, streaming round its
+    // outlines; then its own blocks break through, more and more, until it has taken over
+    float pr=1.-bleed, gm, dir=sign(melt);
+    vec2 v=shapeFlow(src,bc,blk*1.5,dir,gm);
+    float k=sin(3.1416*min(1.,pr*1.12));
+    vec2 mv=(v*1.6+flow*.5)*k, bid2=floor(px/(blk*2.));
+    vec2 mvc=mv*1.8+(vec2(hash(bid2+epoch),hash(bid2+4.2+epoch))-.5)*2.*k;
+    p=moshRead(px,mv,mvc,.03*dir);
+    p=mix(p,s,smoothstep(.5,1.,pr)*.06);
+    if(hash(bid+epoch*1.7)<pr*pr*1.15-.12) p=s;                              // a block once refreshed stays put, as an intra block does
     fresh=0.;
   } else if(bleed>0.){                                                      // a melting cut: reveal the new picture by field value, softly
     float edge=smoothstep(F-.22,F+.22,1.-bleed);
@@ -134,8 +152,8 @@ void main(){ o=texture(tex,gl_FragCoord.xy/res); }`;
     }
     function newEpoch(t){
       ep++; ep0=t; epT=t+9+Math.random()*9;                                       // long epochs, eased in and out (amt), so nothing jumps
-      const r=Math.random(); S.mode=r<.18?0:r<.55?1:r<.72?2:3;                     // calm, a field melt, feedback, or datamosh
-      if(S.mode===3) newField();
+      const r=Math.random(); S.mode=r<.15?0:r<.48?1:r<.65?2:3;                     // calm, a field melt, feedback, or datamosh
+      if(S.mode===3){ newField(); S.huesh=(Math.random()-.5)*.012 }
       if(S.mode===1) newField();
       if(S.mode===2){ newField(); S.zoom=.002+Math.random()*.004; S.spin=(Math.random()-.5)*.004; S.huesh=(Math.random()-.5)*.016 }   // slow, drifting feedback
     }
@@ -155,7 +173,7 @@ void main(){ o=texture(tex,gl_FragCoord.xy/res); }`;
         gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D,a.t); gl.uniform1i(U(pm,'prev'),0);
         gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D,src.t); gl.uniform1i(U(pm,'src'),1);
         gl.uniform2f(U(pm,'res'),W,H); gl.uniform1f(U(pm,'t'),t); gl.uniform1f(U(pm,'epoch'),ep%997); gl.uniform1f(U(pm,'first'),first?1:0);
-        gl.uniform1f(U(pm,'mode'),S.mode); gl.uniform1f(U(pm,'cmode'),S.cmode); gl.uniform1f(U(pm,'blk'),Math.max(8,Math.round(16*H/900))); gl.uniform1f(U(pm,'zoom'),S.zoom); gl.uniform1f(U(pm,'spin'),S.spin); gl.uniform1f(U(pm,'huesh'),S.huesh);
+        gl.uniform1f(U(pm,'mode'),S.mode); gl.uniform1f(U(pm,'cmode'),S.cmode); gl.uniform1f(U(pm,'blk'),Math.max(3,Math.round(6*H/900))); gl.uniform1f(U(pm,'zoom'),S.zoom); gl.uniform1f(U(pm,'spin'),S.spin); gl.uniform1f(U(pm,'huesh'),S.huesh);
         gl.uniform1f(U(pm,'fk'),S.fk); gl.uniform1f(U(pm,'fs'),S.fs); gl.uniform1f(U(pm,'fr'),S.fr); gl.uniform1f(U(pm,'melt'),S.melt*Math.max(.6,H/500));
         gl.uniform1f(U(pm,'push'),S.push); gl.uniform1f(U(pm,'band'),S.band); gl.uniform2f(U(pm,'fc'),S.fc[0],S.fc[1]); gl.uniform2f(U(pm,'jc'),S.jc[0],S.jc[1]);
         { const u=Math.max(0,1-(t-cutT)/cutLen); gl.uniform1f(U(pm,'bleed'),u*u*(3-2*u)) }   // the cut eased at both ends

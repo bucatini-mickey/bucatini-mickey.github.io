@@ -237,6 +237,25 @@ a:hover .pst::after,a:focus-visible .pst::after{box-shadow:inset 0 0 0 3px var(-
 .lcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px 18px}
 .lcards.big{grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:28px 24px}   /* the lists come first on the profile, and large */
 .lcards.big .lcard b{font-size:1.05rem}
+/* the profile's shelves: my list sections as tabs, and each group in a section as a row of list cards that scrolls
+   sideways (Favourites: Top 4s, Decade Favourites, Personal Picks...; Browse: Moods, Story Archetypes...) */
+.shtabs{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 6px}
+.shtabs button{background:var(--bg2);border:1px solid var(--line);border-radius:99px;padding:7px 15px;cursor:pointer;color:var(--dim);font:700 .78rem/1 var(--f-body);letter-spacing:.04em}
+.shtabs button:hover{color:var(--ink);border-color:var(--lbb)}
+.shtabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.shtabs button i{font-style:normal;opacity:.6;margin-left:6px;font-weight:600}
+.shnote{margin:0 0 18px;color:var(--dim);font-size:.9rem}
+.shelf{margin:0 0 26px}
+.shelf h3{display:flex;align-items:baseline;gap:10px;margin:0 0 10px;font:700 1.02rem/1.2 var(--f-body)}
+.shelf h3 span{font:600 .72rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.shelf h3 button{margin-left:auto;background:none;border:0;padding:0;cursor:pointer;color:var(--dim);font:600 .72rem var(--f-body);letter-spacing:.1em;text-transform:uppercase}
+.shelf h3 button:hover{color:var(--ink)}
+.row{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(170px,22vw,210px);gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:thin}
+.row .lcard{scroll-snap-align:start}
+.row .lcard b{font-size:.92rem}
+.chips{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0;padding:0;list-style:none;font-size:.9rem}
+.chips button{background:none;border:0;padding:0;cursor:pointer;color:var(--ink);text-align:left;font:inherit}.chips button:hover{color:var(--lbb)}
+.chips i{font-style:normal;color:var(--dim);margin-left:4px}
 .lcard{display:block;text-decoration:none;color:inherit;cursor:pointer;background:none;border:0;padding:0;text-align:left;font:inherit}
 .stack{display:flex;margin-bottom:8px}
 .stack .pst{width:22%;flex:none;margin-right:-6%;box-shadow:2px 0 6px rgba(0,0,0,.5)}
@@ -290,8 +309,10 @@ details[open]>summary .tw::before{color:var(--lbg)}
   <div class="search"><input id="q" type="search" placeholder="Search lists and films" autocomplete="off" aria-label="Search lists and films"></div>
 </nav>
 <section class="wrap view" id="v-profile">
-  <h2 class="lbh">My lists <button type="button" data-go="lists">All lists →</button></h2>
-  <div class="lcards big" id="plists"></div>
+  <h2 class="lbh">Lists <button type="button" data-go="lists">The full index →</button></h2>
+  <div class="shtabs" id="shtabs" role="tablist" aria-label="List sections"></div>
+  <p class="shnote" id="shnote"></p>
+  <div id="shelves"></div>
   <h2 class="lbh">Recent activity <button type="button" data-go="diary">Diary →</button></h2>
   <ol class="pgrid" id="recent"></ol>
   <h2 class="lbh">Recent reviews <button type="button" data-go="reviews">More →</button></h2>
@@ -543,17 +564,39 @@ const m=decodeURIComponent(location.hash).match(/^#tag=(.+)$/);if(m)openTag(m[1]
     $('diary').innerHTML=rows;
   }
   // list cards: featured lists, each as a fan of its first five posters; clicking opens it in the Lists view
-  function cards(){
-    if(typeof L==='undefined') return;
-    const pick=L.filter(l=>l.g.includes('featured')&&l.img&&l.img.p&&l.img.p.length).slice(0,12);
-    const xs=pick.length>=3?pick:L.filter(l=>l.img&&l.img.p&&l.img.p.length>=5).sort((a,b)=>b.c-a.c).slice(0,12);
-    $('plists').innerHTML=xs.map(l=>`<button type="button" class="lcard" data-s="${esc(l.s)}"><span class="stack">${l.img.p.slice(0,5).map(p=>`<span class="pst"><img src="${esc(p[1])}" alt="" loading="lazy" width="230" height="345"></span>`).join('')}</span><b>${esc(l.n)}</b><span>${l.c} films</span></button>`).join('');
-    $('plists').querySelectorAll('.lcard').forEach(b=>b.onclick=()=>{ view('lists',true);
-      const d=document.querySelector(`details.lst[data-s="${b.dataset.s}"]`); if(!d) return;
-      const sec=d.closest('main>section'); if(sec&&typeof show==='function') show(sec.id);
-      let e=d; while(e){ if(e.tagName==='DETAILS') e.open=true; e=e.parentElement } d.scrollIntoView({block:'center'}) });
-  }
-  cards();
+  // the shelves: each of my list sections (the TREE that lays out the Lists view) as a tab; each group in it as a row
+  function open_(slug){ view('lists',true);
+    const d=document.querySelector(`details.lst[data-s="${slug}"]`); if(!d) return;
+    const sec=d.closest('main>section'); if(sec&&typeof show==='function') show(sec.id);
+    let e=d; while(e){ if(e.tagName==='DETAILS') e.open=true; e=e.parentElement } d.scrollIntoView({block:'center'}) }
+  function groups(sec){
+    if(sec.years){ const ev=L.filter(l=>l.ev), ys=[...new Set(ev.map(l=>l.ev[0]))].sort((a,b)=>b-a);
+      return ys.map(y=>({t:String(y),xs:ev.filter(l=>l.ev[0]===y).sort((a,b)=>a.ev[1]-b.ev[1])})) }
+    const out=[], used=new Set();
+    const walk=(n,pre)=>{ if(n.tree) return;
+      if(n.list){ const l=BY[n.list]; if(l&&!used.has(l)){ used.add(l); out.push({t:l.n,xs:[l]}) } return }
+      if(n.items){ n.items.forEach(k=>walk(k,n.t||pre)); return }
+      const xs=L.filter(l=>(!n.rest||!used.has(l))&&n.q(l)).sort(n.sort||nat); xs.forEach(l=>used.add(l));
+      if(xs.length) out.push({t:n.t,pre,xs}) };
+    (sec.items||[]).forEach(k=>walk(k,'')); return out }
+  const card=l=>`<button type="button" class="lcard" data-s="${esc(l.s)}"><span class="stack">${l.img.p.slice(0,5).map(p=>`<span class="pst"><img src="${esc(p[1])}" alt="" loading="lazy" width="230" height="345"></span>`).join('')}</span><b>${esc(l.n)}</b><span>${l.c} films</span></button>`;
+  function shelves(){
+    if(typeof L==='undefined'||typeof TREE==='undefined') return;
+    const secs=TREE.filter(t=>!t.scale).map(t=>({...t,gs:groups(t)})).filter(t=>t.gs.length);
+    const n=t=>new Set(t.gs.flatMap(g=>g.xs)).size;
+    $('shtabs').innerHTML=secs.map((t,i)=>`<button role="tab" type="button" data-i="${i}" aria-selected="${i===0}">${esc(t.t)}<i>${n(t)}</i></button>`).join('');
+    const pick=i=>{ const t=secs[i];
+      $('shtabs').querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',b.dataset.i==i));
+      $('shnote').textContent=t.note||'';
+      $('shelves').innerHTML=t.gs.map(g=>{ const pics=g.xs.filter(l=>l.img&&l.img.p&&l.img.p.length), bare=g.xs.filter(l=>!(l.img&&l.img.p&&l.img.p.length));
+        return `<section class="shelf"><h3>${esc(g.t)}${g.pre&&g.pre!==g.t?`<span>${esc(g.pre)}</span>`:''}<span>${g.xs.length} list${g.xs.length===1?'':'s'}</span><button type="button" data-sec="${esc(t.id)}">In the index →</button></h3>`+
+          (pics.length?`<div class="row">${pics.map(card).join('')}</div>`:'')+
+          (bare.length?`<ul class="chips">${bare.map(l=>`<li><button type="button" data-s="${esc(l.s)}">${esc(l.n)}<i>${l.c}</i></button></li>`).join('')}</ul>`:'')+`</section>` }).join('');
+      $('shelves').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>open_(b.dataset.s));
+      $('shelves').querySelectorAll('[data-sec]').forEach(b=>b.onclick=()=>{ view('lists',true); if(typeof show==='function') show(b.dataset.sec); scrollTo({top:document.querySelector('.lbnav').offsetTop}) }) };
+    $('shtabs').querySelectorAll('button').forEach(b=>b.onclick=()=>pick(+b.dataset.i));
+    pick(0) }
+  shelves();
   Promise.all([fetch('recent.json').then(r=>r.ok?r.json():{films:[]}),fetch('posters.json').then(r=>r.ok?r.json():null).catch(()=>null)])
     .then(([R,P])=>{ PJ=P; draw(R) }).catch(()=>{});
 })();
