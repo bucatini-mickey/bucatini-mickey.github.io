@@ -4,8 +4,8 @@
    parts freeze while others move on, and a new picture bleeds out of the old one. This does that on purpose.
    The previous output is kept in a texture and fed back each frame (two textures, taking turns), so every push
    accumulates into a smear, always healing a little towards the clean picture so the picture stays itself.
-   Three motions run all the time, each swelling and fading on its own slow cycle (one to two minutes), so the whole
-   never stops and never pulses back to normal:
+   Three motions run all the time, trading places on slow cycles (one to two minutes) while their sum stays steady,
+   so the whole moves at one even pace; it eases off only for a few seconds around each finished photograph:
    - a melt: pixels flow round the contours of a field (the Mandelbrot set's smooth escape time, a Julia set's, or the
      ink's domain-warped noise, chosen for the visit and turning slowly; never shown, it only steers) where its bands say;
    - a datamosh: small blocks carried along vectors taken from the shapes in the picture, so pixels stream round the
@@ -21,7 +21,7 @@
 in vec2 a; void main(){ gl_Position=vec4(a,0.,1.); }`;
   const FS=`#version 300 es
 precision highp float;
-uniform sampler2D prev, src; uniform vec2 res; uniform float t, epoch, first, bleed, blk, wm, wd, wf;
+uniform sampler2D prev, src; uniform vec2 res; uniform float t, epoch, first, bleed, blk, wm, wd, wf, spd, heal, dirv;
 uniform float fk, fs, fr, melt, push, band, zoom, spin, huesh; uniform vec2 fc, jc;
 out vec4 o;
 float hash(vec2 p){ uvec2 v=floatBitsToUint(p)*1664525u+1013904223u; v.x+=v.y*1664525u; v.y+=v.x*1664525u; v^=v>>16u;
@@ -68,7 +68,7 @@ void main(){
   float F=field(q); vec2 g=vec2(field(q+e.xy)-F,field(q+e.yx)-F)/e.x;
   float gl2=length(g); vec2 n=gl2>1e-4?g/gl2:vec2(0.);
   vec2 flow=(vec2(-n.y,n.x)*melt+n*push)*smoothstep(.0,.6,gl2*.04);
-  float dir=melt<0.?-1.:1.;
+  float dir=dirv;
   // the three motions, always all present in some measure (wm, wd, wf), added together. The melt, along the field's bands:
   float b=fract(F*band+t*.015), m=smoothstep(.0,.35,b)*smoothstep(1.,.55,b);
   vec2 mv=flow*m*wm;
@@ -79,17 +79,17 @@ void main(){
   vec2 c=px-.5*res; mv+=(c*zoom-vec2(-c.y,c.x)*spin)*wf;
   // a cut: the new picture's shapes push the old picture's pixels, so it appears drawn in the old colours
   float pr=1.-bleed, k=bleed>0.?sin(3.1416*min(1.,pr*1.05)):0.;
-  if(bleed>0.) mv+=(shapeFlow(src,bc,blk*1.5,dir)*1.6+flow*.5)*k;
+  if(bleed>0.) mv+=(shapeFlow(src,bc,blk*1.5,dir)+flow*.35)*k*spd;   // no faster than the motion around it
   vec2 bid2=floor(px/(blk*2.)); float hc=hash(bid2+epoch*.7);
   vec2 mvc=mv+(mv*.7+(vec2(hc,hash(bid2+9.1))-.5)*1.6*step(.7,hc))*max(wd,k);     // colour on bigger blocks, slipping loose
   vec4 p=moshRead(px,mv,mvc,.012*dir*max(wd,k));
   p.rgb=hue(p.rgb,huesh*wf);
   if(bleed>0.){                                                             // ...then it seeps in and melts over the old one, slowly
     float r=smoothstep(.3,1.,pr)*1.35, edge=smoothstep(F-.3,F+.3,r);
-    o=mix(p,s,edge*.03+smoothstep(.92,1.,pr)*.1); return;
+    o=mix(p,s,edge*.03+smoothstep(.8,1.,pr)*.035); return;
   }
   float act=clamp(wm*m+wd+wf,0.,1.);
-  o=mix(p,s,.012+.025*(1.-act));                                           // always healing a little, so the picture stays itself
+  o=mix(p,s,.012+.025*(1.-act)+heal);                                           // always healing a little, so the picture stays itself
 }`;
   const BLIT=`#version 300 es
 precision mediump float;
@@ -105,7 +105,7 @@ void main(){ o=texture(tex,gl_FragCoord.xy/res); }`;
     const pm=prog(FS), pb=prog(BLIT); if(!pm||!pb) return null;
     const U=(p,n)=>gl.getUniformLocation(p,n);
     let W=0,H=0,src=null,buf=[],cur=0,first=true,ep=0,cutT=-99,cutLen=16,t00=null;
-    const ph=[0,1,2,3,4,5,6].map(()=>Math.random()*6.283);
+    const ph=[0,1,2,3,4,5,6].map(()=>Math.random()*6.283), SGN=Math.random()<.5?-1:1;   // the melt keeps one direction for the visit
     // the field: one of the three functions at a random view, kept for the visit (it turns slowly, and the ink one moves)
     const S={fk:pick([0,0,1,1,2,2]),fs:1,fr:Math.random()*6.283,band:2+Math.floor(Math.random()*4),fc:[-.62,0],jc:[-.8,.156]};
     if(S.fk===0){ const v=pick(MVIEWS); S.fc=[v[0],v[1]]; S.fs=v[2]*(.6+Math.random()*.9) }
@@ -123,18 +123,21 @@ void main(){ o=texture(tex,gl_FragCoord.xy/res); }`;
       target(){ gl.bindFramebuffer(gl.FRAMEBUFFER,src.f); gl.viewport(0,0,W,H); return src.f },
       step(t){
         if(t00===null) t00=t; const warm=Math.min(1,(t-t00)/8);                 // eases in over the first seconds
-        const u=Math.max(0,1-(t-cutT)/cutLen), bleed=u*u*(3-2*u), dip=bleed>0?1-.45*Math.sin(Math.PI*(1-bleed)):1;   // the cut leads; the rest eases back under it
-        // the three motions swell and fade on their own slow cycles; together they never fall below a floor
+        // one steady pace. The cut's own push is no stronger than the motion around it, and that motion eases back while
+        // the cut works; the only change of speed is a gentle valley, about ten seconds wide, around the moment a
+        // photograph is whole, so it can be looked at before the melting picks up again
+        const u=Math.max(0,1-(t-cutT)/cutLen), bleed=u*u*(3-2*u), kc=bleed>0?Math.sin(Math.PI*Math.min(1,(1-bleed)*1.05)):0;
+        const valley=cutT>0?Math.exp(-((((t-cutT-cutLen)-1)/5)**2)):0, spd=1-.6*valley;
+        // the three motions trade places on slow cycles, but their sum is held steady
         let wm=.15+.55*wave(t,83,0), wd=.12+.55*wave(t,61,1)**1.5, wf=.7*wave(t,109,2)**2;
-        const tot=wm+wd+wf; if(tot<.6){ const f=.6/tot; wm*=f; wd*=f; wf*=f }
-        wm*=warm*dip; wd*=warm*dip; wf*=warm*dip;
-        const melt=(.35+.6*wave(t,47,3))*Math.max(.6,H/500)*(Math.sin(t*6.283/170+ph[4])<0?-1:1), push=.4*(wave(t,71,5)-.5);
+        const g=.75/(wm+wd+wf)*warm*spd*(1-.4*kc); wm*=g; wd*=g; wf*=g;
+        const melt=(.55+.3*wave(t,47,3))*Math.max(.6,H/500)*SGN, push=.4*(wave(t,71,5)-.5);
         const a=buf[cur], b=buf[1-cur], f1=(n,v)=>gl.uniform1f(U(pm,n),v);
         gl.useProgram(pm); gl.bindFramebuffer(gl.FRAMEBUFFER,b.f); gl.viewport(0,0,W,H);
         gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D,a.t); gl.uniform1i(U(pm,'prev'),0);
         gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D,src.t); gl.uniform1i(U(pm,'src'),1);
         gl.uniform2f(U(pm,'res'),W,H); f1('t',t); f1('epoch',(ep*31+Math.floor(t/23))%997); f1('first',first?1:0); f1('bleed',bleed);
-        f1('blk',Math.max(3,Math.round(6*H/900))); f1('wm',wm); f1('wd',wd); f1('wf',wf);
+        f1('blk',Math.max(3,Math.round(6*H/900))); f1('wm',wm); f1('wd',wd); f1('wf',wf); f1('spd',spd); f1('heal',.03*valley); f1('dirv',SGN);
         f1('zoom',.0015+.0045*wave(t,37,6)); f1('spin',.0035*Math.sin(t*6.283/93+ph[3])); f1('huesh',.004*Math.sin(t*6.283/57+ph[5]));
         f1('fk',S.fk); f1('fs',S.fs*(1+.15*Math.sin(t*.013))); f1('fr',S.fr); f1('melt',melt); f1('push',push); f1('band',S.band);
         gl.uniform2f(U(pm,'fc'),S.fc[0],S.fc[1]); gl.uniform2f(U(pm,'jc'),S.jc[0],S.jc[1]);

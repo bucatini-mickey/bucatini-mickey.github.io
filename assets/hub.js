@@ -72,7 +72,7 @@ void main(){
     // photographs live on jsonsummers.github.io (with the Photos and Art pages); fetched one at a time, just before they are needed
     const LIB='https://jsonsummers.github.io/';
     let list=[], jokes=[], next=null, pi=0, ji=0;
-    fetch(LIB+'assets/library.json').then(r=>r.ok?r.json():{}).then(d=>{ const all=(d.photos||[]).filter(x=>x.files), tag=t=>all.filter(x=>(x.tags||['home']).includes(t)).sort(()=>Math.random()-.5); list=[...new Map([...tag('home'),...tag('gallery')].map(p=>[p.id,p])).values()].sort(()=>Math.random()-.5); jokes=tag('joke'); load() }).catch(()=>{});
+    fetch(LIB+'assets/library.json').then(r=>r.ok?r.json():{}).then(d=>{ const all=(d.photos||[]).filter(x=>x.files), tag=t=>all.filter(x=>(x.tags||['home']).includes(t)).sort(()=>Math.random()-.5); list=tag('home'); jokes=tag('joke'); load() }).catch(()=>{});   // only photos tagged for the home page (home/ and home_and_gallary/)
     function load(){
       if(!list.length||next) return;
       const ph=jokes.length&&Math.random()<.18?jokes[ji++%jokes.length]:list[pi++%list.length], im=new Image(); im.decoding='async'; im.crossOrigin='anonymous';   // from the other site, which allows it   // now and then, a joke

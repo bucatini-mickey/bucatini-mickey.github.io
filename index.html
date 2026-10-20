@@ -79,7 +79,18 @@ body .page>.bar{background:color-mix(in srgb,var(--bg) 78%,transparent);-webkit-
 .tile{position:relative;display:block;padding:18px 20px;border-radius:6px;text-decoration:none;color:var(--ink);
   background:color-mix(in srgb,var(--bg) 60%,transparent);-webkit-backdrop-filter:blur(16px) saturate(1.3);backdrop-filter:blur(16px) saturate(1.3);
   border:1px solid color-mix(in srgb,var(--ink) 10%,transparent);transition:background .3s,transform .3s}
-.intro{align-self:flex-start;max-width:560px;padding:28px 30px;margin-bottom:max(18vh,40px)}
+.hrow{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:max(18vh,40px)}
+.intro{max-width:560px;padding:28px 30px}
+/* this month's picks: the films I tagged 4insta_MM_YY on Letterboxd (films/picks.json, from tools/lbexport.py) */
+.picks{width:min(300px,100%);padding:16px 18px}
+.picks h2{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 10px;font:500 .68rem var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+.picks h2 small{font:inherit;color:var(--dim);letter-spacing:.08em}
+.picks ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.picks a{display:grid;grid-template-columns:32px minmax(0,1fr);gap:10px;align-items:center;text-decoration:none;color:var(--ink)}
+.picks img{display:block;width:32px;height:48px;object-fit:cover;border-radius:2px;box-shadow:0 0 0 1px color-mix(in srgb,var(--ink) 15%,transparent)}
+.picks b{display:block;font:500 1.02rem/1.2 var(--f-disp);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.picks span{font-size:.75rem;color:var(--dim)}
+.picks a:hover b{color:var(--acc)}
 .intro h1{font-size:clamp(2.5rem,6.4vw,4.4rem)}
 .intro .lede{margin-top:10px}
 .rooms{margin-top:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
@@ -114,7 +125,7 @@ body.min .page{opacity:0;visibility:hidden;transition:opacity .6s,visibility 0s 
 .cap b{display:block;font:500 .66rem var(--f-mono);font-style:normal;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
 @media (max-width:900px){.rooms{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:560px){.tile,body .page>.bar{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:color-mix(in srgb,var(--bg) 76%,transparent)}   /* blur over a moving picture is costly on a phone */
-  .home{gap:10px}.intro{margin-bottom:26vh}.rooms{gap:10px}.tile{padding:16px}.intro{padding:20px}.room p,.room .kick,.strip{display:none}.room h2{margin:0}}
+  .home{gap:10px}.hrow{flex-direction:column;margin-bottom:22vh;gap:10px}.picks{width:100%}.picks ol{flex-direction:row;overflow-x:auto}.picks li{flex:0 0 46%}.rooms{gap:10px}.tile{padding:16px}.intro{padding:20px}.room p,.room .kick,.strip{display:none}.room h2{margin:0}}
 </style>
 </head>
 <body>
@@ -125,10 +136,13 @@ body.min .page{opacity:0;visibility:hidden;transition:opacity .6s,visibility 0s 
   <nav class="pages" aria-label="Pages"><a href="game-dev/">Games</a><a href="films/">Film</a><a href="music/">Music</a><a href="writing/">Writing</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 <main class="home">
+  <div class="hrow">
   <section class="tile intro"><h1>Bucatini Mickey</h1><p class="lede">Things I make and keep track of outside work and the PhD. One room for each hobby.</p></section>
+  <section class="tile picks" id="picksbox" hidden><h2><span id="picksh">Picks</span><small>recommended</small></h2><ol id="picks"></ol></section>
+  </div>
   <nav class="rooms" aria-label="Rooms">
     <a class="tile room" href="game-dev/"><span class="kick">Play</span><h2>Games</h2><p>Grimoire, for Storytellers of Blood on the Clocktower, and the Tachyon engine.</p><span class="go" aria-hidden="true">→</span></a>
-    <a class="tile room" href="films/"><span class="kick">815 films</span><h2>Film</h2><ol class="strip" id="watched" aria-label="Recently watched"></ol><span class="go" aria-hidden="true">→</span></a>
+    <a class="tile room" href="films/"><span class="kick">821 films</span><h2>Film</h2><ol class="strip" id="watched" aria-label="Recently watched"></ol><span class="go" aria-hidden="true">→</span></a>
     <a class="tile room" href="music/"><span class="kick">Spotify</span><h2>Music</h2><p>Playlists I've made, the artists I've been playing, and Off The Sea.</p><span class="go" aria-hidden="true">→</span></a>
     <a class="tile room" href="writing/"><span class="kick">Soon</span><h2>Writing</h2><p>Screenplays, mostly cold and mostly medieval.</p><span class="go" aria-hidden="true">→</span></a>
   </nav>
@@ -138,6 +152,16 @@ body.min .page{opacity:0;visibility:hidden;transition:opacity .6s,visibility 0s 
 </main>
 </div>
 <button class="unmin" id="unmin" type="button" hidden>Show the page</button>
+<script>/* this month's picks (or the latest month's, until this month has any) */
+fetch('films/picks.json').then(r=>r.ok?r.json():null).then(d=>{ if(!d||!d.months) return;
+  const esc=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const now=new Date(), key=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const ks=Object.keys(d.months).filter(k=>k<=key).sort(), k=d.months[key]?key:ks[ks.length-1]; if(!k) return;
+  const [y,m]=k.split('-').map(Number), nm=new Date(y,m-1,1).toLocaleDateString('en-GB',{month:'long'});
+  document.getElementById('picksh').textContent=`${nm}'s picks`;
+  document.getElementById('picks').innerHTML=d.months[k].map(f=>`<li><a href="${esc(f.link)}"><img src="${esc(f.p)}" alt="" loading="lazy" width="32" height="48"><span><b>${esc(f.t)}</b><span>${esc(f.y)}${f.r?' · '+'★'.repeat(Math.floor(f.r))+(f.r%1?'½':''):''}</span></span></a></li>`).join('');
+  document.getElementById('picksbox').hidden=false }).catch(()=>{});
+</script>
 <script>/* the last four films from the Film page's diary, in the Film tile */
 fetch('films/recent.json').then(r=>r.ok?r.json():{films:[]}).then(d=>{const esc=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   document.getElementById('watched').innerHTML=(d.films||[]).slice(0,4).map(f=>`<li><img src="${esc(f.p.replace('-0-600-0-900-','-0-230-0-345-'))}" alt="${esc(f.t)} (${esc(f.y)})" title="${esc(f.t)}" loading="lazy"></li>`).join('')}).catch(()=>{});
