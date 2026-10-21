@@ -1,10 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- farfalle: a square of pasta pinched in the middle into a bow, its two ends crinkled; drawn bold so it reads at 16 px -->
+  <!-- farfalle: one square of pasta, its two ends crinkled, squeezed in the middle so it pleats; drawn bold so it reads at 16 px -->
   <g transform="rotate(-18 32 32)" stroke-linejoin="round" stroke-linecap="round">
-    <path d="M28 30 C22 22 14 15 7 13 L4.5 17 L7.5 20.5 L4 24.5 L7 28.5 L3.5 32.5 L7 36.5 L4 40.5 L7.5 44 L4.5 48 L7 51.5 C14 49.5 22 42 28 34 Z" fill="#f2c75c" stroke="#7a4a12" stroke-width="2.6"/>
-    <path d="M36 30 C42 22 50 15 57 13 L59.5 17 L56.5 20.5 L60 24.5 L57 28.5 L60.5 32.5 L57 36.5 L60 40.5 L56.5 44 L59.5 48 L57 51.5 C50 49.5 42 42 36 34 Z" fill="#f2c75c" stroke="#7a4a12" stroke-width="2.6"/>
-    <path d="M25 29 C19 25 14 23 9 22.5 M25 35 C19 39 14 41 9 41.5 M39 29 C45 25 50 23 55 22.5 M39 35 C45 39 50 41 55 41.5" fill="none" stroke="#c08a2e" stroke-width="2"/>
-    <rect x="26" y="24" width="12" height="16" rx="5" fill="#e0a83e" stroke="#7a4a12" stroke-width="2.6"/>
-    <path d="M30 26.5 V37.5 M34 26.5 V37.5" stroke="#9a6418" stroke-width="1.6"/>
+    <path d="M32 27.5 C26 24 16 15 7 13 L4.5 17 L7.5 20.5 L4 24.5 L7 28.5 L3.5 32.5 L7 36.5 L4 40.5 L7.5 44 L4.5 48 L7 51.5 C16 49 26 40 32 36.5 C38 40 48 49 57 51.5 L59.5 48 L56.5 44 L60 40.5 L57 36.5 L60.5 32.5 L57 28.5 L60 24.5 L56.5 20.5 L59.5 17 L57 13 C48 15 38 24 32 27.5 Z" fill="#f2c75c" stroke="#7a4a12" stroke-width="2.6"/>
+    <path d="M24 28.5 C19 25.5 14 23.5 9 22.5 M24 35.5 C19 38.5 14 40.5 9 41.5 M40 28.5 C45 25.5 50 23.5 55 22.5 M40 35.5 C45 38.5 50 40.5 55 41.5" fill="none" stroke="#c08a2e" stroke-width="2"/>
+    <path d="M28.5 29.5 C27.5 31.5 27.5 32.5 28.5 34.5 M32 28.5 C31 31 31 33 32 35.5 M35.5 29.5 C36.5 31.5 36.5 32.5 35.5 34.5" fill="none" stroke="#9a6418" stroke-width="1.7"/>
   </g>
 </svg>
