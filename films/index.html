@@ -275,23 +275,24 @@ details[open]>summary .tw::before{color:var(--lbg)}
 .posters a:hover img{outline:3px solid var(--lbg);outline-offset:-3px;transform:none}
 .enso{display:none}
 .lb{background:none;padding:0;color:var(--lbb)}
-/* Pick for me: mood chips, then six of my films */
+/* Pick for me: filter rows (genre, decade, feel, movement, country), then my films */
 .pkintro{color:var(--dim);font-size:.9rem;max-width:62ch;margin:0 0 16px}
-#pk-moods{display:flex;flex-direction:column;gap:8px}
-.pkg{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.pkgl{font:600 .66rem/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);width:100px;flex:none}
-@media (max-width:620px){.pkgl{width:100%}}
+.pkrows{display:flex;flex-direction:column;gap:10px}
+.pkg{display:flex;gap:6px 12px;align-items:baseline}
+.pkgl{font:600 .66rem/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);width:84px;flex:none;padding-top:7px}
+.pkcs{display:flex;flex-wrap:wrap;gap:6px;min-width:0}
+@media (max-width:620px){.pkg{flex-direction:column;gap:6px}.pkgl{width:auto;padding-top:0}}
 .pkc{background:var(--bg2);border:1px solid var(--line);border-radius:99px;padding:4px 11px;font:600 .8rem var(--f-body);color:var(--ink);cursor:pointer}
 .pkc:hover{border-color:var(--lbb)}
 .pkc[aria-pressed="true"]{background:var(--lbg);border-color:var(--lbg);color:#14181c}
-.pkbar{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;margin:16px 0 18px;font-size:.82rem;color:var(--dim)}
-#pk-rt{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden}
-#pk-rt button{background:none;border:0;padding:5px 11px;font:600 .78rem var(--f-body);color:var(--dim);cursor:pointer}
-#pk-rt button[aria-pressed="true"]{background:var(--lbb);color:#14181c}
-.pkdeep{display:flex;align-items:center;gap:8px}
-.pkdeep input{width:130px;accent-color:var(--lbg)}
-#pk-again{background:none;border:1px solid var(--line);border-radius:99px;padding:5px 13px;font:600 .78rem var(--f-body);color:var(--ink);cursor:pointer}
-#pk-again:hover{border-color:var(--lbg)}
+.pkseg{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden}
+.pkseg button{background:none;border:0;padding:5px 11px;font:600 .78rem var(--f-body);color:var(--dim);cursor:pointer}
+.pkseg button+button{border-left:1px solid var(--line)}
+.pkseg button[aria-pressed="true"]{background:var(--lbb);color:#14181c}
+.pkbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:18px 0 14px;font-size:.82rem;color:var(--dim);border-top:1px solid var(--line);padding-top:12px}
+#pk-again,#pk-more{background:none;border:1px solid var(--line);border-radius:99px;padding:5px 13px;font:600 .78rem var(--f-body);color:var(--ink);cursor:pointer}
+#pk-again:hover,#pk-more:hover{border-color:var(--lbg)}
+#pk-more{display:block;margin:16px auto 0}
 #pk-out{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 22px}
 @media (max-width:700px){#pk-out{grid-template-columns:1fr}}
 .pk{display:grid;grid-template-columns:70px 1fr;gap:12px;align-items:start;padding-bottom:14px;border-bottom:1px solid var(--line)}
@@ -338,13 +339,18 @@ details[open]>summary .tw::before{color:var(--lbg)}
 </section>
 <section class="wrap view" id="v-diary" hidden><h2 class="lbh">Diary</h2><table class="diary" id="diary"></table></section>
 <section class="wrap view" id="v-reviews" hidden><h2 class="lbh">Reviews</h2><div id="allrevs"></div></section>
-<section class="wrap view" id="v-pick" hidden><h2 class="lbh">Pick for me</h2>
-  <p class="pkintro">Choose a mood (or two) and I'll suggest films I've rated 3½★ or more that fit it. The moods come from my own lists and tags.</p>
-  <div id="pk-moods"></div>
-  <div class="pkbar"><div id="pk-rt" role="group" aria-label="Length"></div>
-    <label class="pkdeep" for="pk-deep">Well known <input type="range" id="pk-deep" min="0" max="100" value="50"> Obscure</label>
-    <button type="button" id="pk-again">Show others</button></div>
+<section class="wrap view" id="v-pick" hidden><h2 class="lbh">Pick for me <button type="button" id="pk-clear">Clear</button></h2>
+  <p class="pkintro">Narrow it down and I'll suggest films I've rated 3½★ or more.</p>
+  <div class="pkrows">
+    <div class="pkg"><span class="pkgl">Genre</span><div class="pkcs" id="pk-genre"></div></div>
+    <div class="pkg"><span class="pkgl">Decade</span><div class="pkcs" id="pk-dec"></div></div>
+    <div class="pkg"><span class="pkgl">Feel</span><div class="pkcs" id="pk-feel"></div></div>
+    <div class="pkg"><span class="pkgl">Movement</span><div class="pkcs" id="pk-mv"></div></div>
+    <div class="pkg"><span class="pkgl">Country</span><div class="pkcs" id="pk-ct"></div></div>
+  </div>
+  <div class="pkbar"><span id="pk-count"></span><button type="button" id="pk-again">Show others</button></div>
   <div id="pk-out"></div>
+  <button type="button" id="pk-more" hidden>Show more</button>
   <p class="pknote" id="pk-note"></p>
 </section>
 <footer class="wrap" id="foot"></footer>
