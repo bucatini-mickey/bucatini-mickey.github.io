@@ -96,7 +96,7 @@ body .page>.bar{background:color-mix(in srgb,var(--bg) 78%,transparent);-webkit-
 .picks a:hover b{color:var(--acc)}
 .intro h1{font-size:clamp(2.5rem,6.4vw,4.4rem)}
 .intro .lede{margin-top:10px}
-.rooms{margin-top:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.rooms{margin-top:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .room{display:flex;flex-direction:column}
 .room h2{font:500 clamp(1.5rem,2.6vw,1.9rem)/1.1 var(--f-disp);margin:0 0 6px}
 .room p{margin:0;color:var(--dim);font-size:.9rem;line-height:1.6}
@@ -135,8 +135,8 @@ body.min .page{opacity:0;visibility:hidden;transition:opacity .6s,visibility 0s 
 <canvas class="backdrop" id="fractal" aria-hidden="true"></canvas>
 <div class="page">
 <header class="bar"><div class="bar-in">
-  <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers: research, CV and links"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="./" aria-current="true" title="Bucatini Mickey: films, games, photos and other hobbies"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
-  <nav class="pages" aria-label="Pages"><a href="game-dev/">Games</a><a href="films/">Film</a><a href="music/">Music</a><a href="writing/">Writing</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
+  <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers: photos and art"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="./" aria-current="true" title="Bucatini Mickey: films, games, photos and other hobbies"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
+  <nav class="pages" aria-label="Pages"><a href="game-dev/">Games</a><a href="films/">Film</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 <main class="home">
   <div class="hrow">
@@ -146,8 +146,6 @@ body.min .page{opacity:0;visibility:hidden;transition:opacity .6s,visibility 0s 
   <nav class="rooms" aria-label="Rooms">
     <a class="tile room" href="game-dev/"><span class="kick">Play</span><h2>Games</h2><p>Grimoire, for Storytellers of Blood on the Clocktower, and the Tachyon engine.</p><span class="go" aria-hidden="true">→</span></a>
     <a class="tile room" href="films/"><span class="kick">844 films</span><h2>Film</h2><ol class="strip" id="watched" aria-label="Recently watched"></ol><span class="go" aria-hidden="true">→</span></a>
-    <a class="tile room" href="music/"><span class="kick">Spotify</span><h2>Music</h2><p>Playlists I've made, the artists I've been playing, and Off The Sea.</p><span class="go" aria-hidden="true">→</span></a>
-    <a class="tile room" href="writing/"><span class="kick">Soon</span><h2>Writing</h2><p>Screenplays, mostly cold and mostly medieval.</p><span class="go" aria-hidden="true">→</span></a>
   </nav>
   <footer class="tile foot"><span>Bucatini Mickey</span><span class="r"><span><a href="https://letterboxd.com/bucatini_mickey/">Letterboxd ↗</a> · <a href="https://open.spotify.com/user/jmsummers98">Spotify ↗</a> · <a href="https://www.instagram.com/bucatini_mickey/">Instagram ↗</a> · <a href="https://github.com/bucatini-mickey">GitHub ↗</a></span>
     <button class="info" id="min" type="button" title="Just the picture" aria-label="Hide the page and show just the picture"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/></svg></button><button class="info" id="info" type="button" aria-expanded="false" aria-controls="cap" title="What's on screen">i</button></span>

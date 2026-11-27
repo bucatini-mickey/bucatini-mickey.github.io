@@ -1,8 +1,7 @@
 # Refreshes music/playlists.json (names and covers of my Spotify playlists) once a week, so the Music page stays current.
 name: Spotify playlists
 on:
-  schedule:
-    - cron: '41 5 * * 1'
+  # weekly run paused 27 Nov 2026: the Music page is unpublished (see _unpublished/README.md)
   workflow_dispatch:
 permissions:
   contents: write
