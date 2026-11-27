@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="preload" href="assets/fonts/cormorant-garamond-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/mulish-500-latin.woff2" as="font" type="font/woff2" crossorigin>
-<meta name="description" content="Hobby projects by Mickey: film, game dev and whatever grows next.">
 <style>
 /* Bucatini Mickey hub: the page floats on a datamoshed cut-up of patterns and photographs (assets/hub.js; the Mandelbrot zoom and the Maya textile are in assets/archive) (the Starry Night field is kept in assets/archive). Shared theme. Night-forest dark by default, autumn + psychedelic accents, washi paper light mode on request. */
 :root{
@@ -135,21 +134,21 @@ body.min .page{opacity:0;visibility:hidden;transition:opacity .6s,visibility 0s 
 <canvas class="backdrop" id="fractal" aria-hidden="true"></canvas>
 <div class="page">
 <header class="bar"><div class="bar-in">
-  <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers: photos and art"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="./" aria-current="true" title="Bucatini Mickey: films, games, photos and other hobbies"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
+  <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="./" aria-current="true" title="Bucatini Mickey"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
   <nav class="pages" aria-label="Pages"><a href="game-dev/">Games</a><a href="films/">Film</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 <main class="home">
   <div class="hrow">
-  <section class="tile intro"><h1>Bucatini Mickey</h1><p class="lede">Things I make and keep track of outside work and the PhD. One room for each hobby.</p></section>
+  <section class="tile intro"><h1>Bucatini Mickey</h1></section>
   <section class="tile picks" id="picksbox" hidden><h2><span id="picksh">Picks</span><small>recommended</small></h2><ol id="picks"></ol></section>
   </div>
   <nav class="rooms" aria-label="Rooms">
-    <a class="tile room" href="game-dev/"><span class="kick">Play</span><h2>Games</h2><p>Grimoire, for Storytellers of Blood on the Clocktower, and the Tachyon engine.</p><span class="go" aria-hidden="true">→</span></a>
+    <a class="tile room" href="game-dev/"><span class="kick">Play</span><h2>Games</h2><span class="go" aria-hidden="true">→</span></a>
     <a class="tile room" href="films/"><span class="kick">844 films</span><h2>Film</h2><ol class="strip" id="watched" aria-label="Recently watched"></ol><span class="go" aria-hidden="true">→</span></a>
   </nav>
   <footer class="tile foot"><span>Bucatini Mickey</span><span class="r"><span><a href="https://letterboxd.com/bucatini_mickey/">Letterboxd ↗</a> · <a href="https://open.spotify.com/user/jmsummers98">Spotify ↗</a> · <a href="https://www.instagram.com/bucatini_mickey/">Instagram ↗</a> · <a href="https://github.com/bucatini-mickey">GitHub ↗</a></span>
-    <button class="info" id="min" type="button" title="Just the picture" aria-label="Hide the page and show just the picture"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/></svg></button><button class="info" id="info" type="button" aria-expanded="false" aria-controls="cap" title="What's on screen">i</button></span>
-    <p class="cap" id="cap" hidden><b>On screen</b><span id="now">Ink, folding over itself</span></p></footer>
+    <button class="info" id="min" type="button" title="Just the picture" aria-label="Hide the page and show just the picture"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/></svg></button></span>
+</footer>
 </main>
 </div>
 <button class="unmin" id="unmin" type="button" hidden>Show the page</button>
@@ -166,13 +165,10 @@ fetch('films/picks.json').then(r=>r.ok?r.json():null).then(d=>{ if(!d||!d.months
 <script>/* the last four films from the Film page's diary, in the Film tile */
 fetch('films/recent.json').then(r=>r.ok?r.json():{films:[]}).then(d=>{const esc=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   document.getElementById('watched').innerHTML=(d.films||[]).slice(0,4).map(f=>`<li><img src="${esc(f.p.replace('-0-600-0-900-','-0-230-0-345-'))}" alt="${esc(f.t)} (${esc(f.y)})" title="${esc(f.t)}" loading="lazy"></li>`).join('')}).catch(()=>{});
-addEventListener('hubscene',e=>{document.getElementById('now').textContent=e.detail||'Ink, folding over itself'});
 (function(){const m=document.getElementById('min'),u=document.getElementById('unmin');   /* just the picture, and back */
   const set=on=>{document.body.classList.toggle('min',on);u.hidden=!on;(on?u:m).focus({preventScroll:true})};
   m.onclick=()=>set(true);u.onclick=()=>set(false);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!u.hidden)set(false)})})();
-(function(){const b=document.getElementById('info'),c=document.getElementById('cap');   /* the (i) button: what the backdrop is showing */
-  const set=o=>{b.setAttribute('aria-expanded',String(o));c.hidden=!o};
-  b.onclick=e=>{e.stopPropagation();set(c.hidden)};document.addEventListener('click',e=>{if(!c.contains(e.target))set(false)});document.addEventListener('keydown',e=>{if(e.key==='Escape')set(false)})})();</script>
+</script>
 <script src="assets/mosh.js"></script>
 <script src="assets/hub.js"></script>
 <script>

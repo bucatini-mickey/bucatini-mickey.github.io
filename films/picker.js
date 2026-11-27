@@ -26,7 +26,7 @@
     return true;
   }
   function draw(){
-    if(!F){ $('pk-out').innerHTML='<p class="empty">The picker hasn’t loaded.</p>'; return }
+    if(!F){ $('pk-out').innerHTML='<p class="empty">Not loaded.</p>'; return }
     let rnd=seed*7919+13; const r=()=>((rnd=(rnd*9301+49297)%233280)/233280);
     const xs=F.filter(match).map(f=>{
       let s=f.r+(f.liked?.25:0);
@@ -40,7 +40,7 @@
         <div><h3><a href="${esc(url)}">${esc(f.t)}</a> <small>${esc(f.y)}</small></h3>
         <div class="meta"><span class="stars">${stars(f.r)}</span>${f.liked?'<span class="lk">♥</span>':''}<span>${[f.rt?f.rt+' min':'',f.dir,f.c].filter(Boolean).map(esc).join(' · ')}</span></div>
         ${tags.length?`<p class="pkt">${tags.map(esc).join(' · ')}</p>`:''}</div></article>`}).join('')
-      ||'<p class="empty">Nothing I’ve rated fits all of that. Try fewer filters.</p>';
+      ||'<p class="empty">Nothing matches.</p>';
     $('pk-more').hidden=xs.length<=shown;
   }
   const chip=(set,v,label)=>`<button type="button" class="pkc" data-set="${set}" data-v="${esc(v)}" aria-pressed="${S[set].has(v)}">${esc(label??v)}</button>`;
@@ -62,7 +62,7 @@
     $('pk-again').onclick=()=>{seed=(seed%997)+1;draw()};
     $('pk-more').onclick=()=>{shown+=6;draw()};
     $('pk-clear').onclick=()=>{S.g.clear();S.dec.clear();S.from.clear();FEEL.forEach(([k])=>S[k]=0);seed=0;shown=6;controls();draw()};
-    $('pk-note').textContent=`Only films I’ve rated 3½★ or more. Surreal, dark and hard are worked out from my own tags and from MovieLens and Wikidata. Updated ${D.built||''}.`;
+    $('pk-note').textContent=`Data: MovieLens, Wikidata. Updated ${D.built||''}`;
   }
   window.lbPicker=()=>load().then(d=>{ if(!d){draw();return} if(!$('pk-genre').children.length) controls(); draw() });
   if(location.hash==='#pick') window.lbPicker();          // opened straight on the tab, before this file had loaded

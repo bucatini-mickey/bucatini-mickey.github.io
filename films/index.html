@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="../assets/fonts/fonts.css">
 <link rel="preload" href="../assets/fonts/cormorant-garamond-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/mulish-500-latin.woff2" as="font" type="font/woff2" crossorigin>
-<meta name="description" content="Every public Letterboxd list by bucatini_mickey, nested and searchable.">
 <style>
 /* Bucatini Mickey — shared theme. Night-forest dark by default, autumn + psychedelic accents, washi paper light mode on request. */
 :root{
@@ -312,7 +311,7 @@ details[open]>summary .tw::before{color:var(--lbg)}
 
 <div class="page">
 <header class="bar"><div class="bar-in">
-  <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers: photos and art"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="../" aria-current="true" title="Bucatini Mickey: films, games, photos and other hobbies"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
+  <nav class="sites" aria-label="Sites"><a class="me away" href="https://jsonsummers.github.io/" title="Jason Summers"><span>J</span><span class="x"><span>ason </span></span><span>S</span><span class="x"><span>ummers</span></span></a><a class="bm here" href="../" aria-current="true" title="Bucatini Mickey"><span>B</span><span class="x"><span>ucatini </span></span><span>M</span><span class="x"><span>ickey</span></span></a></nav>
   <nav class="pages" aria-label="Pages"><a href="../game-dev/">Games</a><a href="../films/" aria-current="page">Film</a><button class="mode" id="mode" type="button" aria-label="Switch light or dark">Light</button></nav>
 </div></header>
 <header class="wrap lbhead">
@@ -340,7 +339,6 @@ details[open]>summary .tw::before{color:var(--lbg)}
 <section class="wrap view" id="v-diary" hidden><h2 class="lbh">Diary</h2><table class="diary" id="diary"></table></section>
 <section class="wrap view" id="v-reviews" hidden><h2 class="lbh">Reviews</h2><div id="allrevs"></div></section>
 <section class="wrap view" id="v-pick" hidden><h2 class="lbh">Pick for me <button type="button" id="pk-clear">Clear</button></h2>
-  <p class="pkintro">Narrow it down and I'll suggest films I've rated 3½★ or more.</p>
   <div class="pkrows">
     <div class="pkg"><span class="pkgl">Genre</span><div class="pkcs" id="pk-genre"></div></div>
     <div class="pkg"><span class="pkgl">Decade</span><div class="pkcs" id="pk-dec"></div></div>
@@ -368,7 +366,7 @@ const SEASON=['spring','summer','autumn','winter'];
 /* The page tree. A node is {list:slug} for one list on its own, or {t, q, items, sort, open} for a fold.
    q picks lists (a tag also catches deeper tags, e.g. picks catches picks:genre unless exact). rest:true skips lists already shown earlier in the same section. */
 const TREE=[
- {id:'favourites',t:'Favourites',note:'The films I keep coming back to.',items:[
+ {id:'favourites',t:'Favourites',note:'',items:[
    {list:'4-favourites'},
    {t:'Top 4s',items:[
      {t:'By decade',q:l=>/^\d{4}s top 4$/i.test(l.n)},
@@ -377,21 +375,21 @@ const TREE=[
    {t:'My Personal Picks',q:tag('picks',true)},
    {t:'Genre Favourites',q:tag('picks:genre')},
    {t:'Nation or Culture Favourites',q:tag('picks:culture')}]},
- {id:'browse',t:'Browse',note:'Moods, story shapes and seasons.',items:[
+ {id:'browse',t:'Browse',note:'',items:[
    {t:'Featured Lists',q:tag('featured')},
    {t:'Particular Moods',q:tag('browse:moods')},
    {t:'Story Archetypes',q:tag('browse:archetype')},
    {t:'Season Collections',q:tag('browse:seasons'),sort:(a,b)=>SEASON.findIndex(s=>a.n.toLowerCase().includes(s))-SEASON.findIndex(s=>b.n.toLowerCase().includes(s))},
    {t:'Every tag',tree:true}]},
- {id:'challenges',t:'Challenges',note:'A year at a time: month-long themes and watch challenges.',years:true},
- {id:'rankings',t:'Rankings',note:'Directors and series, best to worst.',items:[
+ {id:'challenges',t:'Challenges',note:'',years:true},
+ {id:'rankings',t:'Rankings',note:'',items:[
    {t:'Director Rankings',q:l=>has(l,'rank:director')||l.s==='ranking-juraj-herz'},
    {t:'Series Rankings',q:tag('rank:series')}]},
- {id:'collection',t:'Collection',note:'What’s on the shelf, and what I’m hunting for.',items:[
+ {id:'collection',t:'Collection',note:'',items:[
    {list:'my-physical-collection'},
    {t:'Blu-ray Wishlists',q:tag('wishlist')}]},
- {id:'scale',t:'Ratings',note:'Rough thought process behind my ratings, for myself as much as anyone.',scale:true},
- {id:'friends',t:'For Friends',note:'Lists made for particular people.',items:[{t:'Recommendations',q:tag('recom:friends'),open:true}]},
+ {id:'scale',t:'Ratings',note:'',scale:true},
+ {id:'friends',t:'For Friends',note:'',items:[{t:'Recommendations',q:tag('recom:friends'),open:true}]},
 ];
 const SCALE=[['★★★★★','Beloved, and/or near perfect or better.'],['★★★★½','Exceptional, genuinely blew me away.'],['★★★★','Great, exceeded expectations.'],['★★★½','Good, generally recommendable.'],['★★★','Decent, missed potential.'],['★★½','True average across all films.'],['★★','Poor, noticeable flaws.'],['★½','Weak, largely ineffective.'],['★','Terrible, possibly ironic value.'],['½★','Atrocious, regret watching.'],['♥','Mostly TV and short films I like, now also films strongly to my taste.']];
 const $=id=>document.getElementById(id);
@@ -470,7 +468,7 @@ function render(){
     const used=new Set(),kids=s.items.map(k=>node(k,used,placed)).filter(Boolean);
     return kids.length?{...s,html:kids.map(k=>k.html).join('')}:null}).filter(Boolean);
   const rest=L.filter(l=>!placed.has(l)).sort(nat);
-  if(rest.length)secs.push({id:'more',t:'Other',note:'Lists that don’t sit in a tab yet.',html:fold_('Other lists',plural(rest.length,'list'),rows(rest),false)});
+  if(rest.length)secs.push({id:'more',t:'Other',note:'',html:fold_('Other lists',plural(rest.length,'list'),rows(rest),false)});
   $('tabs').innerHTML=secs.map(s=>`<button role="tab" id="tab-${s.id}" aria-controls="${s.id}" aria-selected="false" data-id="${s.id}">${esc(s.t)}</button>`).join('');
   $('main').innerHTML=`<section class="sec" id="results" hidden></section>`+secs.map(s=>`<section class="sec" id="${s.id}" role="tabpanel" aria-labelledby="tab-${s.id}" hidden><h2><span class="enso" aria-hidden="true"></span>${esc(s.t)}</h2>${s.note?`<p class="note">${esc(s.note)}</p>`:''}${s.html}</section>`).join('');
   $('foot').innerHTML=`<span>${L.filter(l=>!l.diary).length} public lists${D.built?` · updated ${esc(D.built)}`:''}</span><a href="../">Bucatini Mickey</a>`;
@@ -503,7 +501,7 @@ function search(){
   const h=new Map();L.forEach(l=>{const fm=l.f.filter(f=>fold(f).includes(q));if(fm.length||fold(l.n+' '+l.d+' '+l.g.join(' ')).includes(q))h.set(l,fm)});
   const xs=[...h.keys()].sort((a,b)=>h.get(b).length-h.get(a).length);
   box.hidden=false;
-  box.innerHTML=`<h2><span class="enso" aria-hidden="true"></span>Search</h2><p class="note">${plural(xs.length,'list')} match “${esc(raw)}”</p>${xs.length?rows(xs,h):'<p class="empty">Nothing matches. Try a shorter word or a director’s surname.</p>'}`;
+  box.innerHTML=`<h2><span class="enso" aria-hidden="true"></span>Search</h2><p class="note">${plural(xs.length,'list')} match “${esc(raw)}”</p>${xs.length?rows(xs,h):'<p class="empty">Nothing matches.</p>'}`;
   wire();
 }
 render();
